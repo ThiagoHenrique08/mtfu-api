@@ -1,0 +1,15 @@
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\bin\Release\net8.0\MoreThanFollowUp.Application.deps.json
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\bin\Release\net8.0\MoreThanFollowUp.Application.dll
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\bin\Release\net8.0\MoreThanFollowUp.Application.pdb
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\bin\Release\net8.0\MoreThanFollowUp.Domain.dll
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\bin\Release\net8.0\MoreThanFollowUp.Domain.pdb
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\MoreThanFollowUp.Application.csproj.AssemblyReference.cache
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\MoreThanFollowUp.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\MoreThanFollowUp.Application.AssemblyInfoInputs.cache
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\MoreThanFollowUp.Application.AssemblyInfo.cs
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\MoreThanFollowUp.Application.csproj.CoreCompileInputs.cache
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\MoreThan.4225878D.Up2Date
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\MoreThanFollowUp.Application.dll
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\refint\MoreThanFollowUp.Application.dll
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\MoreThanFollowUp.Application.pdb
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Application\obj\Release\net8.0\ref\MoreThanFollowUp.Application.dll

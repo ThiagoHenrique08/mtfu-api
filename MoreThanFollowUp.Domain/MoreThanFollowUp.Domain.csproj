@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Entities\Sprints\SprintDeploymentPhase.cs" />
+    <Compile Remove="Entities\Sprints\SprintDesignPhase.cs" />
+    <Compile Remove="Entities\Sprints\SprintDevelopmentAndTestingPhase.cs" />
+    <Compile Remove="Entities\Sprints\Tasks\Task_SprintDeploymentPhase.cs" />
+    <Compile Remove="Entities\Sprints\Tasks\Task_SprintDesignPhase.cs" />
+    <Compile Remove="Entities\Sprints\Tasks\Task_SprintDevelopmentAndTestingPhase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entities\Sprints\Daily\" />
+    <Folder Include="Entities\Sprints\Review\" />
+    <Folder Include="Entities\Sprints\Planning\" />
+  </ItemGroup>
+
+</Project>

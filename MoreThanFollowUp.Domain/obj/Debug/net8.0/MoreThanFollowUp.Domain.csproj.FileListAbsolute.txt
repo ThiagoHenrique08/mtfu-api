@@ -1,0 +1,12 @@
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\bin\Debug\net8.0\MoreThanFollowUp.Domain.deps.json
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\bin\Debug\net8.0\MoreThanFollowUp.Domain.dll
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\bin\Debug\net8.0\MoreThanFollowUp.Domain.pdb
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\MoreThanFollowUp.Domain.csproj.AssemblyReference.cache
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\MoreThanFollowUp.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\MoreThanFollowUp.Domain.AssemblyInfoInputs.cache
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\MoreThanFollowUp.Domain.AssemblyInfo.cs
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\MoreThanFollowUp.Domain.csproj.CoreCompileInputs.cache
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\MoreThanFollowUp.Domain.dll
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\refint\MoreThanFollowUp.Domain.dll
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\MoreThanFollowUp.Domain.pdb
+D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Debug\net8.0\ref\MoreThanFollowUp.Domain.dll

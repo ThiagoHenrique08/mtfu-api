@@ -1,0 +1,73 @@
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using MoreThanFollowUp.Domain.Entities.Projects;
+using MoreThanFollowUp.Domain.Entities.Projects.Phases;
+using MoreThanFollowUp.Domain.Models;
+
+
+namespace MoreThanFollowUp.Infrastructure.Context
+{
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    {
+        private readonly string _connectionString;
+        public ApplicationDbContext()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.Development.json")
+                .Build();
+
+            _connectionString = configuration.GetConnectionString("ConnectionString")!;
+        }
+        public ApplicationDbContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Project_User> ProjectUsers {  get; set; }
+        public DbSet<PlanningPhase> Plannings { get; set; }
+        public DbSet<RequirementsAnalysisPhase> RequirementsAnalysis { get; set; }
+        public DbSet<FunctionalRequirements> FunctionalRequirements { get; set; }
+        public DbSet<NotFunctionalRequirements> NotFunctionalRequirements { get; set; }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(_connectionString);
+                optionsBuilder.UseLazyLoadingProxies();
+            }
+
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Global turn off delete behaviour on foreign keys
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Cascade;
+            }
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        }
+    }
+}
