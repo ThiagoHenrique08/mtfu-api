@@ -16,7 +16,7 @@ jobs:
               with:
                 host: "191.101.18.75"
                 username: "root"
-                password: "${{ secrets.SSH_PRIVATE_KEY }}"
+                key: "${{ secrets.SSH_PRIVATE_KEY }}"
                 source: "."
                 target: "/sistema"
 
