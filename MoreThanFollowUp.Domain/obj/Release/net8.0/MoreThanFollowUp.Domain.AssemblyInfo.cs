@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MoreThanFollowUp.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32a9c9a5b0411776129552d5a773b228edb9f80f")]
 [assembly: System.Reflection.AssemblyProductAttribute("MoreThanFollowUp.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MoreThanFollowUp.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

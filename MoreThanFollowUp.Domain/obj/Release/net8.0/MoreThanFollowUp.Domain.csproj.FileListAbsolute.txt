@@ -10,3 +10,16 @@ D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThan
 D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\refint\MoreThanFollowUp.Domain.dll
 D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.pdb
 D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\ref\MoreThanFollowUp.Domain.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\bin\Release\net8.0\MoreThanFollowUp.Domain.deps.json
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\bin\Release\net8.0\MoreThanFollowUp.Domain.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\bin\Release\net8.0\MoreThanFollowUp.Domain.pdb
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.csproj.AssemblyReference.cache
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.AssemblyInfoInputs.cache
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.AssemblyInfo.cs
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.csproj.CoreCompileInputs.cache
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.sourcelink.json
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\refint\MoreThanFollowUp.Domain.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\MoreThanFollowUp.Domain.pdb
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Domain\obj\Release\net8.0\ref\MoreThanFollowUp.Domain.dll

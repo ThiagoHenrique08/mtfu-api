@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MoreThanFollowUp.Infrastructure.Pagination
+﻿namespace MoreThanFollowUp.Infrastructure.Pagination
 {
     public class ProjectsParameters : QueryStringParameters
     {
-   
+
     }
 }

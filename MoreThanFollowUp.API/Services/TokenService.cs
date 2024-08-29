@@ -2,8 +2,8 @@
 using MoreThanFollowUp.API.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace MoreThanFollowUp.API.Services
 {

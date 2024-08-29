@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreThanFollowUp.API", "Mor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreThanFollowUp.Infrastructure", "MoreThanFollowUp.Infrastructure\MoreThanFollowUp.Infrastructure.csproj", "{1F20259E-2C39-4A14-9C88-1195ECEEFACD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreThanFollowUp.Application", "MoreThanFollowUp.Application\MoreThanFollowUp.Application.csproj", "{0C4F57B8-32A3-4138-8F5B-DE93158D1262}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreThanFollowUp.Application", "MoreThanFollowUp.Application\MoreThanFollowUp.Application.csproj", "{0C4F57B8-32A3-4138-8F5B-DE93158D1262}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreThanFollowUp.Domain", "MoreThanFollowUp.Domain\MoreThanFollowUp.Domain.csproj", "{3B6DE455-5075-4DB3-A3C7-FF279899577D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreThanFollowUp.Domain", "MoreThanFollowUp.Domain\MoreThanFollowUp.Domain.csproj", "{3B6DE455-5075-4DB3-A3C7-FF279899577D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

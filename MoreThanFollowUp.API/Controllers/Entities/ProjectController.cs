@@ -66,7 +66,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                             Project = newProjectCadastrado,
                             User = result,
                             CreateDate = DateTime.Now
-                            
+
                         });
                     }
                     else
@@ -110,7 +110,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             var newListProject = new List<GETProject>();
 
 
-         foreach (var project in projects)
+            foreach (var project in projects)
             {
                 newListProject.Add(new GETProject
                 {

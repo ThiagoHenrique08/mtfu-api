@@ -1,10 +1,8 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MoreThanFollowUp.API.Interfaces;
-using MoreThanFollowUp.API.Services;
 using MoreThanFollowUp.Application.DTO.Login;
 using MoreThanFollowUp.Domain.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -60,7 +58,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
 
         [HttpPost]
         [Route("AddUserToRole")]
-       [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> AddUserToRole(string email, string roleName)
         {
 
@@ -223,7 +221,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
 
             return NoContent();
         }
-        
+
         [HttpPost]
         [Route("RevokeRoleToUser")]
         [Authorize(Policy = "AdminOnly")]

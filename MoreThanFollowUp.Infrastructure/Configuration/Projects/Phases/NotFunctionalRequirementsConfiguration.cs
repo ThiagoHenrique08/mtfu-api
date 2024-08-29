@@ -1,12 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MoreThanFollowUp.Domain.Entities.Projects.Phases;
-using MoreThanFollowUp.Domain.Entities.Projects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MoreThanFollowUp.Infrastructure.Configuration.Projects.Phases
 {

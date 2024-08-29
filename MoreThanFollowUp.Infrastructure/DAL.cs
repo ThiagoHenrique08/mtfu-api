@@ -35,7 +35,7 @@ namespace MoreThanFollowUp.Infrastructure
 
         public ICollection<T> Listar()
         {
-            var Lista =  _context.Set<T>().AsNoTracking().ToList();
+            var Lista = _context.Set<T>().AsNoTracking().ToList();
             return Lista;
         }
         public async Task<ICollection<T>> ListarAsync()

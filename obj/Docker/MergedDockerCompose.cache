@@ -1,0 +1,44 @@
+name: dockercompose13445416218319710700
+services:
+  morethanfollowup.api:
+    build:
+      context: C:\Estudos - C#\Projetos\MoreThanFollowUp
+      dockerfile: MoreThanFollowUp.API/Dockerfile
+    depends_on:
+      sqlserver:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: morethanfollowupapi
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "5001"
+        protocol: tcp
+  sqlserver:
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: Criativos1@
+    expose:
+      - "1433"
+    hostname: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 1433
+        published: "11433"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: c:\dados\volumes\mssql
+        target: /var/opt/mssql
+        bind:
+          create_host_path: true
+networks:
+  default:
+    name: dockercompose13445416218319710700_default

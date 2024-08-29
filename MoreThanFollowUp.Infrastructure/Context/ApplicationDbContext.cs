@@ -10,15 +10,18 @@ namespace MoreThanFollowUp.Infrastructure.Context
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        private readonly string _connectionString;
+        private readonly string? _connectionString;
+
         public ApplicationDbContext()
         {
+
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.Development.json")
+                .AddJsonFile("appsettings.json")
                 .Build();
 
             _connectionString = configuration.GetConnectionString("ConnectionString")!;
+
         }
         public ApplicationDbContext(string connectionString)
         {
@@ -27,34 +30,28 @@ namespace MoreThanFollowUp.Infrastructure.Context
 
 
         public DbSet<Project> Projects { get; set; }
-        public DbSet<Project_User> ProjectUsers {  get; set; }
+        public DbSet<Project_User> ProjectUsers { get; set; }
         public DbSet<PlanningPhase> Plannings { get; set; }
         public DbSet<RequirementsAnalysisPhase> RequirementsAnalysis { get; set; }
         public DbSet<FunctionalRequirements> FunctionalRequirements { get; set; }
         public DbSet<NotFunctionalRequirements> NotFunctionalRequirements { get; set; }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(_connectionString);
+                optionsBuilder.UseSqlServer(_connectionString, sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5, // Número máximo de tentativas
+                        maxRetryDelay: TimeSpan.FromSeconds(5), // Tempo máximo entre as tentativas
+                        errorNumbersToAdd: null); // Números de erro adicionais que disparam o retry (opcional));
+                });
                 optionsBuilder.UseLazyLoadingProxies();
-            }
 
+            }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

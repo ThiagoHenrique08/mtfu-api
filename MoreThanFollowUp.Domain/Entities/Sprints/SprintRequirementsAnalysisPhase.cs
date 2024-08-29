@@ -1,5 +1,4 @@
 ﻿using MoreThanFollowUp.Domain.Entities.Projects.Phases;
-using MoreThanFollowUp.Domain.Entities.Sprints.Tasks;
 
 namespace MoreThanFollowUp.Domain.Entities.Sprints
 {

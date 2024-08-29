@@ -17,3 +17,23 @@ D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\re
 D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.pdb
 D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.genruntimeconfig.cache
 D:\PROJETOS\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\ref\MoreThanFollowUp.Infrastructure.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\bin\Debug\net8.0\MoreThanFollowUp.Infrastructure.deps.json
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\bin\Debug\net8.0\MoreThanFollowUp.Infrastructure.runtimeconfig.json
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\bin\Debug\net8.0\MoreThanFollowUp.Infrastructure.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\bin\Debug\net8.0\MoreThanFollowUp.Infrastructure.pdb
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\bin\Debug\net8.0\MoreThanFollowUp.Application.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\bin\Debug\net8.0\MoreThanFollowUp.Domain.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\bin\Debug\net8.0\MoreThanFollowUp.Application.pdb
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\bin\Debug\net8.0\MoreThanFollowUp.Domain.pdb
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.csproj.AssemblyReference.cache
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.AssemblyInfoInputs.cache
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.AssemblyInfo.cs
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.sourcelink.json
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThan.CB6395AB.Up2Date
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\refint\MoreThanFollowUp.Infrastructure.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.pdb
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\MoreThanFollowUp.Infrastructure.genruntimeconfig.cache
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Infrastructure\obj\Debug\net8.0\ref\MoreThanFollowUp.Infrastructure.dll
