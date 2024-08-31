@@ -17,6 +17,9 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Add server to known_hosts
+      run: ssh-keyscan -H 191.101.18.75 >> ~/.ssh/known_hosts
     
     - name: Copy files to VPS
       run: scp -r ./* root@191.101.18.75:/app
