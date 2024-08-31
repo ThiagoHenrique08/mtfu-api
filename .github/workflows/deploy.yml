@@ -1,0 +1,37 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main  # ou outra branch que você deseja monitorar
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Copy files to VPS
+      run: scp -r ./* root@191.101.18.75:/app
+
+    - name: SSH and build containers
+      run: |
+        ssh root@191.101.18.75 << 'EOF'
+          cd /app
+          if [ ! -f ".first_build_done" ]; then
+            docker-compose build
+            docker-compose up -d
+            touch .first_build_done
+          else
+            docker-compose build api
+            docker-compose up -d api
+          fi
+        EOF
+
