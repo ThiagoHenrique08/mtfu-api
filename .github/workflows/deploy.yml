@@ -19,6 +19,9 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         known_hosts: github.com
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
+  
+    - name: Add server to known_hosts
+      run: ssh-keyscan -H 191.101.18.75 >> ~/.ssh/known_hosts
     
     - name: Copy files to VPS
       run: scp -r ./* root@191.101.18.75:/app
