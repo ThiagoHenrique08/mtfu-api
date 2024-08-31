@@ -13,15 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup SSH with passphrase
-      uses: shimataro/ssh-key-action@v2
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
       with:
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        known_hosts: github.com
-        passphrase: ${{ secrets.SSH_PASSPHRASE }}
-  
-    - name: Add server to known_hosts
-      run: ssh-keyscan -H 191.101.18.75 >> ~/.ssh/known_hosts
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     
     - name: Copy files to VPS
       run: scp -r ./* root@191.101.18.75:/app
