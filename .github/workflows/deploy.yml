@@ -20,6 +20,9 @@ jobs:
 
     - name: Add server to known_hosts
       run: ssh-keyscan -H 191.101.18.75 >> ~/.ssh/known_hosts
+
+    - name: Ensure target directory exists
+      run: ssh root@191.101.18.75 'mkdir -p /app'
     
     - name: Copy files to VPS
       run: scp -r ./* root@191.101.18.75:/app
