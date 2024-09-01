@@ -1,6 +1,5 @@
 volumes:
   sqlserver_data:
-  grafana-data:
 
 services:
   api:
