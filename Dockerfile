@@ -29,7 +29,7 @@ RUN dotnet publish "./MoreThanFollowUp.API/MoreThanFollowUp.API.csproj" -c Relea
 
 FROM base AS final
 WORKDIR /migration
-COPY --from=migration /app/migration .
+COPY --from=migration /app-mtfu/migration .
 WORKDIR /app-mtfu
 COPY --from=publish /app-mtfu .
 ENTRYPOINT ["dotnet", "MoreThanFollowUp.API.dll"]
