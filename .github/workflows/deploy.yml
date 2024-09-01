@@ -32,12 +32,12 @@ jobs:
         ssh root@191.101.18.75 << 'EOF'
           cd /app
           if [ ! -f ".first_build_done" ]; then
-            docker-compose build
-            docker-compose up -d
+            docker-compose build || { echo "Build failed"; exit 1; }
+            docker-compose up -d || { echo "Failed to start containers"; exit 1; }
             touch .first_build_done
           else
-            docker-compose build api
-            docker-compose up -d api
+            docker-compose build api || { echo "API build failed"; exit 1; }
+            docker-compose up -d api || { echo "Failed to start API container"; exit 1; }
           fi
         EOF
 

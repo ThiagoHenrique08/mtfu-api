@@ -75,6 +75,8 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                         return NotFound("User not exist!");
 
                     }
+
+
                 }
                 await _project_UserRepository.CadastrarEmMassaAsync(newListProjectUser);
                 return Ok();
