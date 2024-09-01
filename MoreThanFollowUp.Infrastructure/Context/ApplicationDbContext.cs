@@ -17,7 +17,7 @@ namespace MoreThanFollowUp.Infrastructure.Context
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.development.json")
+                .AddJsonFile("appsettings.json")
                 .Build();
 
             _connectionString = configuration.GetConnectionString("ConnectionString")!;

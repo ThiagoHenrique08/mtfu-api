@@ -33,7 +33,7 @@ jobs:
           cd /app
           if [ ! -f ".first_build_done" ]; then
             docker-compose build || { echo "Build failed"; exit 1; }
-            docker-compose up -d || { echo "Failed to start containers"; exit 1; }
+            docker-compose up || { echo "Failed to start containers"; exit 1; }
             touch .first_build_done
           else
             docker-compose build api || { echo "API build failed"; exit 1; }
