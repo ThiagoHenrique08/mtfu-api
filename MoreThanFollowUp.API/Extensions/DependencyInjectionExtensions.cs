@@ -75,7 +75,7 @@ namespace MoreThanFollowUp.API.Extensions
                                 policy.AllowAnyMethod(): Permite qualquer método HTTP (GET, POST, PUT, DELETE, etc.).
                                 app.UseCors("AllowAll"): Aplica a política de CORS definida com o nome "AllowAll".*/
 
-                            policy.WithOrigins("https://localhost:7023", "https://localhost:7156", "http://localhost:5173", "https://localhost:5000", "https://localhost:5001", "https://localhost:5001")
+                            policy.WithOrigins("http://191.101.18.75", "https://localhost:7023", "https://localhost:7156", "http://localhost:5173", "https://localhost:5000", "https://localhost:5001", "https://localhost:5001")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                         });

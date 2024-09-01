@@ -50,9 +50,9 @@ namespace MoreThanFollowUp.Infrastructure
 
         }
 
-        public async Task CadastrarEmMassaAsync(ICollection<T> listaEquipamento)
+        public async Task CadastrarEmMassaAsync(ICollection<T> listObjects)
         {
-            await _context.AddRangeAsync(listaEquipamento);
+            await _context.AddRangeAsync(listObjects);
             await _context.SaveChangesAsync();
         }
     }

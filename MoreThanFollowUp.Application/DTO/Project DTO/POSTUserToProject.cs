@@ -1,6 +1,6 @@
 ﻿namespace MoreThanFollowUp.Application.DTO.Project_DTO
 {
-    public class POSTProjectUser
+    public class POSTUserToProject
     {
         public string? UserName { get; set; }
     }

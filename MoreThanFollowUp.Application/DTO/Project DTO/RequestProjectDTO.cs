@@ -3,6 +3,6 @@
     public class RequestProjectDTO
     {
         public POSTProject? Project { get; set; }
-        public ICollection<POSTProjectUser>? ProjectUsers { get; set; }
+        public ICollection<POSTUserToProject>? UsersList { get; set; }
     }
 }

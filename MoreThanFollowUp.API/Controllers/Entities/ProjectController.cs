@@ -54,7 +54,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
                 var newListProjectUser = new List<Project_User>();
 
-                foreach (var user in projectRequest.ProjectUsers!)
+                foreach (var user in projectRequest.UsersList!)
                 {
 
                     var result = await _userManager.FindByNameAsync(user.UserName!);

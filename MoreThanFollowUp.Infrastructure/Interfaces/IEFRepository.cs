@@ -12,7 +12,7 @@
 
         public T? RecuperarPorAsync(Func<T, bool> condicao);
 
-        public Task CadastrarEmMassaAsync(ICollection<T> listaEquipamento);
+        public Task CadastrarEmMassaAsync(ICollection<T> listObjects);
 
 
     }
