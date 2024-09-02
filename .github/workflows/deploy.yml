@@ -30,7 +30,7 @@ jobs:
     - name: Run Docker Compose on VPS
       run: |
           ssh -o StrictHostKeyChecking=no root@191.101.18.75 '
-          cd /app-mftu &&
+          cd /app-mtfu &&
           docker compose -f ./docker-compose.yml up -d --no-deps --build
           '
 
