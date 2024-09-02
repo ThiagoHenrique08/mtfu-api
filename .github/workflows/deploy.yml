@@ -40,4 +40,7 @@ jobs:
             docker-compose up -d api || { echo "Failed to start API container"; exit 1; }
           fi
         EOF
+        
+    - name: Check Docker Compose Logs
+      run: docker compose logs
 
