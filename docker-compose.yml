@@ -10,6 +10,7 @@ services:
       - "8080:8080"
     depends_on:
       - sqlserver.configurator
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
@@ -24,13 +25,13 @@ services:
 
   sqlserver.configurator:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    volumes:
-      - ./init:/docker-entrypoint-initdb.d
     depends_on:
       - sqlserver
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
     command: >
       bash -c "
+      sleep 20;
       /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'Criativos123@' -d master -i docker-entrypoint-initdb.d/init.sql;
       echo 'All done!';
       "
-
