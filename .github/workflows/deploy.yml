@@ -27,20 +27,10 @@ jobs:
     - name: Copy files to VPS
       run: scp -r ./* root@191.101.18.75:/app-mtfu
 
-    - name: SSH and build containers
+    - name: Run Docker Compose on VPS
       run: |
-        ssh root@191.101.18.75 << 'EOF'
-          cd /app-mtfu
-          if [ ! -f ".first_build_done" ]; then
-            docker-compose build || { echo "Build failed"; exit 1; }
-            docker-compose up || { echo "Failed to start containers"; exit 1; }
-            touch .first_build_done
-          else
-            docker-compose build api || { echo "API build failed"; exit 1; }
-            docker-compose up -d api || { echo "Failed to start API container"; exit 1; }
-          fi
-        EOF
-        
-    - name: Check Docker Compose Logs
-      run: docker compose logs
+          ssh -o StrictHostKeyChecking=no root@191.101.18.75 '
+          cd /app-mftu &&
+          docker compose -f ./docker-compose.yml up -d --no-deps --build
+          '
 
