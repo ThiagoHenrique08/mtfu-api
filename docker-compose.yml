@@ -14,7 +14,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=Criativos1@
+      - SA_PASSWORD=Criativos123@
       - MSSQL_PID=Developer
     ports:
       - 1433:1433
@@ -29,7 +29,8 @@ services:
     depends_on:
       - sqlserver
     command: >
-      bash -c '
-      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P Criativos1@ -d master -i docker-entrypoint-initdb.d/init.sql;
-      echo "All done!";
-      '
+      bash -c "
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'Criativos123@' -d master -i /docker-entrypoint-initdb.d/init.sql;
+      echo 'All done!';
+      "
+
