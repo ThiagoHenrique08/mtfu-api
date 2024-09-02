@@ -27,7 +27,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpPost]
         [Route("create")]
-        [Authorize(Policy = "AdminOnlyAndScrumMasterOnly")]
+        //[Authorize(Policy = "AdminOnlyAndScrumMasterOnly")]
         public async Task<ActionResult> PostProject([FromBody] RequestProjectDTO projectRequest)
         {
 
