@@ -22,15 +22,15 @@ jobs:
       run: ssh-keyscan -H 191.101.18.75 >> ~/.ssh/known_hosts
 
     - name: Ensure target directory exists
-      run: ssh root@191.101.18.75 'mkdir -p /app'
+      run: ssh root@191.101.18.75 'mkdir -p /app-mtfu'
     
     - name: Copy files to VPS
-      run: scp -r ./* root@191.101.18.75:/app
+      run: scp -r ./* root@191.101.18.75:/app-mtfu
 
     - name: SSH and build containers
       run: |
         ssh root@191.101.18.75 << 'EOF'
-          cd /app
+          cd /app-mtfu
           if [ ! -f ".first_build_done" ]; then
             docker-compose build || { echo "Build failed"; exit 1; }
             docker-compose up || { echo "Failed to start containers"; exit 1; }

@@ -1,7 +1,7 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app-mtfu
+WORKDIR /app
 EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0.303 AS build
@@ -13,7 +13,7 @@ COPY ["MoreThanFollowUp.Domain/MoreThanFollowUp.Domain.csproj", "MoreThanFollowU
 COPY ["MoreThanFollowUp.Infrastructure/MoreThanFollowUp.Infrastructure.csproj", "MoreThanFollowUp.Infrastructure/"]
 RUN dotnet restore "./MoreThanFollowUp.API/MoreThanFollowUp.API.csproj"
 COPY . .
-RUN dotnet build "./MoreThanFollowUp.API/MoreThanFollowUp.API.csproj" -c Release -o /app-mtfu
+RUN dotnet build "./MoreThanFollowUp.API/MoreThanFollowUp.API.csproj" -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0.303 AS migration
 WORKDIR /src
@@ -21,15 +21,15 @@ COPY . .
 RUN dotnet restore "./MoreThanFollowUp.Infrastructure/MoreThanFollowUp.Infrastructure.csproj"
 COPY . .
 WORKDIR "/src/MoreThanFollowUp.Infrastructure"
-RUN dotnet build "./MoreThanFollowUp.Infrastructure.csproj" -c Release -o /app-mtfu/migration
+RUN dotnet build "./MoreThanFollowUp.Infrastructure.csproj" -c Release -o /app/migration
 
 
 FROM build AS publish
-RUN dotnet publish "./MoreThanFollowUp.API/MoreThanFollowUp.API.csproj" -c Release -o /app-mtfu
+RUN dotnet publish "./MoreThanFollowUp.API/MoreThanFollowUp.API.csproj" -c Release -o /app
 
 FROM base AS final
 WORKDIR /migration
-COPY --from=migration /app-mtfu/migration .
-WORKDIR /app-mtfu
-COPY --from=publish /app-mtfu .
+COPY --from=migration /app/migration .
+WORKDIR /app
+COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "MoreThanFollowUp.API.dll"]
