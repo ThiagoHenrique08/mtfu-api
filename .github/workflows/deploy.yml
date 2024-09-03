@@ -28,9 +28,9 @@ jobs:
 
     - name: Ensure target directory exists
       run: ssh root@191.101.18.75 'mkdir -p /app-mtfu'
-    
+
     - name: Copy files to VPS
-      run: scp -r ./* root@191.101.18.75:/app-mtfu
+      run: rsync -avz --delete --exclude='.git' ./ root@191.101.18.75:/app-mtfu
 
     - name: SSH and build containers to VPS
       run: |
