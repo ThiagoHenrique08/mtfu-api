@@ -6,6 +6,7 @@ using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
 using MoreThanFollowUp.Infrastructure.Pagination;
+using MoreThanFollowUp.Infrastructure.Repository.Projects;
 using Newtonsoft.Json;
 
 namespace MoreThanFollowUp.API.Controllers.Entities
@@ -53,7 +54,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                 var newProjectCadastrado = _projectRepository.RecuperarPorAsync(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
 
                 var newListProjectUser = new List<Project_User>();
-        
+
 
                 foreach (var user in projectRequest.UsersList!)
                 {
@@ -155,5 +156,21 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             }
             return Ok(newListProject);
         }
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<ActionResult> Delete(int idProject)
+        {
+            var project = _projectRepository.RecuperarPorAsync(p=>p.ProjectId == idProject);
+
+            if (project is null) { return NotFound(); }
+
+            await _projectRepository.DeletarAsync(project);
+
+            return Ok();
+
+
     }
+
+    }
+  
 }
