@@ -53,7 +53,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                 var newProjectCadastrado = _projectRepository.RecuperarPorAsync(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
 
                 var newListProjectUser = new List<Project_User>();
-                 int um = 1;
+        
 
                 foreach (var user in projectRequest.UsersList!)
                 {
