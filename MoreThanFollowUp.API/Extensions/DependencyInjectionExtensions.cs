@@ -112,7 +112,7 @@ namespace MoreThanFollowUp.API.Extensions
                             options.UseSqlServer(configuration.GetConnectionString("ConnectionString"));
                             options.UseLazyLoadingProxies();
 
-                        }, ServiceLifetime.Transient);
+                        }, ServiceLifetime.Scoped);
 
             return services;
         }

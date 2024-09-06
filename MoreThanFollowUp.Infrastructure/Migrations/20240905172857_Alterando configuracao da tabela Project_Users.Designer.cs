@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoreThanFollowUp.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using MoreThanFollowUp.Infrastructure.Context;
 namespace MoreThanFollowUp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240905172857_Alterando configuracao da tabela Project_Users")]
+    partial class AlterandoconfiguracaodatabelaProject_Users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,14 +285,10 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("DATETIME")
-                        .HasColumnName("StartDate");
+                        .HasColumnName("DataCriacao");
 
                     b.Property<string>("Description")
                         .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("EndDate");
 
                     b.Property<string>("Responsible")
                         .HasColumnType("VARCHAR(50)");

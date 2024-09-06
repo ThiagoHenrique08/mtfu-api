@@ -26,7 +26,7 @@ builder.Services.AddHttpClient("MyClient")
             ServerCertificateCustomValidationCallback = (httpRequestMessage, certificate, chain, sslPolicyErrors) =>
             {
                 // Exemplo: Aceitando todos os certificados (apenas para desenvolvimento)
-                return sslPolicyErrors == SslPolicyErrors.None || certificate.Issuer == certificate.Subject;
+                return sslPolicyErrors == SslPolicyErrors.None || certificate!.Issuer == certificate.Subject;
             }
         };
     });

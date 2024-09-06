@@ -2,7 +2,7 @@
 {
     public class RequestProjectDTO
     {
-        public POSTProject? Project { get; set; }
-        public ICollection<POSTUserToProject>? UsersList { get; set; }
+        public POSTProjectDTO? Project { get; set; }
+        public ICollection<POSTUserToProjectDTO>? UsersList { get; set; }
     }
 }

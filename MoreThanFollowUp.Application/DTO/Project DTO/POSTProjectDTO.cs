@@ -1,6 +1,6 @@
 ﻿namespace MoreThanFollowUp.Application.DTO.Project_DTO
 {
-    public class POSTProject
+    public class POSTProjectDTO
     {
         public string? Title { get; set; }
 

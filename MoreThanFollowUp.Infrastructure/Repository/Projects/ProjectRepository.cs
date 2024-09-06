@@ -29,7 +29,7 @@ namespace MoreThanFollowUp.Infrastructure.Repository.Projects
 
         public PagedList<Project> GetProjectPagination(ProjectsParameters projectsParameters)
         {
-            var projects = Listar().OrderBy(p => p.ProjectId).AsQueryable();
+            var projects = Listar().OrderBy(p => p.ProjectId).AsQueryable().Include(p=>p.Projects_Users!.Select(u=>u.User!.CompletedName));
             var ordenedProjects = PagedList<Project>.ToPagedList(projects, projectsParameters.PageNumber, projectsParameters.PageSize);
 
             return ordenedProjects;

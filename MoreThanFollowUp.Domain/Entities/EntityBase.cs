@@ -3,5 +3,6 @@
     public class EntityBase
     {
         public DateTime? CreateDate { get; set; }
+       
     }
 }
