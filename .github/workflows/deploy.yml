@@ -13,10 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    - name: Use .NET SDK 8.0.303
+    - name: Use .NET SDK 8.0.401
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: "8.0.303"
+        dotnet-version: "8.0.401"
       
     - name: Run unit tests
       run: dotnet test --filter FullyQualifiedName~MoreThanFollowUp.Tests.UnitTests ./MoreThanFollowUp.Tests/MoreThanFollowUp.Tests.csproj
