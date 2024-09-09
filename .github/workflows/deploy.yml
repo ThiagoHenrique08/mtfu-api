@@ -19,7 +19,7 @@ jobs:
         dotnet-version: "8.0.303"
       
     - name: Run unit tests
-      run: dotnet test ./MoreThanFollowUp.Tests/MoreThanFollowUp.Tests.csproj --filter FullyQualifiedName~MoreThanFollowUp.Tests.UnitTests --stop-on-fail
+      run: dotnet test --filter FullyQualifiedName~MoreThanFollowUp.Tests.UnitTests ./MoreThanFollowUp.Tests/MoreThanFollowUp.Tests.csproj
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
