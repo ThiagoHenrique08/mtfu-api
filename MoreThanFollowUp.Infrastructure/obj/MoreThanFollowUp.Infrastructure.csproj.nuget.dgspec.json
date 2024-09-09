@@ -233,6 +233,22 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "X.Extensions.PagedList.EF": {
+              "target": "Package",
+              "version": "[10.1.2, )"
+            },
+            "X.PagedList": {
+              "target": "Package",
+              "version": "[10.0.3, )"
+            },
+            "X.PagedList.Mvc.Core": {
+              "target": "Package",
+              "version": "[10.1.2, )"
+            },
+            "X.Web.PagedList": {
+              "target": "Package",
+              "version": "[10.1.2, )"
+            },
             "Z.EntityFramework.Extensions.EFCore": {
               "target": "Package",
               "version": "[8.103.3, )"

@@ -1,6 +1,6 @@
 ﻿namespace MoreThanFollowUp.Infrastructure.Pagination
 {
-    public class PagedList<T> : List<T> where T : class
+    public class PagedListDeT<T> : List<T> where T : class
     {
         public int CurrentPage { get; private set; }
         public int TotalPages { get; private set; }
@@ -11,7 +11,7 @@
         public bool HasNext => CurrentPage < TotalPages;
 
 
-        public PagedList(List<T> items, int count, int pageNumber, int pageSize)
+        public PagedListDeT(List<T> items, int count, int pageNumber, int pageSize)
         {
             TotalCount = count;
             PageSize = pageSize;
@@ -21,11 +21,11 @@
             AddRange(items);
         }
 
-        public static PagedList<T> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
+        public static PagedListDeT<T> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
         {
             var count = source.Count();
             var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-            return new PagedList<T>(items, count, pageNumber, pageSize);
+            return new PagedListDeT<T>(items, count, pageNumber, pageSize);
         }
     }
 }

@@ -8,6 +8,7 @@ using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
 using MoreThanFollowUp.Infrastructure.Pagination;
 using MoreThanFollowUp.Infrastructure.Repository.Projects;
 using Newtonsoft.Json;
+using X.PagedList;
 
 namespace MoreThanFollowUp.API.Controllers.Entities
 {
@@ -26,6 +27,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             _project_UserRepository = project_UserRepository;
         }
 
+
         [HttpPost]
         [Route("create")]
         //[Authorize(Policy = "AdminOnlyAndScrumMasterOnly")]
@@ -43,14 +45,14 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                     Description = projectRequest.Project.Description,
                     CreateDate = DateTime.Now,
                 };
-                var ProjectExist = _projectRepository.RecuperarPorAsync(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
+                var ProjectExist = await _projectRepository.RecuperarPorAsync(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
 
                 if (ProjectExist is null)
                 {
                     await _projectRepository.AdicionarAsync(newProject);
                 }
 
-                var newProjectCadastrado = _projectRepository.RecuperarPorAsync(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
+                var newProjectCadastrado = await _projectRepository.RecuperarPorAsync(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
                 var newListProjectUser = new List<Project_User>();
 
                 foreach (var user in projectRequest.UsersList!)
@@ -87,8 +89,8 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         {
             try
             {
-              
-                var ProjectExist =  _projectRepository.RecuperarPorAsync(p => p.ProjectId.Equals(IdProject));
+
+                var ProjectExist = await _projectRepository.RecuperarPorAsync(p => p.ProjectId.Equals(IdProject));
                 if (ProjectExist is null)
                 {
                     return NotFound();
@@ -123,24 +125,23 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         }
         [HttpGet]
         [Route("pagination")]
-        public ActionResult<IEnumerable<GETProjectDTO>> GetProjectsPagination([FromQuery] ProjectsParameters projectsParameters)
+        public async Task<ActionResult<IEnumerable<GETProjectDTO>>> GetProjectsPagination([FromQuery] ProjectsParameters projectsParameters)
         {
-            var projects = _projectRepository.GetProjectPagination(projectsParameters);
-
-            if (projects is null) { return NotFound(); }
-
-            var metadata = new
+            try
             {
-                projects.TotalCount,
-                projects.PageSize,
-                projects.CurrentPage,
-                projects.TotalPages,
-                projects.HasNext,
-                projects.HasPrevious
-            };
+                var projects = await _projectRepository.GetProjectPaginationAsync(projectsParameters);
 
-            //Cria um cabeçalho HTTP personalizado para ser mostrar na resposta:
-            Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
+                return GetProjects(projects);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        private ActionResult<IEnumerable<GETProjectDTO>> GetProjects(IPagedList<Project> projects)
+        {
+
 
             var newListProject = new List<GETProjectDTO>();
             var usersList = new List<POSTUserToProjectDTO>();
@@ -159,34 +160,61 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                     Projects_Users = project.Projects_Users!.Select(p => p.User!.CompletedName).ToList()!
 
                 });
-                
-            }
-            return Ok(newListProject);
 
+
+
+
+            }
+
+            var metadata = new
+            {
+                projects.Count,
+                projects.PageSize,
+                projects.PageCount,
+                projects.TotalItemCount,
+                projects.HasNextPage,
+                projects.HasPreviousPage
+            };
+
+
+            //Cria um cabeçalho HTTP personalizado para ser mostrar na resposta:
+            Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
+            return Ok(newListProject);
         }
+
+
         [HttpPatch]
         [Route("changeProject")]
         public async Task<ActionResult> PatchProject([FromBody] PATCHProjectDTO projectDTO)
         {
-
-            if (projectDTO is null)
-            {
-                return NotFound();
-            }
-            var projectExist =  _projectRepository.RecuperarPorAsync(p=>p.ProjectId == projectDTO.ProjectId);
-
-            if (projectExist is not null)
+            try
             {
 
-                projectExist.Title = projectDTO.Title ?? projectExist.Title;
-                projectExist.Responsible = projectDTO.Responsible ?? projectExist.Responsible;
-                projectExist.Category = projectDTO.Category ?? projectExist.Category;
-                projectExist.Description = projectDTO.Description ?? projectExist.Description;
-                projectExist.CreateDate = projectDTO.CreateDate ?? projectExist.CreateDate;
-            }
-                await _projectRepository.AtualizarAsync(projectExist!);    
+                if (projectDTO is null)
+                {
+                    return NotFound();
+                }
+                var projectExist = await _projectRepository.RecuperarPorAsync(p => p.ProjectId == projectDTO.ProjectId);
 
-            return Ok();
+                if (projectExist is not null)
+                {
+
+                    projectExist.Title = projectDTO.Title ?? projectExist.Title;
+                    projectExist.Responsible = projectDTO.Responsible ?? projectExist.Responsible;
+                    projectExist.Category = projectDTO.Category ?? projectExist.Category;
+                    projectExist.Description = projectDTO.Description ?? projectExist.Description;
+                    projectExist.CreateDate = projectDTO.CreateDate ?? projectExist.CreateDate;
+                }
+                await _projectRepository.AtualizarAsync(projectExist!);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
 
         }
 
@@ -194,17 +222,26 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         [Route("delete")]
         public async Task<ActionResult> Delete(int idProject)
         {
-            var project = _projectRepository.RecuperarPorAsync(p=>p.ProjectId == idProject);
+            try
+            {
+                var project = await _projectRepository.RecuperarPorAsync(p => p.ProjectId == idProject);
 
-            if (project is null) { return NotFound(); }
+                if (project is null) { return NotFound(); }
 
-            await _projectRepository.DeletarAsync(project);
+                await _projectRepository.DeletarAsync(project);
 
-            return Ok();
+                return Ok();
 
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+
+        }
 
     }
 
-    }
-  
 }

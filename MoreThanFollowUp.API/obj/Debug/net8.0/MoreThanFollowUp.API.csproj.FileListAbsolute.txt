@@ -142,6 +142,9 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\System.Runtime.Caching.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\System.Text.Json.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\X.PagedList.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\X.PagedList.Mvc.Core.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\X.Web.PagedList.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\Z.EntityFramework.Extensions.EFCore.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
@@ -230,3 +233,4 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.pdb
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.genruntimeconfig.cache
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\ref\MoreThanFollowUp.API.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\X.Extensions.PagedList.EF.dll

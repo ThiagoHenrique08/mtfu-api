@@ -1668,6 +1668,58 @@
           "lib/netcoreapp2.1/_._": {}
         }
       },
+      "X.Extensions.PagedList.EF/10.1.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "8.0.7",
+          "X.PagedList": "10.0.3"
+        },
+        "compile": {
+          "lib/net8.0/X.Extensions.PagedList.EF.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/X.Extensions.PagedList.EF.dll": {}
+        }
+      },
+      "X.PagedList/10.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/X.PagedList.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/X.PagedList.dll": {}
+        }
+      },
+      "X.PagedList.Mvc.Core/10.1.2": {
+        "type": "package",
+        "dependencies": {
+          "X.Web.PagedList": "10.1.2"
+        },
+        "compile": {
+          "lib/net8.0/X.PagedList.Mvc.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/X.PagedList.Mvc.Core.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "X.Web.PagedList/10.1.2": {
+        "type": "package",
+        "dependencies": {
+          "X.PagedList": "10.0.3"
+        },
+        "compile": {
+          "lib/net8.0/X.Web.PagedList.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/X.Web.PagedList.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "Z.EntityFramework.Extensions.EFCore/8.103.3": {
         "type": "package",
         "dependencies": {
@@ -4561,6 +4613,71 @@
         "version.txt"
       ]
     },
+    "X.Extensions.PagedList.EF/10.1.2": {
+      "sha512": "rs9nDn3+8f3Bh5OsBFHNEMoo+mGOszJ/oTDGro3HyCJafnJ6iTwGuairiIaAfW2yMHFaIbv9dU4FO0K1Glu/Pw==",
+      "type": "package",
+      "path": "x.extensions.pagedlist.ef/10.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net6.0/X.Extensions.PagedList.EF.dll",
+        "lib/net8.0/X.Extensions.PagedList.EF.dll",
+        "x-extensions.png",
+        "x.extensions.pagedlist.ef.10.1.2.nupkg.sha512",
+        "x.extensions.pagedlist.ef.nuspec"
+      ]
+    },
+    "X.PagedList/10.0.3": {
+      "sha512": "HIYIXYlqIWrhedP1ext7bG1Bj3LS8X7zgNrZlrPdcQBbXCjns+QXudVbadzZq9tLrfQJmVowJirwCM1pONyeBg==",
+      "type": "package",
+      "path": "x.pagedlist/10.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net6.0/X.PagedList.dll",
+        "lib/net8.0/X.PagedList.dll",
+        "lib/netstandard2.0/X.PagedList.dll",
+        "lib/netstandard2.1/X.PagedList.dll",
+        "x.pagedlist.10.0.3.nupkg.sha512",
+        "x.pagedlist.nuspec"
+      ]
+    },
+    "X.PagedList.Mvc.Core/10.1.2": {
+      "sha512": "znbnP3LqonxwM1Rue5wqVvu2e6S9e2g/jToWgrXCD6AGgGCQl93FIBdXxY2uGJ8by8dQX4exVKm3ydpEmWRS5w==",
+      "type": "package",
+      "path": "x.pagedlist.mvc.core/10.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net6.0/X.PagedList.Mvc.Core.dll",
+        "lib/net8.0/X.PagedList.Mvc.Core.dll",
+        "x-web.png",
+        "x.pagedlist.mvc.core.10.1.2.nupkg.sha512",
+        "x.pagedlist.mvc.core.nuspec"
+      ]
+    },
+    "X.Web.PagedList/10.1.2": {
+      "sha512": "sAo7tJmBWs8dT3PaZYI8bzBCDx8hctZAA6CGqMovNOEL+rpNxXIdED468GV7Gs2nNCdhOb5bpw4ZxmAIBuBFHg==",
+      "type": "package",
+      "path": "x.web.pagedlist/10.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net6.0/X.Web.PagedList.dll",
+        "lib/net8.0/X.Web.PagedList.dll",
+        "x-web.png",
+        "x.web.pagedlist.10.1.2.nupkg.sha512",
+        "x.web.pagedlist.nuspec"
+      ]
+    },
     "Z.EntityFramework.Extensions.EFCore/8.103.3": {
       "sha512": "h+NwCLKp4j/cPjzUE3Fd4ooFsZfR4DTHib/uimMWi7TP3P+X4+1O/dVrOJzN9oH1bdHo4xk77eknP9GQr8izCA==",
       "type": "package",
@@ -4598,6 +4715,10 @@
       "Microsoft.Extensions.Configuration.Json >= 8.0.0",
       "MoreThanFollowUp.Application >= 1.0.0",
       "MoreThanFollowUp.Domain >= 1.0.0",
+      "X.Extensions.PagedList.EF >= 10.1.2",
+      "X.PagedList >= 10.0.3",
+      "X.PagedList.Mvc.Core >= 10.1.2",
+      "X.Web.PagedList >= 10.1.2",
       "Z.EntityFramework.Extensions.EFCore >= 8.103.3"
     ]
   },
@@ -4693,6 +4814,22 @@
           "Microsoft.Extensions.Configuration.Json": {
             "target": "Package",
             "version": "[8.0.0, )"
+          },
+          "X.Extensions.PagedList.EF": {
+            "target": "Package",
+            "version": "[10.1.2, )"
+          },
+          "X.PagedList": {
+            "target": "Package",
+            "version": "[10.0.3, )"
+          },
+          "X.PagedList.Mvc.Core": {
+            "target": "Package",
+            "version": "[10.1.2, )"
+          },
+          "X.Web.PagedList": {
+            "target": "Package",
+            "version": "[10.1.2, )"
           },
           "Z.EntityFramework.Extensions.EFCore": {
             "target": "Package",

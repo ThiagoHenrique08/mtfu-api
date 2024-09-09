@@ -3,6 +3,10 @@ using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Context;
 using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
 using MoreThanFollowUp.Infrastructure.Pagination;
+using X.Extensions.PagedList.EF;
+using X.PagedList;
+using X.PagedList.Extensions;
+
 
 namespace MoreThanFollowUp.Infrastructure.Repository.Projects
 {
@@ -27,12 +31,17 @@ namespace MoreThanFollowUp.Infrastructure.Repository.Projects
             return results;
         }
 
-        public PagedList<Project> GetProjectPagination(ProjectsParameters projectsParameters)
+        public async Task<IPagedList<Project>> GetProjectPaginationAsync(ProjectsParameters projectsParameters)
         {
-            var projects = Listar().OrderBy(p => p.ProjectId).AsQueryable().Include(p=>p.Projects_Users!.Select(u=>u.User!.CompletedName));
-            var ordenedProjects = PagedList<Project>.ToPagedList(projects, projectsParameters.PageNumber, projectsParameters.PageSize);
-
-            return ordenedProjects;
+            var projects = await ListarAsync();
+            var projectsOrdened = projects.OrderBy(p => p.ProjectId).AsQueryable();
+            //var projectsOrdened = projects.OrderBy(p => p.ProjectId).AsQueryable().Include(p=>p.Projects_Users!.Select(u=>u.User!.CompletedName));
+            //var ordenedProjects =  PagedList<Project>.ToPagedList(projects, projectsParameters.PageNumber, projectsParameters.PageSize);
+            
+            var projectsResult =  projectsOrdened.ToPagedList(projectsParameters.PageNumber, projectsParameters.PageSize);
+            
+            return projectsResult;
         }
+
     }
 }

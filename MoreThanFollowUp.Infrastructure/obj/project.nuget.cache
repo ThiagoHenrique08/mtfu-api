@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Iy6/wHdljWs=",
+  "dgSpecHash": "/xlIbjTWUzs=",
   "success": true,
   "projectFilePath": "C:\\Estudos - C#\\Projetos\\MoreThanFollowUp\\MoreThanFollowUp.Infrastructure\\MoreThanFollowUp.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -90,6 +90,10 @@
     "C:\\Users\\Thiago\\.nuget\\packages\\system.text.json\\8.0.4\\system.text.json.8.0.4.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
+    "C:\\Users\\Thiago\\.nuget\\packages\\x.extensions.pagedlist.ef\\10.1.2\\x.extensions.pagedlist.ef.10.1.2.nupkg.sha512",
+    "C:\\Users\\Thiago\\.nuget\\packages\\x.pagedlist\\10.0.3\\x.pagedlist.10.0.3.nupkg.sha512",
+    "C:\\Users\\Thiago\\.nuget\\packages\\x.pagedlist.mvc.core\\10.1.2\\x.pagedlist.mvc.core.10.1.2.nupkg.sha512",
+    "C:\\Users\\Thiago\\.nuget\\packages\\x.web.pagedlist\\10.1.2\\x.web.pagedlist.10.1.2.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\z.entityframework.extensions.efcore\\8.103.3\\z.entityframework.extensions.efcore.8.103.3.nupkg.sha512"
   ],
   "logs": []

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoreThanFollowUp.Infrastructure.Context;
 using MoreThanFollowUp.Infrastructure.Interfaces;
+using System.Linq.Expressions;
 
 namespace MoreThanFollowUp.Infrastructure
 {
@@ -38,15 +39,15 @@ namespace MoreThanFollowUp.Infrastructure
             var Lista = _context.Set<T>().ToList();
             return Lista;
         }
-        public async Task<ICollection<T>> ListarAsync()
+        public async Task<IEnumerable<T>> ListarAsync()
         {
             var Lista = await _context.Set<T>().ToListAsync();
             return Lista;
         }
 
-        public T? RecuperarPorAsync(Func<T, bool> condicao)
+        public async Task<T?> RecuperarPorAsync(Expression<Func<T, bool>> condicao)
         {
-            return _context.Set<T>().FirstOrDefault(condicao);
+            return await _context.Set<T>().FirstOrDefaultAsync(condicao);
 
         }
 
