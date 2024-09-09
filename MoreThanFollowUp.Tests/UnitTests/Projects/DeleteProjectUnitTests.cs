@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Projects
 {
-    public class DeleteProjectUnitTests : IClassFixture<ProjectsUnitTestsController>
+    public class DeleteProjectUnitTests 
     {
 
        
@@ -17,15 +17,15 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         //    _controller = new ProjectController(controller._repository, controller._userManager, controller._project_UserRepository);
         //}
 
-        [Fact]
-        public async Task DeleteProjectById_Return_Ok()
-        {
+        //[Fact]
+        //public async Task DeleteProjectById_Return_Ok()
+        //{
 
-        }
-        [Fact]
-        public async Task DeleteProjectById_Return_BadRequest()
-        {
+        //}
+        //[Fact]
+        //public async Task DeleteProjectById_Return_BadRequest()
+        //{
 
-        }
+        //}
     }
 }
