@@ -19,7 +19,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         private readonly IPagedList<Project>? _projects;
 
         [Fact]
-        public async Task GetProjectsPagination_ShouldReturnOkWithPaginationMetadata()
+        public async Task GetProjectsPagination_WithValidProjectList_ShouldReturnOkResult()
         {
             // Arrange
             var _mockRepo = new Mock<IProjectRepository>();
@@ -75,7 +75,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
 
 
         [Fact]
-        public async Task GetProjectsPagination_Return_BadRequestResult()
+        public async Task GetProjectsPagination_InvalidReturn_ShouldBadRequestResult()
         {
             // Arrange
             var _mockRepo = new Mock<IProjectRepository>();
@@ -108,7 +108,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             Assert.IsType<ActionResult<IEnumerable<GETProjectDTO>>>(result);
             Assert.IsType<BadRequestObjectResult>(result.Result);
 
-            // Verificando se o resultado da ação é OkObjectResult
+            // Verificando se o resultado da ação é BadRequestObjectResult
             var okResult = Assert.IsType<BadRequestObjectResult>(result.Result);
 
         }

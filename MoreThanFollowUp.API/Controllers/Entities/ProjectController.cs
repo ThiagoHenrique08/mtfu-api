@@ -160,10 +160,6 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                     Projects_Users = project.Projects_Users!.Select(p => p.User!.CompletedName).ToList()!
 
                 });
-
-
-
-
             }
 
             var metadata = new

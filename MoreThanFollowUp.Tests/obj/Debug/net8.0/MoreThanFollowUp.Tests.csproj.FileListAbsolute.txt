@@ -165,3 +165,6 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.0\MoreThanFollowUp.Tests.genruntimeconfig.cache
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.0\ref\MoreThanFollowUp.Tests.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\X.Extensions.PagedList.EF.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll

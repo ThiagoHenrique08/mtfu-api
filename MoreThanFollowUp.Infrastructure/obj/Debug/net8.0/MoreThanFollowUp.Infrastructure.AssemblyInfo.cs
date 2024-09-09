@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MoreThanFollowUp.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f79e5ccc93a258c45ffc0e8576c165014adf37f2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5637ec4a8f97b48f54af88b0d23143fb63ef4332")]
 [assembly: System.Reflection.AssemblyProductAttribute("MoreThanFollowUp.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MoreThanFollowUp.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
