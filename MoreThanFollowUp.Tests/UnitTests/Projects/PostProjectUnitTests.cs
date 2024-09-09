@@ -10,46 +10,135 @@ using MoreThanFollowUp.Infrastructure.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Projects
 {
-    public class PostProjectUnitTests 
+    public class PostProjectUnitTests
     {
 
-        //[Fact]
-        //public async Task PostProject_WithValidProjectAndUser_ShouldReturnOkResult()
-        //{
-        //    //Arrange
-        //    var _mockrepo = new Mock<IProjectRepository>();
-        //    var _mockUserRepo = new Mock<UserManager<ApplicationUser>>(Mock.Of<IUserStore<ApplicationUser>>());
-        //    var _mockProjectUser = new Mock<IProject_UserRepository>();
-        //    var controller = new ProjectController(_mockrepo.Object, _mockUserRepo.Object, _mockProjectUser.Object);
+        private readonly Mock<IProjectRepository> _projectRepositoryMock;
+        private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
+        private readonly Mock<IProject_UserRepository> _projectUserRepositoryMock;
+        private readonly ProjectController _controller;
 
-        //    var project = new POSTProjectDTO{
-              
-        //        Title = "teste",
-        //        Description = "teste",
-        //        Category = "teste",
-        //        Responsible = "teste",
-        //        CreateDate = DateTime.Now,
-           
-        //    };
-        //    var Users = new List<POSTUserToProjectDTO> {
-        //    new POSTUserToProjectDTO {UserName="thiagsilva"},
-        //    new POSTUserToProjectDTO {UserName="raphael"}
-        //    };
+        public PostProjectUnitTests()
+        {
+            // Configura UserManager para funcionar com Moq
+            var store = new Mock<IUserStore<ApplicationUser>>();
+            _userManagerMock = new Mock<UserManager<ApplicationUser>>(
+                store.Object, null, null, null, null, null, null, null, null);
 
-        //   var requestDTO = new RequestProjectDTO { Project = project, UsersList = Users };
+            _projectRepositoryMock = new Mock<IProjectRepository>();
+            _projectUserRepositoryMock = new Mock<IProject_UserRepository>();
 
-        //    //_mockrepo.Setup(repo => repo.CadastrarEmMassaAsync(It.IsAny<List<Project_User>>()));
+            _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object);
+        }
 
-        //}
-        //[Fact]
-        //public async Task PostProject_Return_BadRequest()
-        //{
+        [Fact] //Testa se o método retorna Ok quando o projeto é criado com sucesso.
+        public async Task PostProject_ReturnsOk_WhenProjectIsCreatedSuccessfully()
+        {
+            // Arrange
+            var projectRequest = new RequestProjectDTO
+            {
+                Project = new POSTProjectDTO
+                {
+                    Title = "New Project",
+                    Responsible = "John Doe",
+                    Category = "Development",
+                    Description = "A new project",
+                    CreateDate = DateTime.Now
+                },
+                UsersList = new List<POSTUserToProjectDTO>
+                {
+                new POSTUserToProjectDTO { UserName = "User1" }
+                }
+            };
 
-        //}
+            var newProject = new Project
+            {
+                Title = "New Project",
+                Responsible = "John Doe",
+                Category = "Development",
+                Description = "A new project",
+                CreateDate = DateTime.Now
+            };
+
+            var applicationUser = new ApplicationUser { UserName = "User1" };
+
+            // Configura as simulações
+            _projectRepositoryMock.Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+                .ReturnsAsync((Project?)null); // O projeto não existe ainda
+
+   
+            _projectRepositoryMock.Setup(repo => repo.AdicionarAsync(It.IsAny<Project>()));
+
+            _userManagerMock.Setup(um => um.FindByNameAsync("User1"))
+                .ReturnsAsync(applicationUser); // Usuário encontrado
+
+            _projectUserRepositoryMock.Setup(repo => repo.CadastrarEmMassaAsync(It.IsAny<ICollection<Project_User>>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _controller.PostProject(projectRequest);
+
+            // Assert
+            var okResult = Assert.IsType<OkResult>(result); // Verifica se o retorno é Ok
+        }
+
+
+        [Fact]//Verifica se o método retorna NotFound quando um dos usuários na lista não existe.
+        public async Task PostProject_ReturnsNotFound_WhenUserNotExist()
+        {
+            // Arrange
+            var projectRequest = new RequestProjectDTO
+            {
+                Project = new POSTProjectDTO
+                {
+                    Title = "New Project",
+                    Responsible = "John Doe",
+                    Category = "Development",
+                    Description = "A new project",
+                    CreateDate = DateTime.Now
+                },
+                UsersList = new List<POSTUserToProjectDTO>
+                {
+                new POSTUserToProjectDTO { UserName = "User1" }
+                }
+            };
+
+            // Configura as simulações
+            _projectRepositoryMock.Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+                .ReturnsAsync((Project?)null); // O projeto não existe ainda
+
+            _userManagerMock.Setup(um => um.FindByNameAsync("NonExistentUser"))
+                .ReturnsAsync((ApplicationUser?)null); // Usuário não encontrado
+
+            // Act
+            var result = await _controller.PostProject(projectRequest);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal("User not exist!", notFoundResult.Value); // Verifica se o retorno contém a mensagem correta
+
+        }
+        [Fact]
+        public async Task PostProject_ReturnsNotFound_WhenProjectIsNull()
+        {
+            // Arrange
+            var projectRequest = new RequestProjectDTO
+            {
+                Project = null,
+                UsersList = new List<POSTUserToProjectDTO>()
+            };
+
+            // Act
+            var result = await _controller.PostProject(projectRequest);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result); // Verifica se o retorno é NotFound
+        }
     }
 }
