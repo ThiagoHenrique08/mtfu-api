@@ -212,6 +212,10 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                     projectExist.Description = projectDTO.Description ?? projectExist.Description;
                     projectExist.CreateDate = projectDTO.CreateDate ?? projectExist.CreateDate;
                 }
+                else
+                {
+                    return NotFound();
+                }
                 await _projectRepository.AtualizarAsync(projectExist!);
 
                 return Ok();

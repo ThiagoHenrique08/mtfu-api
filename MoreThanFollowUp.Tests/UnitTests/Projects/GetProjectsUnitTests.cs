@@ -19,28 +19,39 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
     public class GetProjectsUnitTests 
     {
         private readonly IPagedList<Project>? _projects;
+        private readonly Mock<IProjectRepository> _projectRepositoryMock;
+        private readonly Mock<IUserStore<ApplicationUser>> _userStoreMock;
+        private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
+        private readonly Mock<IProject_UserRepository> _projectUserRepositoryMock;
+        private readonly Mock<IUserApplicationRepository> _mockUserApplicationRepo;
+        private readonly Mock<IProjectCategoryRepository> _mockCategoryRepo;
+        private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
+        private readonly ProjectController _controller;
 
+        public GetProjectsUnitTests()
+        {
+            // Configura UserManager para funcionar com Moq
+            _projectRepositoryMock = new Mock<IProjectRepository>();
+            _userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+            _userManagerMock = new Mock<UserManager<ApplicationUser>>(_userStoreMock.Object, null, null, null, null, null, null, null, null);
+            _projectUserRepositoryMock = new Mock<IProject_UserRepository>();
+            _mockUserApplicationRepo = new Mock<IUserApplicationRepository>();
+            _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
+            _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
+            _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
+                                                     _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object);
+        }
 
         [Fact]
         public async Task GetProjectsPagination_WithValidProjectList_ShouldReturnOkResult()
         {
             // Arrange
-            var _mockRepo = new Mock<IProjectRepository>();
-            var _mockUserManager = new Mock<UserManager<ApplicationUser>>(
-                 Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
-            var _mockUserRepository = new Mock<IProject_UserRepository>();
-            var _mockUserApplicationRepo = new Mock<IUserApplicationRepository>();
-            var _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
-            var _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
-
-        var controller = new ProjectController(_mockRepo.Object, _mockUserManager.Object, _mockUserRepository.Object,
-                                                    _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object);
                 
             var parametersPagination = new ProjectsParameters { PageNumber = 1, PageSize = 2 };
             string category = "Integração";
             string status = "Completed";
             string parameter = "MTFU";
-            _mockRepo.Setup(repo => repo.GetProjectPaginationAsync(It.IsAny<ProjectsParameters>(),parameter, category, status)).ReturnsAsync(new StaticPagedList<Project>(
+            _projectRepositoryMock.Setup(repo => repo.GetProjectPaginationAsync(It.IsAny<ProjectsParameters>(),parameter, category, status)).ReturnsAsync(new StaticPagedList<Project>(
             new List<Project>
             {
                 new Project { ProjectId = 1, Title = "Project 1", Category = "Backend", Description = "Description 1", Responsible = "John", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() },
@@ -53,12 +64,12 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
 
             // Criando o HttpContext manualmente para simular os headers
             var httpContext = new DefaultHttpContext();
-            controller.ControllerContext = new ControllerContext
+            _controller.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContext
             };
             // Act
-            var result = await controller.GetProjectsPagination(parametersPagination, parameter, category,status);
+            var result = await _controller.GetProjectsPagination(parametersPagination, parameter, category,status);
 
             // Assert
 
@@ -88,22 +99,12 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         public async Task GetProjectsPagination_InvalidReturn_ShouldBadRequestResult()
         {
             // Arrange
-            var _mockRepo = new Mock<IProjectRepository>();
-            var _mockUserManager = new Mock<UserManager<ApplicationUser>>(
-                 Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
-            var _mockUserRepository = new Mock<IProject_UserRepository>();
-            var _mockUserApplicationRepo = new Mock<IUserApplicationRepository>();
-            var _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
-            var _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
-            var controller = new ProjectController(_mockRepo.Object, _mockUserManager.Object, _mockUserRepository.Object,
-                                                        _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object);
-
             var parametersPagination = new ProjectsParameters { PageNumber = 1, PageSize = 2 };
             string category = "Integração";
             string status = "Completed";
             string parameter = "MTFU";
 
-            _mockRepo.Setup(repo => repo.GetProjectPaginationAsync(It.IsAny<ProjectsParameters>(), parameter, category, status)).ReturnsAsync(new StaticPagedList<Project>(
+            _projectRepositoryMock.Setup(repo => repo.GetProjectPaginationAsync(It.IsAny<ProjectsParameters>(), parameter, category, status)).ReturnsAsync(new StaticPagedList<Project>(
             new List<Project>
             {
                 new Project { ProjectId = 1, Title = "Project 1", Category = "Backend", Description = "Description 1", Responsible = "John", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() },
@@ -115,7 +116,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         ));
 
             // Act
-            var result = await controller.GetProjectsPagination(parametersPagination,parameter, category, status);
+            var result = await _controller.GetProjectsPagination(parametersPagination,parameter, category, status);
 
             // Assert
 

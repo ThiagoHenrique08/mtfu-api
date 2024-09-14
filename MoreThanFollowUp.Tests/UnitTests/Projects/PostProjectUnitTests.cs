@@ -22,25 +22,27 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
     {
 
         private readonly Mock<IProjectRepository> _projectRepositoryMock;
+        private readonly Mock<IUserStore<ApplicationUser>> _userStoreMock;
         private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
         private readonly Mock<IProject_UserRepository> _projectUserRepositoryMock;
+        private readonly Mock<IUserApplicationRepository> _mockUserApplicationRepo;
+        private readonly Mock<IProjectCategoryRepository> _mockCategoryRepo;
+        private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
         private readonly ProjectController _controller;
+
 
         public PostProjectUnitTests()
         {
             // Configura UserManager para funcionar com Moq
-            var store = new Mock<IUserStore<ApplicationUser>>();
-            _userManagerMock = new Mock<UserManager<ApplicationUser>>(
-                store.Object, null, null, null, null, null, null, null, null);
-
             _projectRepositoryMock = new Mock<IProjectRepository>();
+            _userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+            _userManagerMock = new Mock<UserManager<ApplicationUser>>(_userStoreMock.Object, null, null, null, null, null, null, null, null);
             _projectUserRepositoryMock = new Mock<IProject_UserRepository>();
-            var _mockUserApplicationRepo = new Mock<IUserApplicationRepository>();
-            var _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
-            var _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
-
+            _mockUserApplicationRepo = new Mock<IUserApplicationRepository>();
+            _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
+            _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
             _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
-                                                    _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object);
+                                                     _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object);
         }
 
         [Fact] //Testa se o método retorna Ok quando o projeto é criado com sucesso.
@@ -78,7 +80,6 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             _projectRepositoryMock.Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync((Project?)null); // O projeto não existe ainda
 
-   
             _projectRepositoryMock.Setup(repo => repo.AdicionarAsync(It.IsAny<Project>()));
 
             _userManagerMock.Setup(um => um.FindByNameAsync("User1"))
