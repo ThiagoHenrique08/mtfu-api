@@ -22,6 +22,8 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.VisualStudio.CodeCoverage.Shim.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
@@ -53,6 +55,7 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.Common.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Moq.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\SendGrid.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\SendGrid.Extensions.DependencyInjection.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\StarkbankEcdsa.dll
@@ -64,6 +67,7 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\System.Memory.Data.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\System.Runtime.Caching.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\X.Extensions.PagedList.EF.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\X.PagedList.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\X.PagedList.Mvc.Core.dll
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\X.Web.PagedList.dll
@@ -164,7 +168,3 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.0\MoreThanFollowUp.Tests.pdb
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.0\MoreThanFollowUp.Tests.genruntimeconfig.cache
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.0\ref\MoreThanFollowUp.Tests.dll
-C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\X.Extensions.PagedList.EF.dll
-C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
-C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
-C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll

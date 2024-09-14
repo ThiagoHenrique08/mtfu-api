@@ -1,4 +1,5 @@
 using MoreThanFollowUp.API.Extensions;
+using MoreThanFollowUp.API.Interfaces;
 using Newtonsoft.Json;
 using System.Net.Security;
 using System.Text.Json.Serialization;
@@ -24,7 +25,6 @@ builder.Services.AddContextService();
 builder.Services.AddAuthenticationService(builder);
 builder.Services.AddAuthorizationService();
 
-
 builder.Services.AddHttpClient("MyClient")
     .ConfigurePrimaryHttpMessageHandler(() =>
     {
@@ -49,8 +49,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwaggerUI();
 }
 app.ApplyMigrations();
+app.InputResourceExtension();       
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();

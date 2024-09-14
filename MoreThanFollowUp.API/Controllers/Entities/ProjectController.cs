@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Project_DTO;
+using MoreThanFollowUp.Application.DTO.Resources;
+using MoreThanFollowUp.Application.DTO.Users;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
+using MoreThanFollowUp.Infrastructure.Interfaces.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Users;
 using MoreThanFollowUp.Infrastructure.Pagination;
-using MoreThanFollowUp.Infrastructure.Repository.Projects;
 using Newtonsoft.Json;
 using X.PagedList;
 
@@ -19,12 +22,18 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         private readonly IProjectRepository _projectRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IProject_UserRepository _project_UserRepository;
+        private readonly IUserApplicationRepository _userApplicationRepository;
+        private readonly IProjectCategoryRepository _projectCategoryRepository;
+        private readonly IProjectResponsibleRepository _projectResponsibleRepository;
 
-        public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository)
+        public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository, IUserApplicationRepository userApplicationRepository, IProjectCategoryRepository projectCategoryRepository, IProjectResponsibleRepository projectResponsibleRepository)
         {
             _projectRepository = projectRepository;
             _userManager = userManager;
             _project_UserRepository = project_UserRepository;
+            _userApplicationRepository = userApplicationRepository;
+            _projectCategoryRepository = projectCategoryRepository;
+            _projectResponsibleRepository = projectResponsibleRepository;
         }
 
 
@@ -125,11 +134,11 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         }
         [HttpGet]
         [Route("pagination")]
-        public async Task<ActionResult<IEnumerable<GETProjectDTO>>> GetProjectsPagination([FromQuery] ProjectsParameters projectsParameters)
+        public async Task<ActionResult<IEnumerable<GETProjectDTO>>> GetProjectsPagination([FromQuery] ProjectsParameters projectsParametersPagination, string? parameter, string? category, string? status)
         {
             try
             {
-                var projects = await _projectRepository.GetProjectPaginationAsync(projectsParameters);
+                var projects = await _projectRepository.GetProjectPaginationAsync(projectsParametersPagination, parameter!, category!, status!);
 
                 return GetProjects(projects);
             }
@@ -155,8 +164,10 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                     Title = project.Title,
                     Responsible = project.Responsible,
                     Category = project.Category,
+                    Status = project.Status,
                     Description = project.Description,
-                    EndDate = DateTime.Now,
+                    CreateDate = project.CreateDate,
+                    EndDate = project.EndDate,
                     Projects_Users = project.Projects_Users!.Select(p => p.User!.CompletedName).ToList()!
 
                 });
@@ -238,6 +249,37 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         }
 
+        [HttpGet]
+        [Route("getResourcesForProject")]
+        public async Task<ActionResult<ICollection<GetResourcesForProjectDTO>>> GetResourcesForProject()
+        {
+            var users = await _userApplicationRepository.ListarAsync();
+            var responsibles = await _projectResponsibleRepository.ListarAsync();
+            var categories = await _projectCategoryRepository.ListarAsync();
+
+            if (users.IsNullOrEmpty() || responsibles.IsNullOrEmpty() || categories.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+
+            var resourcesForProject = new GetResourcesForProjectDTO();
+
+            foreach (var user in users)
+            {
+                resourcesForProject.Users.Add(new GetUsersDTO { UserId = user.Id, NameCompleted = user.CompletedName, Function = user.Function });
+            }
+            foreach (var responsbile in responsibles)
+            {
+                resourcesForProject.Responsibles.Add(new GetResponsibleDTO { ResponsibleId = responsbile.ResponsibleId, Name = responsbile.Name});
+            }
+            foreach (var category in categories)
+            {
+                resourcesForProject.Categories.Add(new GetCategoryDTO { CategoryId = category.CategoryId, Name = category.Name });
+            }
+
+           return Ok(resourcesForProject);
+
+        }
     }
 
 }

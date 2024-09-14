@@ -12,6 +12,8 @@
   <ItemGroup>
     <Compile Remove="Controllers\Entities\RelashionshipController.cs" />
     <Compile Remove="Controllers\Entities\SquadController.cs" />
+    <Compile Remove="Interfaces\IInputDataToTableService.cs" />
+    <Compile Remove="Interfaces\IInputResourcesProjectService.cs" />
     <Compile Remove="Services\EmailSender.cs" />
   </ItemGroup>
 

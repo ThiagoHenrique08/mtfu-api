@@ -10,15 +10,18 @@ using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Context;
 using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Projects.Phases;
+using MoreThanFollowUp.Infrastructure.Interfaces.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Users;
 using MoreThanFollowUp.Infrastructure.Repository.Projects;
 using MoreThanFollowUp.Infrastructure.Repository.Projects.Phases;
+using MoreThanFollowUp.Infrastructure.Repository.Resources;
+using MoreThanFollowUp.Infrastructure.Repository.Users;
 using System.Text;
 
 namespace MoreThanFollowUp.API.Extensions
 {
     public static class DependencyInjectionExtensions
     {
-
         public static IServiceCollection AddSwaggerGen(this IServiceCollection services)
         {
 
@@ -89,6 +92,10 @@ namespace MoreThanFollowUp.API.Extensions
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IProject_UserRepository, Project_UserRepository>();
             services.AddScoped<IPlanejamentoRepository, PlanejamentoRepository>();
+            services.AddScoped<IProjectCategoryRepository, ProjectCategoryRepository>();
+            services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
+            services.AddScoped<IUserApplicationRepository, UserApplicationRepository>();
+            services.AddScoped<IProjectResponsibleRepository, ProjectResponsibleRepository>();
 
             return services;
         }
@@ -179,19 +186,6 @@ namespace MoreThanFollowUp.API.Extensions
 
             return services;
         }
-
-        //public static IServiceCollection AddSendGridService(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    services.AddSendGrid(options =>
-        //    {
-        //        options.ApiKey = configuration["SendGridApiKey"];
-        //    });
-
-        //    services.AddTransient<IEmailSender, EmailSender>();
-
-        //    return services; // Retorna a IServiceCollection para encadear outras chamadas.
-        //}
-
 
     }
 }

@@ -6,6 +6,8 @@ using MoreThanFollowUp.Application.DTO.Project_DTO;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
+using MoreThanFollowUp.Infrastructure.Interfaces.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Users;
 using MoreThanFollowUp.Infrastructure.Pagination;
 using System;
 using System.Collections.Generic;
@@ -33,8 +35,12 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
 
             _projectRepositoryMock = new Mock<IProjectRepository>();
             _projectUserRepositoryMock = new Mock<IProject_UserRepository>();
+            var _mockUserApplicationRepo = new Mock<IUserApplicationRepository>();
+            var _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
+            var _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
 
-            _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object);
+            _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
+                                                    _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object);
         }
 
         [Fact] //Testa se o método retorna Ok quando o projeto é criado com sucesso.

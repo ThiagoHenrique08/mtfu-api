@@ -39,7 +39,7 @@ namespace MoreThanFollowUp.Infrastructure
             var Lista = _context.Set<T>().ToList();
             return Lista;
         }
-        public async Task<IEnumerable<T>> ListarAsync()
+        public async Task<ICollection<T>> ListarAsync()
         {
             var Lista = await _context.Set<T>().ToListAsync();
             return Lista;

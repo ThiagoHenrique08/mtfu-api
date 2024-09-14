@@ -13,7 +13,6 @@ namespace MoreThanFollowUp.Infrastructure.Configuration.Projects
             builder.Property(p => p.Id).HasColumnType("INT").UseIdentityColumn();
             builder.Property(p => p.CreateDate).HasColumnName("DataCriacao").HasColumnType("DATETIME").IsRequired(false);
             builder.Property(p => p.ProjectId).HasColumnType("INT").IsRequired();
-            //builder.Property(p => p.User.Id).HasColumnType("VARCHAR(50)").IsRequired(false);
             builder.HasOne(p => p.Project).WithMany(c => c.Projects_Users).HasForeignKey(c => c.ProjectId);
             builder.HasOne(p => p.User).WithMany(l => l.Projects_Users).HasPrincipalKey(c => c.Id);
         }

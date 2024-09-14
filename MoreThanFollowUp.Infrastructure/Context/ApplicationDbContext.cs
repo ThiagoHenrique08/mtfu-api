@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Entities.Projects.Phases;
+using MoreThanFollowUp.Domain.Entities.Resources;
 using MoreThanFollowUp.Domain.Models;
 
 
@@ -35,7 +36,9 @@ namespace MoreThanFollowUp.Infrastructure.Context
         public DbSet<RequirementsAnalysisPhase> RequirementsAnalysis { get; set; }
         public DbSet<FunctionalRequirements> FunctionalRequirements { get; set; }
         public DbSet<NotFunctionalRequirements> NotFunctionalRequirements { get; set; }
-
+        public DbSet<ProjectCategory> Categories { get; set; }
+        public DbSet<ProjectStatus> ProjectStatus { get; set; }
+        public DbSet<ProjectResponsible> Responsible { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

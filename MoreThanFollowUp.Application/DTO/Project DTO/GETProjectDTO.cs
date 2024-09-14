@@ -10,6 +10,7 @@ namespace MoreThanFollowUp.Application.DTO.Project_DTO
         public string? Title { get; set; }
         public string? Responsible { get; set; }
         public string? Category { get; set; }
+        public string? Status { get; set; }
         public string? Description { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? EndDate { get; set; }

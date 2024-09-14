@@ -294,6 +294,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Property<string>("Responsible")
                         .HasColumnType("VARCHAR(50)");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("VARCHAR(50)");
+
                     b.Property<string>("Title")
                         .HasColumnType("VARCHAR(50)");
 
@@ -327,6 +330,59 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ProjectUsers", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Resources.ProjectCategory", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("VARCHAR(30)")
+                        .HasColumnName("Name");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Resources.ProjectResponsible", b =>
+                {
+                    b.Property<int>("ResponsibleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResponsibleId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(30)")
+                        .HasColumnName("Name");
+
+                    b.HasKey("ResponsibleId");
+
+                    b.ToTable("Responsible", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Resources.ProjectStatus", b =>
+                {
+                    b.Property<int>("StatusProjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusProjectId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(30)")
+                        .HasColumnName("Name");
+
+                    b.HasKey("StatusProjectId");
+
+                    b.ToTable("ProjectStatus", (string)null);
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Sprints.SprintPlanningPhase", b =>

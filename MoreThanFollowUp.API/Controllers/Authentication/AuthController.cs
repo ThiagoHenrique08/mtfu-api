@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MoreThanFollowUp.API.Interfaces;
 using MoreThanFollowUp.Application.DTO.Login;
+using MoreThanFollowUp.Application.DTO.Users;
 using MoreThanFollowUp.Domain.Models;
+using MoreThanFollowUp.Infrastructure.Interfaces.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -19,15 +21,16 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthController> _logger;
-        //private readonly IEmailSender<ApplicationUser> _emailSender;
+        private readonly IUserApplicationRepository _userApplicationRepository;
 
-        public AuthController(ITokenService tokenService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ILogger<AuthController> logger)
+        public AuthController(ITokenService tokenService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ILogger<AuthController> logger, IUserApplicationRepository userApplicationRepository)
         {
             _tokenService = tokenService;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _logger = logger;
+            _userApplicationRepository = userApplicationRepository;
         }
 
         [HttpPost]
@@ -289,6 +292,31 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
             }
 
             return BadRequest(ModelState);
+        }
+        [HttpGet]
+        [Route("getUsers")]
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
+        {
+            var users = await _userApplicationRepository.ListarAsync();
+
+            if (users is null) { return NotFound(); }
+
+            var listUsersDTO = new List<GetUsersDTO>();
+
+            foreach (var user in users)
+            {
+                listUsersDTO.Add(new GetUsersDTO
+                {
+                    UserId = user.Id,
+                    NameCompleted = user.CompletedName,
+                    Function = user.Function,
+
+                });
+
+            }
+
+            return Ok(listUsersDTO);
+
         }
     }
 

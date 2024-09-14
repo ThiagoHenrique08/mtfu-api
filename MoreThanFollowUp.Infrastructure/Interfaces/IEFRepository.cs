@@ -5,7 +5,7 @@ namespace MoreThanFollowUp.Infrastructure.Interfaces
     public interface IEFRepository<T> where T : class
     {
         public ICollection<T> Listar();
-        public Task<IEnumerable<T>> ListarAsync();
+        public Task<ICollection<T>> ListarAsync();
         public Task<T> AdicionarAsync(T objeto);
 
         public Task<T> AtualizarAsync(T objeto);
