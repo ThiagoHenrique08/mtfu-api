@@ -57,7 +57,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                     Responsible = "John Doe",
                     Category = "Development",
                     Description = "A new project",
-                    CreateDate = DateTime.Now
+                    
                 },
                 UsersList = new List<POSTUserToProjectDTO>
                 {
@@ -108,7 +108,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                     Responsible = "John Doe",
                     Category = "Development",
                     Description = "A new project",
-                    CreateDate = DateTime.Now
+              
                 },
                 UsersList = new List<POSTUserToProjectDTO>
                 {
