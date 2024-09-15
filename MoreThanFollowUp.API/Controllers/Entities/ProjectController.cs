@@ -25,7 +25,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         private readonly IUserApplicationRepository _userApplicationRepository;
         private readonly IProjectCategoryRepository _projectCategoryRepository;
         private readonly IProjectResponsibleRepository _projectResponsibleRepository;
-
+       
         public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository, IUserApplicationRepository userApplicationRepository, IProjectCategoryRepository projectCategoryRepository, IProjectResponsibleRepository projectResponsibleRepository)
         {
             _projectRepository = projectRepository;
@@ -66,7 +66,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
                 foreach (var user in projectRequest.UsersList!)
                 {
-                    var result = await _userManager.FindByNameAsync(user.UserName!);
+                    var result = await _userApplicationRepository.RecuperarPorAsync(p => p.CompletedName!.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.UserName!);
 
                     if (result != null)
                     {
@@ -108,7 +108,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
                 foreach (var user in users)
                 {
-                    var result = await _userManager.FindByNameAsync(user.UserName!);
+                    var result = await _userApplicationRepository.RecuperarPorAsync(p => p.CompletedName.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.com!);
 
                     if (result != null)
                     {

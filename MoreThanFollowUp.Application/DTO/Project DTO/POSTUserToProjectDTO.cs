@@ -2,6 +2,6 @@
 {
     public class POSTUserToProjectDTO
     {
-        public string? UserName { get; set; }
+        public string? CompletedName { get; set; }
     }
 }

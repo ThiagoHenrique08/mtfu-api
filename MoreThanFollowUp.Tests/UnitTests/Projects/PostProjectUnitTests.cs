@@ -61,7 +61,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 },
                 UsersList = new List<POSTUserToProjectDTO>
                 {
-                new POSTUserToProjectDTO { UserName = "User1" }
+                new POSTUserToProjectDTO { CompletedName = "User1" }
                 }
             };
 
@@ -74,7 +74,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 CreateDate = DateTime.Now
             };
 
-            var applicationUser = new ApplicationUser { UserName = "User1" };
+            var applicationUser = new ApplicationUser { CompletedName = "User1" };
 
             // Configura as simulações
             _projectRepositoryMock.Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
@@ -82,8 +82,8 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
 
             _projectRepositoryMock.Setup(repo => repo.AdicionarAsync(It.IsAny<Project>()));
 
-            _userManagerMock.Setup(um => um.FindByNameAsync("User1"))
-                .ReturnsAsync(applicationUser); // Usuário encontrado
+            _mockUserApplicationRepo.Setup(um => um.RecuperarPorAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(applicationUser);   
+
 
             _projectUserRepositoryMock.Setup(repo => repo.CadastrarEmMassaAsync(It.IsAny<ICollection<Project_User>>()))
                 .Returns(Task.CompletedTask);
@@ -112,7 +112,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 },
                 UsersList = new List<POSTUserToProjectDTO>
                 {
-                new POSTUserToProjectDTO { UserName = "User1" }
+                new POSTUserToProjectDTO { CompletedName = "User1" }
                 }
             };
 
