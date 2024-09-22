@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 8080
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.303 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.401 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["MoreThanFollowUp.API/MoreThanFollowUp.API.csproj", "MoreThanFollowUp.API/"]
@@ -15,7 +15,7 @@ RUN dotnet restore "./MoreThanFollowUp.API/MoreThanFollowUp.API.csproj"
 COPY . .
 RUN dotnet build "./MoreThanFollowUp.API/MoreThanFollowUp.API.csproj" -c Release -o /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.303 AS migration
+FROM mcr.microsoft.com/dotnet/sdk:8.0.401 AS migration
 WORKDIR /src
 COPY . .
 RUN dotnet restore "./MoreThanFollowUp.Infrastructure/MoreThanFollowUp.Infrastructure.csproj"

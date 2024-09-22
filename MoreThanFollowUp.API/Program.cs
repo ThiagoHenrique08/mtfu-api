@@ -1,8 +1,5 @@
 using MoreThanFollowUp.API.Extensions;
-using MoreThanFollowUp.API.Interfaces;
-using Newtonsoft.Json;
 using System.Net.Security;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
