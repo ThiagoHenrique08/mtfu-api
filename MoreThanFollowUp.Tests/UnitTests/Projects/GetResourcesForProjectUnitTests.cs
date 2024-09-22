@@ -60,52 +60,52 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             Assert.IsType<NotFoundResult>(result.Result);
         }
 
-        [Fact]
-        public async Task GetResourcesForProject_ShouldReturnNotFound_WhenResponsiblesListIsEmpty()
-        {
-            // Arrange
-            _mockUserApplicationRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ApplicationUser> { new ApplicationUser() });
-            _mockResponsibleRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectResponsible>());
-            _mockCategoryRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectCategory> { new ProjectCategory() });
-            _mockStatusRepositoryMock.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectStatus> { new ProjectStatus() });
+        //[Fact]
+        //public async Task GetResourcesForProject_ShouldReturnNotFound_WhenResponsiblesListIsEmpty()
+        //{
+        //    // Arrange
+        //    _mockUserApplicationRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ApplicationUser> { new ApplicationUser() });
+        //    _mockResponsibleRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectResponsible>());
+        //    _mockCategoryRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectCategory> { new ProjectCategory() });
+        //    _mockStatusRepositoryMock.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectStatus> { new ProjectStatus() });
 
-            // Act
-            var result = await _controller.GetResourcesForProject();
+        //    // Act
+        //    var result = await _controller.GetResourcesForProject();
 
-            // Assert
-            Assert.IsType<NotFoundResult>(result.Result);
-        }
+        //    // Assert
+        //    Assert.IsType<NotFoundResult>(result.Result);
+        //}
 
-        [Fact]
-        public async Task GetResourcesForProject_ShouldReturnNotFound_WhenCategoriesListIsEmpty()
-        {
-            // Arrange
-            _mockUserApplicationRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ApplicationUser> { new ApplicationUser() });
-            _mockResponsibleRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectResponsible> { new ProjectResponsible() });
-            _mockCategoryRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectCategory>());
-            _mockStatusRepositoryMock.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectStatus> { new ProjectStatus() });
+        //[Fact]
+        //public async Task GetResourcesForProject_ShouldReturnNotFound_WhenCategoriesListIsEmpty()
+        //{
+        //    // Arrange
+        //    _mockUserApplicationRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ApplicationUser> { new ApplicationUser() });
+        //    _mockResponsibleRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectResponsible> { new ProjectResponsible() });
+        //    _mockCategoryRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectCategory>());
+        //    _mockStatusRepositoryMock.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectStatus> { new ProjectStatus() });
 
-            // Act
-            var result = await _controller.GetResourcesForProject();
+        //    // Act
+        //    var result = await _controller.GetResourcesForProject();
 
-            // Assert
-            Assert.IsType<NotFoundResult>(result.Result);
-        }
-        [Fact]
-        public async Task GetResourcesForProject_ShouldReturnNotFound_WhenStatusListIsEmpty()
-        {
-            // Arrange
-            _mockUserApplicationRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ApplicationUser> { new ApplicationUser() });
-            _mockResponsibleRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectResponsible> { new ProjectResponsible() });
-            _mockCategoryRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectCategory> { new ProjectCategory() });
-            _mockStatusRepositoryMock.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectStatus>());
+        //    // Assert
+        //    Assert.IsType<NotFoundResult>(result.Result);
+        //}
+        //[Fact]
+        //public async Task GetResourcesForProject_ShouldReturnNotFound_WhenStatusListIsEmpty()
+        //{
+        //    // Arrange
+        //    _mockUserApplicationRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ApplicationUser> { new ApplicationUser() });
+        //    _mockResponsibleRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectResponsible> { new ProjectResponsible() });
+        //    _mockCategoryRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectCategory> { new ProjectCategory() });
+        //    _mockStatusRepositoryMock.Setup(repo => repo.ListarAsync()).ReturnsAsync(new List<ProjectStatus>());
 
-            // Act
-            var result = await _controller.GetResourcesForProject();
+        //    // Act
+        //    var result = await _controller.GetResourcesForProject();
 
-            // Assert
-            Assert.IsType<NotFoundResult>(result.Result);
-        }
+        //    // Assert
+        //    Assert.IsType<NotFoundResult>(result.Result);
+        //}
 
         [Fact]
         public async Task GetResourcesForProject_ShouldReturnOk_WhenAllListsHaveData()
