@@ -31,7 +31,7 @@ services:
       - ./init:/docker-entrypoint-initdb.d
     command: >
       bash -c "
-      sleep 20;
+      sleep 30;
       /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'Criativos123@' -d master -i docker-entrypoint-initdb.d/init.sql;
       echo 'All done!';
       "
