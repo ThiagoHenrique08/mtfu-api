@@ -272,10 +272,11 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             var responsibles = await _projectResponsibleRepository.ListarAsync();
             var categories = await _projectCategoryRepository.ListarAsync();
             var projectStatus = await _projectStatusRepository.ListarAsync();
-            if (users.IsNullOrEmpty() || responsibles.IsNullOrEmpty() || categories.IsNullOrEmpty() || projectStatus.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
+            
+            //if (users.IsNullOrEmpty() || responsibles.IsNullOrEmpty() || categories.IsNullOrEmpty() || projectStatus.IsNullOrEmpty())
+            //{
+            //    return NotFound();
+            //}
 
             var resourcesForProject = new GetResourcesForProjectDTO();
 
