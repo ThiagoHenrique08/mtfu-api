@@ -40,10 +40,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Configuration\Sprints\" />
-    <Folder Include="Interfaces\Sprints\Tasks\" />
-    <Folder Include="Interfaces\Sprints\" />
-    <Folder Include="Repository\Sprints\" />
+    <Folder Include="Configuration\Entities\Projects\Phases\" />
+    <Folder Include="Interfaces\Entities\Projects\Phases\" />
+    <Folder Include="Interfaces\Entities\Sprints\Tasks\" />
+    <Folder Include="Interfaces\Entities\Sprints\" />
+    <Folder Include="Repository\Entities\Projects\Phases\" />
+    <Folder Include="Repository\Entities\Sprints\" />
   </ItemGroup>
 
 

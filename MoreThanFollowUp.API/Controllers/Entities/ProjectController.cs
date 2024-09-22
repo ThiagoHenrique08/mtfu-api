@@ -6,9 +6,9 @@ using MoreThanFollowUp.Application.DTO.Resources;
 using MoreThanFollowUp.Application.DTO.Users;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
-using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
-using MoreThanFollowUp.Infrastructure.Interfaces.Resources;
-using MoreThanFollowUp.Infrastructure.Interfaces.Users;
+using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
+using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using MoreThanFollowUp.Infrastructure.Pagination;
 using Newtonsoft.Json;
 using X.PagedList;
@@ -25,8 +25,9 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         private readonly IUserApplicationRepository _userApplicationRepository;
         private readonly IProjectCategoryRepository _projectCategoryRepository;
         private readonly IProjectResponsibleRepository _projectResponsibleRepository;
-       
-        public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository, IUserApplicationRepository userApplicationRepository, IProjectCategoryRepository projectCategoryRepository, IProjectResponsibleRepository projectResponsibleRepository)
+        private readonly IProjectStatusRepository _projectStatusRepository;
+
+        public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository, IUserApplicationRepository userApplicationRepository, IProjectCategoryRepository projectCategoryRepository, IProjectResponsibleRepository projectResponsibleRepository, IProjectStatusRepository projectStatusRepository)
         {
             _projectRepository = projectRepository;
             _userManager = userManager;
@@ -34,6 +35,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             _userApplicationRepository = userApplicationRepository;
             _projectCategoryRepository = projectCategoryRepository;
             _projectResponsibleRepository = projectResponsibleRepository;
+            _projectStatusRepository = projectStatusRepository;
         }
 
 
@@ -235,6 +237,16 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         {
             try
             {
+                //Deleta primeiro todos os relacionamentos de Projeto com usuário antes de Deletar o Projeto
+
+                var list = _project_UserRepository.SearchForAsync(p => p.ProjectId == idProject);
+
+                if (list is not null)
+                {
+                    await _project_UserRepository.RemoveRange(list);
+                }
+
+                // Deleta o Projeto de Fato
                 var project = await _projectRepository.RecuperarPorAsync(p => p.ProjectId == idProject);
 
                 if (project is null) { return NotFound(); }
@@ -246,7 +258,6 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
 
@@ -260,8 +271,8 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             var users = await _userApplicationRepository.ListarAsync();
             var responsibles = await _projectResponsibleRepository.ListarAsync();
             var categories = await _projectCategoryRepository.ListarAsync();
-
-            if (users.IsNullOrEmpty() || responsibles.IsNullOrEmpty() || categories.IsNullOrEmpty())
+            var projectStatus = await _projectStatusRepository.ListarAsync();
+            if (users.IsNullOrEmpty() || responsibles.IsNullOrEmpty() || categories.IsNullOrEmpty() || projectStatus.IsNullOrEmpty())
             {
                 return NotFound();
             }
@@ -274,14 +285,18 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             }
             foreach (var responsbile in responsibles)
             {
-                resourcesForProject.Responsibles.Add(new GetResponsibleDTO { ResponsibleId = responsbile.ResponsibleId, Name = responsbile.Name});
+                resourcesForProject.Responsibles.Add(new GetResponsibleDTO { ResponsibleId = responsbile.ResponsibleId, Name = responsbile.Name });
             }
             foreach (var category in categories)
             {
                 resourcesForProject.Categories.Add(new GetCategoryDTO { CategoryId = category.CategoryId, Name = category.Name });
             }
+            foreach (var status in projectStatus)
+            {
+                resourcesForProject.StatusProjects.Add(new GETStatusDTO { StatusProjectId = status.StatusProjectId, Name = status.Name });
+            }
 
-           return Ok(resourcesForProject);
+            return Ok(resourcesForProject);
 
         }
     }

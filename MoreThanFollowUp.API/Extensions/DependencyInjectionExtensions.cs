@@ -8,14 +8,14 @@ using MoreThanFollowUp.API.Interfaces;
 using MoreThanFollowUp.API.Services;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Context;
-using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
-using MoreThanFollowUp.Infrastructure.Interfaces.Projects.Phases;
-using MoreThanFollowUp.Infrastructure.Interfaces.Resources;
-using MoreThanFollowUp.Infrastructure.Interfaces.Users;
-using MoreThanFollowUp.Infrastructure.Repository.Projects;
-using MoreThanFollowUp.Infrastructure.Repository.Projects.Phases;
-using MoreThanFollowUp.Infrastructure.Repository.Resources;
-using MoreThanFollowUp.Infrastructure.Repository.Users;
+using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
+using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
+using MoreThanFollowUp.Infrastructure.Repository.Entities.Projects;
+using MoreThanFollowUp.Infrastructure.Repository.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Repository.Models;
+using MoreThanFollowUp.Infrastructure.Repository.Models.Users;
 using System.Text;
 
 namespace MoreThanFollowUp.API.Extensions
@@ -91,11 +91,15 @@ namespace MoreThanFollowUp.API.Extensions
 
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IProject_UserRepository, Project_UserRepository>();
-            services.AddScoped<IPlanejamentoRepository, PlanejamentoRepository>();
             services.AddScoped<IProjectCategoryRepository, ProjectCategoryRepository>();
             services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
             services.AddScoped<IUserApplicationRepository, UserApplicationRepository>();
             services.AddScoped<IProjectResponsibleRepository, ProjectResponsibleRepository>();
+            services.AddScoped<ITenantRepository, TenantRepository>();
+            services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IEnterpriseRepository, EnterpriseRepository>();
+           
 
             return services;
         }

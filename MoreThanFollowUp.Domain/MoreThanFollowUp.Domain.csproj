@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Entities\Projects\Phases\FunctionalRequirements.cs" />
+    <Compile Remove="Entities\Projects\Phases\NotFunctionalRequirements.cs" />
+    <Compile Remove="Entities\Projects\Phases\Period.cs" />
+    <Compile Remove="Entities\Projects\Phases\PlanningPhase.cs" />
+    <Compile Remove="Entities\Projects\Phases\RequirementsAnalysisPhase.cs" />
     <Compile Remove="Entities\Sprints\SprintDeploymentPhase.cs" />
     <Compile Remove="Entities\Sprints\SprintDesignPhase.cs" />
     <Compile Remove="Entities\Sprints\SprintDevelopmentAndTestingPhase.cs" />
@@ -20,9 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Entities\Projects\Phases\" />
     <Folder Include="Entities\Sprints\Daily\" />
     <Folder Include="Entities\Sprints\Review\" />
     <Folder Include="Entities\Sprints\Planning\" />
+    <Folder Include="Entities\Sprints\Tasks\" />
   </ItemGroup>
 
 </Project>

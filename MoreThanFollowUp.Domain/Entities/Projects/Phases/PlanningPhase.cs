@@ -10,8 +10,8 @@ namespace MoreThanFollowUp.Domain.Entities.Projects.Phases
 
         public string? Description { get; set; }
 
-        public int? ProjectId { get; set; }
-        public virtual Project? Project { get; set; }
+        //public int ProjectId { get; set; }
+        //public virtual Project? Project { get; set; }
 
         public virtual ICollection<SprintPlanningPhase>? Sprints { get; set; }
     }

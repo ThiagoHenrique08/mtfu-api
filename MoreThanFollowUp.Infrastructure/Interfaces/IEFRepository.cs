@@ -16,6 +16,8 @@ namespace MoreThanFollowUp.Infrastructure.Interfaces
 
         public Task CadastrarEmMassaAsync(ICollection<T> listObjects);
 
+      
+
 
     }
 }

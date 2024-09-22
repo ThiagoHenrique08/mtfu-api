@@ -8,7 +8,7 @@ using MoreThanFollowUp.API.Controllers.Authentication;
 using MoreThanFollowUp.API.Interfaces;
 using MoreThanFollowUp.Application.DTO.Login;
 using MoreThanFollowUp.Domain.Models;
-using MoreThanFollowUp.Infrastructure.Interfaces.Users;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Authentication
 {

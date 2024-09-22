@@ -5,9 +5,9 @@ using MoreThanFollowUp.API.Controllers.Entities;
 using MoreThanFollowUp.Application.DTO.Project_DTO;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
-using MoreThanFollowUp.Infrastructure.Interfaces.Projects;
-using MoreThanFollowUp.Infrastructure.Interfaces.Resources;
-using MoreThanFollowUp.Infrastructure.Interfaces.Users;
+using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
+using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using MoreThanFollowUp.Infrastructure.Pagination;
 using System;
 using System.Collections.Generic;
@@ -28,6 +28,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         private readonly Mock<IUserApplicationRepository> _mockUserApplicationRepo;
         private readonly Mock<IProjectCategoryRepository> _mockCategoryRepo;
         private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
+        private readonly Mock<IProjectStatusRepository> _mockStatusRepositoryMock;
         private readonly ProjectController _controller;
 
 
@@ -41,8 +42,9 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             _mockUserApplicationRepo = new Mock<IUserApplicationRepository>();
             _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
             _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
+            _mockStatusRepositoryMock = new Mock<IProjectStatusRepository>();
             _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
-                                                     _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object);
+                                                     _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object, _mockStatusRepositoryMock.Object);
         }
 
         [Fact] //Testa se o método retorna Ok quando o projeto é criado com sucesso.

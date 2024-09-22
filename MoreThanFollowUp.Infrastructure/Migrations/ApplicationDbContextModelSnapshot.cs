@@ -158,117 +158,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.FunctionalRequirements", b =>
-                {
-                    b.Property<int>("FunctionalRequirementsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FunctionalRequirementsId"));
-
-                    b.Property<string>("Behavior")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<string>("FunctionOrAction")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<int>("RequirementsAnalysPhaseId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequirementsAnalysisPhaseRequirementsAnalysPhaseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FunctionalRequirementsId");
-
-                    b.HasIndex("RequirementsAnalysisPhaseRequirementsAnalysPhaseId");
-
-                    b.ToTable("FunctionalRequirements", (string)null);
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.NotFunctionalRequirements", b =>
-                {
-                    b.Property<int>("NotFunctionalRequirementsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotFunctionalRequirementsId"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<int>("RequirementsAnalysPhaseId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequirementsAnalysisPhaseRequirementsAnalysPhaseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.HasKey("NotFunctionalRequirementsId");
-
-                    b.HasIndex("RequirementsAnalysisPhaseRequirementsAnalysPhaseId");
-
-                    b.ToTable("NotFunctionalRequirements", (string)null);
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.PlanningPhase", b =>
-                {
-                    b.Property<int>("PlanningPhaseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanningPhaseId"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("DATETIME");
-
-                    b.Property<string>("LinkWebsite")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("INT");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("DATETIME");
-
-                    b.HasKey("PlanningPhaseId");
-
-                    b.HasIndex("ProjectId")
-                        .IsUnique()
-                        .HasFilter("[ProjectId] IS NOT NULL");
-
-                    b.ToTable("Plannings", (string)null);
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.RequirementsAnalysisPhase", b =>
-                {
-                    b.Property<int>("RequirementsAnalysPhaseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequirementsAnalysPhaseId"));
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("DATETIME");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("DATETIME");
-
-                    b.HasKey("RequirementsAnalysPhaseId");
-
-                    b.HasIndex("ProjectId")
-                        .IsUnique();
-
-                    b.ToTable("RequirementsAnalysis", (string)null);
-                });
-
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project", b =>
                 {
                     b.Property<int>("ProjectId")
@@ -291,6 +180,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasColumnType("DATETIME")
                         .HasColumnName("EndDate");
 
+                    b.Property<int?>("EnterpriseId")
+                        .HasColumnType("INT");
+
                     b.Property<string>("Responsible")
                         .HasColumnType("VARCHAR(50)");
 
@@ -301,6 +193,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasColumnType("VARCHAR(50)");
 
                     b.HasKey("ProjectId");
+
+                    b.HasIndex("EnterpriseId");
 
                     b.ToTable("Projects", (string)null);
                 });
@@ -317,7 +211,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasColumnType("DATETIME")
                         .HasColumnName("DataCriacao");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int?>("ProjectId")
                         .HasColumnType("INT");
 
                     b.Property<string>("UserId")
@@ -385,51 +279,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.ToTable("ProjectStatus", (string)null);
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Sprints.SprintPlanningPhase", b =>
-                {
-                    b.Property<int>("SprintId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SprintId"));
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PlanningPhaseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SprintId");
-
-                    b.HasIndex("PlanningPhaseId");
-
-                    b.ToTable("SprintPlanningPhase");
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Sprints.SprintRequirementsAnalysisPhase", b =>
-                {
-                    b.Property<int>("SprintId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SprintId"));
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RequirementsAnalysPhaseId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequirementsAnalysisPhaseRequirementsAnalysPhaseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SprintId");
-
-                    b.HasIndex("RequirementsAnalysisPhaseRequirementsAnalysPhaseId");
-
-                    b.ToTable("SprintRequirementsAnalysisPhase");
-                });
-
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -451,6 +300,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("EnterpriseId")
+                        .HasColumnType("INT");
 
                     b.Property<string>("Function")
                         .HasColumnType("nvarchar(max)");
@@ -496,6 +348,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EnterpriseId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -505,6 +359,144 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
+                {
+                    b.Property<int>("EnterpriseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnterpriseId"));
+
+                    b.Property<string>("CNPJ")
+                        .HasColumnType("VARCHAR(18)");
+
+                    b.Property<string>("CorporateReason")
+                        .HasColumnType("VARCHAR(100)");
+
+                    b.Property<string>("Segment")
+                        .HasColumnType("VARCHAR(100)");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INT");
+
+                    b.HasKey("EnterpriseId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Enterprises", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Invoice", b =>
+                {
+                    b.Property<int>("InvoiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceId"));
+
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("DECIMAL(10,2)");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("VARCHAR(30)");
+
+                    b.Property<int?>("SubscriptionId")
+                        .HasColumnType("INT");
+
+                    b.HasKey("InvoiceId");
+
+                    b.HasIndex("SubscriptionId")
+                        .IsUnique()
+                        .HasFilter("[SubscriptionId] IS NOT NULL");
+
+                    b.ToTable("Invoices", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Subscription", b =>
+                {
+                    b.Property<int>("SubscriptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptionId"));
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<string>("Plan")
+                        .HasColumnType("VARCHAR(30)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("VARCHAR(30)");
+
+                    b.Property<int?>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("INT");
+
+                    b.Property<int?>("TotalAvailable")
+                        .HasColumnType("INT");
+
+                    b.Property<int?>("TotalLicense")
+                        .HasColumnType("INT");
+
+                    b.Property<int?>("TotalUsed")
+                        .HasColumnType("INT");
+
+                    b.HasKey("SubscriptionId");
+
+                    b.HasIndex("TenantId")
+                        .IsUnique();
+
+                    b.ToTable("Subscriptions", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Tenant", b =>
+                {
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TenantId"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("Responsible")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("TenantCustomDomain")
+                        .HasColumnType("VARCHAR(100)");
+
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("TenantStatus")
+                        .HasColumnType("VARCHAR(100)");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("DATETIME");
+
+                    b.HasKey("TenantId");
+
+                    b.ToTable("Tenants", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -558,45 +550,14 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.FunctionalRequirements", b =>
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project", b =>
                 {
-                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Phases.RequirementsAnalysisPhase", "RequirementsAnalysisPhase")
-                        .WithMany("FunctionalRequirements")
-                        .HasForeignKey("RequirementsAnalysisPhaseRequirementsAnalysPhaseId")
+                    b.HasOne("MoreThanFollowUp.Domain.Models.Enterprise", "Enterprise")
+                        .WithMany("Projects")
+                        .HasForeignKey("EnterpriseId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("RequirementsAnalysisPhase");
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.NotFunctionalRequirements", b =>
-                {
-                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Phases.RequirementsAnalysisPhase", "RequirementsAnalysisPhase")
-                        .WithMany("NotFunctionalRequirements")
-                        .HasForeignKey("RequirementsAnalysisPhaseRequirementsAnalysPhaseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("RequirementsAnalysisPhase");
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.PlanningPhase", b =>
-                {
-                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Project", "Project")
-                        .WithOne("PlanningPhase")
-                        .HasForeignKey("MoreThanFollowUp.Domain.Entities.Projects.Phases.PlanningPhase", "ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.RequirementsAnalysisPhase", b =>
-                {
-                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Project", "Project")
-                        .WithOne("RequirementsAnalysPhase")
-                        .HasForeignKey("MoreThanFollowUp.Domain.Entities.Projects.Phases.RequirementsAnalysisPhase", "ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
+                    b.Navigation("Enterprise");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project_User", b =>
@@ -604,8 +565,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Project", "Project")
                         .WithMany("Projects_Users")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationUser", "User")
                         .WithMany("Projects_Users")
@@ -617,53 +577,75 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Sprints.SprintPlanningPhase", b =>
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Phases.PlanningPhase", "PlanningPhase")
-                        .WithMany("Sprints")
-                        .HasForeignKey("PlanningPhaseId")
+                    b.HasOne("MoreThanFollowUp.Domain.Models.Enterprise", "Enterprise")
+                        .WithMany("Users")
+                        .HasForeignKey("EnterpriseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Enterprise");
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
+                {
+                    b.HasOne("MoreThanFollowUp.Domain.Models.Tenant", "Tenant")
+                        .WithMany("Enterprises")
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PlanningPhase");
+                    b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Sprints.SprintRequirementsAnalysisPhase", b =>
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Invoice", b =>
                 {
-                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Phases.RequirementsAnalysisPhase", "RequirementsAnalysisPhase")
-                        .WithMany("Sprints")
-                        .HasForeignKey("RequirementsAnalysisPhaseRequirementsAnalysPhaseId")
+                    b.HasOne("MoreThanFollowUp.Domain.Models.Subscription", "Subscription")
+                        .WithOne("Invoice")
+                        .HasForeignKey("MoreThanFollowUp.Domain.Models.Invoice", "SubscriptionId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("RequirementsAnalysisPhase");
+                    b.Navigation("Subscription");
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.PlanningPhase", b =>
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Subscription", b =>
                 {
-                    b.Navigation("Sprints");
-                });
+                    b.HasOne("MoreThanFollowUp.Domain.Models.Tenant", "Tenant")
+                        .WithOne("Subscription")
+                        .HasForeignKey("MoreThanFollowUp.Domain.Models.Subscription", "TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Phases.RequirementsAnalysisPhase", b =>
-                {
-                    b.Navigation("FunctionalRequirements");
-
-                    b.Navigation("NotFunctionalRequirements");
-
-                    b.Navigation("Sprints");
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project", b =>
                 {
-                    b.Navigation("PlanningPhase");
-
                     b.Navigation("Projects_Users");
-
-                    b.Navigation("RequirementsAnalysPhase");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Projects_Users");
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
+                {
+                    b.Navigation("Projects");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Subscription", b =>
+                {
+                    b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Tenant", b =>
+                {
+                    b.Navigation("Enterprises");
+
+                    b.Navigation("Subscription");
                 });
 #pragma warning restore 612, 618
         }

@@ -56,5 +56,7 @@ namespace MoreThanFollowUp.Infrastructure
             await _context.AddRangeAsync(listObjects);
             await _context.SaveChangesAsync();
         }
+
+ 
     }
 }

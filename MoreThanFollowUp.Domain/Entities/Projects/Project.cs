@@ -1,5 +1,4 @@
-﻿using MoreThanFollowUp.Domain.Entities.Projects.Phases;
-using MoreThanFollowUp.Domain.Entities.Resources;
+﻿using MoreThanFollowUp.Domain.Models;
 
 namespace MoreThanFollowUp.Domain.Entities.Projects
 {
@@ -12,8 +11,9 @@ namespace MoreThanFollowUp.Domain.Entities.Projects
         public string? Status { get; set; }
         public string? Description { get; set; }
         public DateTime? EndDate { get; set; }
+        public int? EnterpriseId { get; set; }
+        public virtual Enterprise? Enterprise { get; set; }
         public virtual ICollection<Project_User>? Projects_Users { get; set; }
-        public virtual PlanningPhase? PlanningPhase { get; set; }
-        public virtual RequirementsAnalysisPhase? RequirementsAnalysPhase { get; set; }
+
     }
 }

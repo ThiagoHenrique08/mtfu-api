@@ -6,7 +6,7 @@ using MoreThanFollowUp.API.Interfaces;
 using MoreThanFollowUp.Application.DTO.Login;
 using MoreThanFollowUp.Application.DTO.Users;
 using MoreThanFollowUp.Domain.Models;
-using MoreThanFollowUp.Infrastructure.Interfaces.Users;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
