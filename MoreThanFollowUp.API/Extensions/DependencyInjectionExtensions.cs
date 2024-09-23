@@ -80,7 +80,8 @@ namespace MoreThanFollowUp.API.Extensions
 
                             policy.WithOrigins("http://191.101.18.75", "https://localhost:7023", "https://localhost:7156", "http://localhost:5173", "https://localhost:5000", "https://localhost:5001", "https://localhost:5001")
                             .AllowAnyHeader()
-                            .AllowAnyMethod();
+                            .AllowAnyMethod()
+                            .WithExposedHeaders("X-Pagination");
                         });
             });
 
