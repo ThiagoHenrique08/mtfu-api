@@ -42,7 +42,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         [HttpPost]
         [Route("create")]
         //[Authorize(Policy = "AdminOnlyAndScrumMasterOnly")]
-        public async Task<ActionResult> PostProject([FromBody] RequestProjectDTO projectRequest)
+        public async Task<ActionResult> CreateProject([FromBody] RequestProjectDTO projectRequest)
         {
             try
             {
@@ -56,19 +56,19 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                     Description = projectRequest.Project.Description,
                     CreateDate = DateTime.Now,
                 };
-                var ProjectExist = await _projectRepository.RecuperarPorAsync(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
+                var ProjectExist = await _projectRepository.RecoverBy(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
 
                 if (ProjectExist is null)
                 {
-                    await _projectRepository.AdicionarAsync(newProject);
+                    await _projectRepository.RegisterAsync(newProject);
                 }
 
-                var newProjectCadastrado = await _projectRepository.RecuperarPorAsync(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
+                var newProjectCadastrado = await _projectRepository.RecoverBy(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
                 var newListProjectUser = new List<Project_User>();
 
                 foreach (var user in projectRequest.UsersList!)
                 {
-                    var result = await _userApplicationRepository.RecuperarPorAsync(p => p.CompletedName!.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.UserName!);
+                    var result = await _userApplicationRepository.RecoverBy(p => p.CompletedName!.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.UserName!);
 
                     if (result != null)
                     {
@@ -84,7 +84,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                         return NotFound("User not exist!");
                     }
                 }
-                await _project_UserRepository.CadastrarEmMassaAsync(newListProjectUser);
+                await _project_UserRepository.RegisterList(newListProjectUser);
                 return Ok();
             }
             catch (Exception ex)
@@ -96,12 +96,12 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         [HttpPost]
         [Route("addUserToProject/{IdProject:int}")]
         //[Authorize(Policy = "AdminOnlyAndScrumMasterOnly")]
-        public async Task<ActionResult> PosUserToProject([FromRoute] int IdProject, [FromBody] List<POSTUserToProjectDTO> users)
+        public async Task<ActionResult> PostUserToProject([FromRoute] int IdProject, [FromBody] List<POSTUserToProjectDTO> users)
         {
             try
             {
 
-                var ProjectExist = await _projectRepository.RecuperarPorAsync(p => p.ProjectId.Equals(IdProject));
+                var ProjectExist = await _projectRepository.RecoverBy(p => p.ProjectId.Equals(IdProject));
                 if (ProjectExist is null)
                 {
                     return NotFound();
@@ -110,7 +110,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
                 foreach (var user in users)
                 {
-                    var result = await _userApplicationRepository.RecuperarPorAsync(p => p.CompletedName.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.com!);
+                    var result = await _userApplicationRepository.RecoverBy(p => p.CompletedName.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.com!);
 
                     if (result != null)
                     {
@@ -126,7 +126,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                         return NotFound("User not exist!");
                     }
                 }
-                await _project_UserRepository.CadastrarEmMassaAsync(newListProjectUser);
+                await _project_UserRepository.RegisterList(newListProjectUser);
                 return Ok();
             }
             catch (Exception ex)
@@ -135,8 +135,8 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             }
         }
         [HttpGet]
-        [Route("pagination")]
-        public async Task<ActionResult<IEnumerable<GETProjectDTO>>> GetProjectsPagination([FromQuery] ProjectsParameters projectsParametersPagination, string? parameter, string? category, string? status)
+        [Route("get")]
+        public async Task<ActionResult<IEnumerable<GETProjectDTO>>> GetProjectWithPagination([FromQuery] ProjectsParameters projectsParametersPagination, string? parameter, string? category, string? status)
         {
             try
             {
@@ -193,8 +193,8 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
 
         [HttpPatch]
-        [Route("changeProject")]
-        public async Task<ActionResult> PatchProject([FromBody] PATCHProjectDTO projectDTO)
+        [Route("update")]
+        public async Task<ActionResult> UpdateProject([FromBody] PATCHProjectDTO projectDTO)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                 {
                     return NotFound();
                 }
-                var projectExist = await _projectRepository.RecuperarPorAsync(p => p.ProjectId == projectDTO.ProjectId);
+                var projectExist = await _projectRepository.RecoverBy(p => p.ProjectId == projectDTO.ProjectId);
 
                 if (projectExist is not null)
                 {
@@ -218,7 +218,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                 {
                     return NotFound();
                 }
-                await _projectRepository.AtualizarAsync(projectExist!);
+                await _projectRepository.UpdateAsync(projectExist!);
 
                 return Ok();
             }
@@ -233,7 +233,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<ActionResult> Delete(int idProject)
+        public async Task<ActionResult> DeleteProject(int idProject)
         {
             try
             {
@@ -247,11 +247,11 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                 }
 
                 // Deleta o Projeto de Fato
-                var project = await _projectRepository.RecuperarPorAsync(p => p.ProjectId == idProject);
+                var project = await _projectRepository.RecoverBy(p => p.ProjectId == idProject);
 
                 if (project is null) { return NotFound(); }
 
-                await _projectRepository.DeletarAsync(project);
+                await _projectRepository.DeleteAsync(project);
 
                 return Ok();
 
@@ -268,10 +268,10 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         [Route("getResourcesForProject")]
         public async Task<ActionResult<ICollection<GetResourcesForProjectDTO>>> GetResourcesForProject()
         {
-            var users = await _userApplicationRepository.ListarAsync();
-            var responsibles = await _projectResponsibleRepository.ListarAsync();
-            var categories = await _projectCategoryRepository.ListarAsync();
-            var projectStatus = await _projectStatusRepository.ListarAsync();
+            var users = await _userApplicationRepository.ToListAsync();
+            var responsibles = await _projectResponsibleRepository.ToListAsync();
+            var categories = await _projectCategoryRepository.ToListAsync();
+            var projectStatus = await _projectStatusRepository.ToListAsync();
             
             //if (users.IsNullOrEmpty() || responsibles.IsNullOrEmpty() || categories.IsNullOrEmpty() || projectStatus.IsNullOrEmpty())
             //{

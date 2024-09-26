@@ -71,7 +71,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 HttpContext = httpContext
             };
             // Act
-            var result = await _controller.GetProjectsPagination(parametersPagination, parameter, category,status);
+            var result = await _controller.GetProjectWithPagination(parametersPagination, parameter, category,status);
 
             // Assert
 
@@ -118,7 +118,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         ));
 
             // Act
-            var result = await _controller.GetProjectsPagination(parametersPagination,parameter, category, status);
+            var result = await _controller.GetProjectWithPagination(parametersPagination,parameter, category, status);
 
             // Assert
 

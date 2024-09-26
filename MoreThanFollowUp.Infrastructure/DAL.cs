@@ -14,44 +14,44 @@ namespace MoreThanFollowUp.Infrastructure
             _context = context;
         }
 
-        public async Task<T> AdicionarAsync(T objeto)
+        public async Task<T> RegisterAsync(T objeto)
         {
             await _context.Set<T>().AddAsync(objeto);
             await _context.SaveChangesAsync();
             return objeto;
         }
 
-        public async Task<T> AtualizarAsync(T objeto)
+        public async Task<T> UpdateAsync(T objeto)
         {
             _context.Set<T>().Update(objeto);
             await _context.SaveChangesAsync();
             return objeto;
         }
 
-        public async Task DeletarAsync(T objeto)
+        public async Task DeleteAsync(T objeto)
         {
             _context.Set<T>().Remove(objeto);
             await _context.SaveChangesAsync();
         }
 
-        public ICollection<T> Listar()
+        public ICollection<T> ToList()
         {
             var Lista = _context.Set<T>().ToList();
             return Lista;
         }
-        public async Task<ICollection<T>> ListarAsync()
+        public async Task<ICollection<T>> ToListAsync()
         {
             var Lista = await _context.Set<T>().ToListAsync();
             return Lista;
         }
 
-        public async Task<T?> RecuperarPorAsync(Expression<Func<T, bool>> condicao)
+        public async Task<T?> RecoverBy(Expression<Func<T, bool>> condicao)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(condicao);
 
         }
 
-        public async Task CadastrarEmMassaAsync(ICollection<T> listObjects)
+        public async Task RegisterList(ICollection<T> listObjects)
         {
             await _context.AddRangeAsync(listObjects);
             await _context.SaveChangesAsync();

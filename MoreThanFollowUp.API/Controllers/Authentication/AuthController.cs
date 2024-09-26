@@ -297,7 +297,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         [Route("getUsers")]
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
         {
-            var users = await _userApplicationRepository.ListarAsync();
+            var users = await _userApplicationRepository.ToListAsync();
 
             if (users is null) { return NotFound(); }
 

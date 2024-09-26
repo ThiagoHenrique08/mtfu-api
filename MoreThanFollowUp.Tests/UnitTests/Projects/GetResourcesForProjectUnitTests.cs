@@ -115,10 +115,10 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             var responsiblesList = new List<ProjectResponsible> { new ProjectResponsible { ResponsibleId = 1, Name = "Responsible 1" } };
             var categoriesList = new List<ProjectCategory> { new ProjectCategory { CategoryId = 1, Name = "Category 1" } };
             var statusList = new List<ProjectStatus> { new ProjectStatus { StatusProjectId = 1, Name = "Não iniciado" } };
-            _mockUserApplicationRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(usersList);
-            _mockResponsibleRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(responsiblesList);
-            _mockCategoryRepo.Setup(repo => repo.ListarAsync()).ReturnsAsync(categoriesList);
-            _mockStatusRepositoryMock.Setup(repo => repo.ListarAsync()).ReturnsAsync(statusList);
+            _mockUserApplicationRepo.Setup(repo => repo.ToListAsync()).ReturnsAsync(usersList);
+            _mockResponsibleRepo.Setup(repo => repo.ToListAsync()).ReturnsAsync(responsiblesList);
+            _mockCategoryRepo.Setup(repo => repo.ToListAsync()).ReturnsAsync(categoriesList);
+            _mockStatusRepositoryMock.Setup(repo => repo.ToListAsync()).ReturnsAsync(statusList);
 
             // Act
             var result = await _controller.GetResourcesForProject();

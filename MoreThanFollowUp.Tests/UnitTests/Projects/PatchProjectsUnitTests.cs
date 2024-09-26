@@ -8,12 +8,7 @@ using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Projects
 {
@@ -56,7 +51,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             projectRequest = null;
 
             // Act
-            var result = await _controller.PatchProject(projectRequest!);
+            var result = await _controller.UpdateProject(projectRequest!);
 
             // Assert
             Assert.IsType<NotFoundResult>(result); // Verifica se o retorno é NotFound
@@ -69,11 +64,11 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             var projectDTO = new PATCHProjectDTO { ProjectId = 1 };
 
             _projectRepositoryMock
-                .Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+                .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync((Project)null!);
 
             // Act
-            var result = await _controller.PatchProject(projectDTO);
+            var result = await _controller.UpdateProject(projectDTO);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
@@ -96,15 +91,15 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             };
 
             _projectRepositoryMock
-                .Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+                .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync(existingProject);
 
             // Act
-            var result = await _controller.PatchProject(projectDTO);
+            var result = await _controller.UpdateProject(projectDTO);
 
             // Assert
             Assert.IsType<OkResult>(result);
-            _projectRepositoryMock.Verify(repo => repo.AtualizarAsync(existingProject), Times.Once);
+            _projectRepositoryMock.Verify(repo => repo.UpdateAsync(existingProject), Times.Once);
             Assert.Equal("Updated Title", existingProject.Title);
         }
 
@@ -115,11 +110,11 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             var projectDTO = new PATCHProjectDTO { ProjectId = 1 };
 
             _projectRepositoryMock
-                .Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+                .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ThrowsAsync(new Exception("Error"));
 
             // Act
-            var result = await _controller.PatchProject(projectDTO);
+            var result = await _controller.UpdateProject(projectDTO);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);

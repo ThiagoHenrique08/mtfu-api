@@ -4,17 +4,17 @@ namespace MoreThanFollowUp.Infrastructure.Interfaces
 {
     public interface IEFRepository<T> where T : class
     {
-        public ICollection<T> Listar();
-        public Task<ICollection<T>> ListarAsync();
-        public Task<T> AdicionarAsync(T objeto);
+        public ICollection<T> ToList();
+        public Task<ICollection<T>> ToListAsync();
+        public Task<T> RegisterAsync(T objeto);
 
-        public Task<T> AtualizarAsync(T objeto);
+        public Task<T> UpdateAsync(T objeto);
 
-        public Task DeletarAsync(T objeto);
+        public Task DeleteAsync(T objeto);
 
-        public Task<T?> RecuperarPorAsync(Expression<Func<T, bool>> condicao);
+        public Task<T?> RecoverBy(Expression<Func<T, bool>> condicao);
 
-        public Task CadastrarEmMassaAsync(ICollection<T> listObjects);
+        public Task RegisterList(ICollection<T> listObjects);
 
       
 

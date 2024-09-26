@@ -8,13 +8,7 @@ using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
-using MoreThanFollowUp.Infrastructure.Pagination;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Projects
 {
@@ -79,19 +73,19 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             var applicationUser = new ApplicationUser { CompletedName = "User1" };
 
             // Configura as simulações
-            _projectRepositoryMock.Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+            _projectRepositoryMock.Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync((Project?)null); // O projeto não existe ainda
 
-            _projectRepositoryMock.Setup(repo => repo.AdicionarAsync(It.IsAny<Project>()));
+            _projectRepositoryMock.Setup(repo => repo.RegisterAsync(It.IsAny<Project>()));
 
-            _mockUserApplicationRepo.Setup(um => um.RecuperarPorAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(applicationUser);   
+            _mockUserApplicationRepo.Setup(um => um.RecoverBy(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(applicationUser);   
 
 
-            _projectUserRepositoryMock.Setup(repo => repo.CadastrarEmMassaAsync(It.IsAny<ICollection<Project_User>>()))
+            _projectUserRepositoryMock.Setup(repo => repo.RegisterList(It.IsAny<ICollection<Project_User>>()))
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _controller.PostProject(projectRequest);
+            var result = await _controller.CreateProject(projectRequest);
 
             // Assert
             var okResult = Assert.IsType<OkResult>(result); // Verifica se o retorno é Ok
@@ -119,14 +113,14 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             };
 
             // Configura as simulações
-            _projectRepositoryMock.Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+            _projectRepositoryMock.Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync((Project?)null); // O projeto não existe ainda
 
             _userManagerMock.Setup(um => um.FindByNameAsync("NonExistentUser"))
                 .ReturnsAsync((ApplicationUser?)null); // Usuário não encontrado
 
             // Act
-            var result = await _controller.PostProject(projectRequest);
+            var result = await _controller.CreateProject(projectRequest);
 
             // Assert
             var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
@@ -144,7 +138,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             };
 
             // Act
-            var result = await _controller.PostProject(projectRequest);
+            var result = await _controller.CreateProject(projectRequest);
 
             // Assert
             Assert.IsType<NotFoundResult>(result); // Verifica se o retorno é NotFound

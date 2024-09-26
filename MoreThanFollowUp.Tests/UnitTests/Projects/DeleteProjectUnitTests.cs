@@ -8,12 +8,7 @@ using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Projects
 {
@@ -53,11 +48,11 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             var projectDTO = new Project { ProjectId = 1, Title = "teste" };
 
             _projectRepositoryMock
-                .Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+                .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync((Project)null!);
 
             // Act
-            var result = await _controller.Delete(1);
+            var result = await _controller.DeleteProject(1);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
@@ -75,15 +70,15 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             };
 
             _projectRepositoryMock
-                .Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+                .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync(existingProject);
 
             // Act
-            var result = await _controller.Delete(1);
+            var result = await _controller.DeleteProject(1);
 
             // Assert
             Assert.IsType<OkResult>(result);
-            _projectRepositoryMock.Verify(repo => repo.DeletarAsync(existingProject), Times.Once);
+            _projectRepositoryMock.Verify(repo => repo.DeleteAsync(existingProject), Times.Once);
             Assert.Equal(1, existingProject.ProjectId);
         }
 
@@ -94,11 +89,11 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             var projectDTO = new PATCHProjectDTO { ProjectId = 1 };
 
             _projectRepositoryMock
-                .Setup(repo => repo.RecuperarPorAsync(It.IsAny<Expression<Func<Project, bool>>>()))
+                .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ThrowsAsync(new Exception("Error"));
 
             // Act
-            var result = await _controller.Delete(1);
+            var result = await _controller.DeleteProject(1);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
