@@ -39,14 +39,5 @@
     <ProjectReference Include="..\MoreThanFollowUp.Domain\MoreThanFollowUp.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Configuration\Entities\Projects\Phases\" />
-    <Folder Include="Interfaces\Entities\Projects\Phases\" />
-    <Folder Include="Interfaces\Entities\Sprints\Tasks\" />
-    <Folder Include="Interfaces\Entities\Sprints\" />
-    <Folder Include="Repository\Entities\Projects\Phases\" />
-    <Folder Include="Repository\Entities\Sprints\" />
-  </ItemGroup>
-
 
 </Project>

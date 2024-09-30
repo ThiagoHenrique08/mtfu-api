@@ -24,7 +24,8 @@ namespace MoreThanFollowUp.API.Extensions
                 var listEnterprise = aplicationServiceDb?.Enteprises.ToList();
                 var listSubscription = aplicationServiceDb?.Subscriptions.ToList();
                 var listInvoice = aplicationServiceDb?.Invoices.ToList();
-
+                var listPlanning = aplicationServiceDb?.Plannings.ToList();
+                var listSprint = aplicationServiceDb?.Sprints.ToList();
                 if (listProjectStatus.IsNullOrEmpty())
                 {
                     aplicationServiceDb!.ProjectStatus.Add(new ProjectStatus { Name = "Pendente" });
@@ -70,14 +71,14 @@ namespace MoreThanFollowUp.API.Extensions
 
                 if (listInvoice.IsNullOrEmpty())
                 {
-                    aplicationServiceDb!.Invoices.Add(new Invoice { Amount = 15000, Status = "Ativo", SubscriptionId = 1,  CreateAt = DateTime.Now, DueDate = DateTime.Now.AddDays(365) });
+                    aplicationServiceDb!.Invoices.Add(new Invoice { Amount = 15000, Status = "Ativo", SubscriptionId = 1, CreateAt = DateTime.Now, DueDate = DateTime.Now.AddDays(365) });
 
                     aplicationServiceDb.SaveChanges();
                 }
 
                 if (listEnterprise.IsNullOrEmpty())
                 {
-                    aplicationServiceDb!.Enteprises.Add(new Enterprise { CorporateReason = "SWIF Technology LTDA", CNPJ = "09.001.001/0001-10", Segment = "Tecnologia", TenantId = 1});
+                    aplicationServiceDb!.Enteprises.Add(new Enterprise { CorporateReason = "SWIF Technology LTDA", CNPJ = "09.001.001/0001-10", Segment = "Tecnologia", TenantId = 1 });
 
                     aplicationServiceDb.SaveChanges();
                 }
@@ -85,7 +86,7 @@ namespace MoreThanFollowUp.API.Extensions
 
                 if (listProjects.IsNullOrEmpty() || listProjects.Count < 5)
                 {
-                    aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-1", Responsible = "Nicolas Jeronimo", Category = "Refatoração", Status = "Não iniciado", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null , EnterpriseId = 1});
+                    aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-1", Responsible = "Nicolas Jeronimo", Category = "Refatoração", Status = "Não iniciado", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-2", Responsible = "Nicolas Jeronimo", Category = "Inovação", Status = "Em andamento", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-3", Responsible = "Nicolas Jeronimo", Category = "Manutenção", Status = "Concluído", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-4", Responsible = "Nicolas Jeronimo", Category = "UX-UI", Status = "Em revisão", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
@@ -95,7 +96,7 @@ namespace MoreThanFollowUp.API.Extensions
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-8", Responsible = "Thiago Henrique", Category = "Inovação", Status = "Concluído", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-9", Responsible = "Thiago Henrique", Category = "Manutenção", Status = "Em revisão", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-10", Responsible = "Thiago Henrique", Category = "UX-UI", Status = "Em aprovação", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
-                    aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-11", Responsible = "Richard França", Category = "Segurança", Status = "Não iniciado", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null , EnterpriseId = 1 });
+                    aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-11", Responsible = "Richard França", Category = "Segurança", Status = "Não iniciado", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-12", Responsible = "Richard França", Category = "Integração", Status = "Em andamento", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-13", Responsible = "Richard França", Category = "Refatoração", Status = "Concluído", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-14", Responsible = "Richard França", Category = "Inovação", Status = "Em revisão", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
@@ -116,6 +117,29 @@ namespace MoreThanFollowUp.API.Extensions
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-29", Responsible = "Richard França", Category = "Segurança", Status = "Em revisão", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-30", Responsible = "Guilherme França", Category = "Integração", Status = "Em aprovação", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb.SaveChanges();
+                }
+                if (listPlanning.IsNullOrEmpty())
+                {
+                    var totalProjects = listProjects.Count;
+                    for (int i = 1; i <= totalProjects; i++)
+                    {
+                        aplicationServiceDb!.Plannings.Add(new Planning
+
+                        {
+                            DocumentationLink = "link.com.br",
+                            PlanningDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                            ProjectId = i,
+                            Sprints = new List<Sprint>
+                        {
+                            new Sprint {Title = "MTFU Sprint 1", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído"},
+                            new Sprint {Title = "MTFU Sprint 2", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído"},
+                            new Sprint {Title = "MTFU Sprint 3", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído"},
+                            new Sprint {Title = "MTFU Sprint 4", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído"},
+                            new Sprint {Title = "MTFU Sprint 5", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Pendente" },
+                        }
+                        });
+                        aplicationServiceDb.SaveChanges();
+                    }
                 }
             }
             Console.WriteLine("Done...!");

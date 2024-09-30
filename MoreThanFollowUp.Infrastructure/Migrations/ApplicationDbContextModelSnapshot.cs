@@ -158,6 +158,32 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Planning", b =>
+                {
+                    b.Property<int>("PlanningId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanningId"));
+
+                    b.Property<string>("DocumentationLink")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<string>("PlanningDescription")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("INT");
+
+                    b.HasKey("PlanningId");
+
+                    b.HasIndex("ProjectId")
+                        .IsUnique()
+                        .HasFilter("[ProjectId] IS NOT NULL");
+
+                    b.ToTable("Plannings", (string)null);
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project", b =>
                 {
                     b.Property<int>("ProjectId")
@@ -224,6 +250,44 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ProjectUsers", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint", b =>
+                {
+                    b.Property<int>("SprintId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SprintId"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("Description");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("End Date");
+
+                    b.Property<int?>("PlanningId")
+                        .HasColumnType("INT");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("Start Date");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("VARCHAR(20)")
+                        .HasColumnName("Status");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("VARCHAR(MAX)")
+                        .HasColumnName("Link");
+
+                    b.HasKey("SprintId");
+
+                    b.HasIndex("PlanningId");
+
+                    b.ToTable("Sprints", (string)null);
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Resources.ProjectCategory", b =>
@@ -550,6 +614,16 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Planning", b =>
+                {
+                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Project", "Project")
+                        .WithOne("Planning")
+                        .HasForeignKey("MoreThanFollowUp.Domain.Entities.Projects.Planning", "ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project", b =>
                 {
                     b.HasOne("MoreThanFollowUp.Domain.Models.Enterprise", "Enterprise")
@@ -575,6 +649,16 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("Project");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint", b =>
+                {
+                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Planning", "Planning")
+                        .WithMany("Sprints")
+                        .HasForeignKey("PlanningId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Planning");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
@@ -619,8 +703,15 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("Tenant");
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Planning", b =>
+                {
+                    b.Navigation("Sprints");
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project", b =>
                 {
+                    b.Navigation("Planning");
+
                     b.Navigation("Projects_Users");
                 });
 

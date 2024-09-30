@@ -13,6 +13,8 @@ namespace MoreThanFollowUp.Domain.Entities.Projects
         public DateTime? EndDate { get; set; }
         public int? EnterpriseId { get; set; }
         public virtual Enterprise? Enterprise { get; set; }
+
+        public virtual Planning? Planning { get; set; }
         public virtual ICollection<Project_User>? Projects_Users { get; set; }
 
     }

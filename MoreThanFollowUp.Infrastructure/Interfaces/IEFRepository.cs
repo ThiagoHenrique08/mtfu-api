@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using MoreThanFollowUp.Domain.Entities.Projects;
+using System.Linq.Expressions;
 
 namespace MoreThanFollowUp.Infrastructure.Interfaces
 {
@@ -15,8 +16,8 @@ namespace MoreThanFollowUp.Infrastructure.Interfaces
         public Task<T?> RecoverBy(Expression<Func<T, bool>> condicao);
 
         public Task RegisterList(ICollection<T> listObjects);
+        public IEnumerable<T> SearchForAsync(Expression<Func<T, bool>> condicao);
 
-      
 
 
     }

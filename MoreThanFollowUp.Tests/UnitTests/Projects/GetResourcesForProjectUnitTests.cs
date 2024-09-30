@@ -1,19 +1,12 @@
-﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using MoreThanFollowUp.API.Controllers.Entities;
-using MoreThanFollowUp.Application.DTO.Project_DTO;
 using MoreThanFollowUp.Application.DTO.Resources;
 using MoreThanFollowUp.Domain.Entities.Resources;
 using MoreThanFollowUp.Domain.Models;
+using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Projects
 {
@@ -23,6 +16,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
         private readonly Mock<IProjectCategoryRepository> _mockCategoryRepo;
         private readonly Mock<IProjectStatusRepository> _mockStatusRepositoryMock;
+        private readonly Mock<IPlanningRepository> _PlanningRepositoryMock;
         private readonly ProjectController _controller;
 
         public GetResourcesForProjectUnitTests()
@@ -31,7 +25,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
             _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
             _mockStatusRepositoryMock = new Mock<IProjectStatusRepository>();
-
+            _PlanningRepositoryMock = new Mock<IPlanningRepository>();
             _controller = new ProjectController(
                 null, // Mocked repositories needed for this method
                 null, // UserManager is not used in this method
@@ -39,7 +33,8 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 _mockUserApplicationRepo.Object,
                 _mockCategoryRepo.Object,
                 _mockResponsibleRepo.Object,
-                _mockStatusRepositoryMock.Object
+                _mockStatusRepositoryMock.Object,
+                _PlanningRepositoryMock.Object
             );
         }
 

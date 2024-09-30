@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Context;
 using MoreThanFollowUp.Infrastructure.Interfaces;
 using System.Linq.Expressions;
@@ -57,6 +58,11 @@ namespace MoreThanFollowUp.Infrastructure
             await _context.SaveChangesAsync();
         }
 
- 
+        public IEnumerable<T> SearchForAsync(Expression<Func<T, bool>> condicao)
+        {
+            return _context.Set<T>().AsQueryable().Where(condicao);
+        }
+
+
     }
 }

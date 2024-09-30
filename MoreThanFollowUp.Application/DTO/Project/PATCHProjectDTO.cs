@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoreThanFollowUp.Application.DTO.Project_DTO
+namespace MoreThanFollowUp.Application.DTO.Project
 {
     public class PATCHProjectDTO
     {

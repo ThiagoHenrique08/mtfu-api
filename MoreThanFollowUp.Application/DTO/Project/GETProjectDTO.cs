@@ -1,7 +1,7 @@
 ﻿using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 
-namespace MoreThanFollowUp.Application.DTO.Project_DTO
+namespace MoreThanFollowUp.Application.DTO.Project
 {
     public class GETProjectDTO
     {

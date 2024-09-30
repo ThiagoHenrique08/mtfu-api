@@ -1,4 +1,4 @@
-﻿namespace MoreThanFollowUp.Application.DTO.Project_DTO
+﻿namespace MoreThanFollowUp.Application.DTO.Project
 {
     public class POSTProjectDTO
     {
@@ -8,6 +8,6 @@
         public string? Category { get; set; }
 
         public string? Description { get; set; }
-        
+
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using MoreThanFollowUp.API.Controllers.Entities;
-using MoreThanFollowUp.Application.DTO.Project_DTO;
+using MoreThanFollowUp.Application.DTO.Project;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
@@ -23,6 +23,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         private readonly Mock<IProjectCategoryRepository> _mockCategoryRepo;
         private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
         private readonly Mock<IProjectStatusRepository> _mockStatusRepositoryMock;
+        private readonly Mock<IPlanningRepository> _PlanningRepositoryMock;
         private readonly ProjectController _controller;
 
 
@@ -37,8 +38,11 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             _mockCategoryRepo = new Mock<IProjectCategoryRepository>();
             _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
             _mockStatusRepositoryMock = new Mock<IProjectStatusRepository>();
+            _PlanningRepositoryMock = new Mock<IPlanningRepository>();
             _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
-                                                     _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object, _mockStatusRepositoryMock.Object);
+                                                     _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object, 
+                                                     _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object
+                                                     );
         }
 
         [Fact] //Testa se o método retorna Ok quando o projeto é criado com sucesso.

@@ -1,4 +1,4 @@
-﻿namespace MoreThanFollowUp.Application.DTO.Project_DTO
+﻿namespace MoreThanFollowUp.Application.DTO.Project
 {
     public class POSTUserToProjectDTO
     {

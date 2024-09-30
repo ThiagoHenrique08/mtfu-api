@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTO\NovaPasta\**" />
+    <EmbeddedResource Remove="DTO\NovaPasta\**" />
+    <None Remove="DTO\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MoreThanFollowUp.Domain\MoreThanFollowUp.Domain.csproj" />
   </ItemGroup>
 

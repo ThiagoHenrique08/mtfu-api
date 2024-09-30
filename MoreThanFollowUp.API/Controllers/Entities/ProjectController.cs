@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using MoreThanFollowUp.Application.DTO.Project_DTO;
+using MoreThanFollowUp.Application.DTO.Project;
 using MoreThanFollowUp.Application.DTO.Resources;
 using MoreThanFollowUp.Application.DTO.Users;
 using MoreThanFollowUp.Domain.Entities.Projects;
@@ -26,8 +26,8 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         private readonly IProjectCategoryRepository _projectCategoryRepository;
         private readonly IProjectResponsibleRepository _projectResponsibleRepository;
         private readonly IProjectStatusRepository _projectStatusRepository;
-
-        public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository, IUserApplicationRepository userApplicationRepository, IProjectCategoryRepository projectCategoryRepository, IProjectResponsibleRepository projectResponsibleRepository, IProjectStatusRepository projectStatusRepository)
+        private readonly IPlanningRepository _planningRepository;
+        public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository, IUserApplicationRepository userApplicationRepository, IProjectCategoryRepository projectCategoryRepository, IProjectResponsibleRepository projectResponsibleRepository, IProjectStatusRepository projectStatusRepository, IPlanningRepository planningRepository)
         {
             _projectRepository = projectRepository;
             _userManager = userManager;
@@ -36,6 +36,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             _projectCategoryRepository = projectCategoryRepository;
             _projectResponsibleRepository = projectResponsibleRepository;
             _projectStatusRepository = projectStatusRepository;
+            _planningRepository = planningRepository;
         }
 
 
@@ -110,7 +111,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
                 foreach (var user in users)
                 {
-                    var result = await _userApplicationRepository.RecoverBy(p => p.CompletedName.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.com!);
+                    var result = await _userApplicationRepository.RecoverBy(p => p.CompletedName!.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.com!);
 
                     if (result != null)
                     {
@@ -240,6 +241,13 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                 //Deleta primeiro todos os relacionamentos de Projeto com usuário antes de Deletar o Projeto
 
                 var list = _project_UserRepository.SearchForAsync(p => p.ProjectId == idProject);
+
+                if (list is not null)
+                {
+                    await _project_UserRepository.RemoveRange(list);
+                }
+
+                var planningList = _planningRepository.SearchForAsync(p => p.ProjectId == idProject);
 
                 if (list is not null)
                 {

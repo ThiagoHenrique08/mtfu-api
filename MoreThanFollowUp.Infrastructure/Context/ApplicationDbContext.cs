@@ -38,7 +38,8 @@ namespace MoreThanFollowUp.Infrastructure.Context
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Enterprise> Enteprises { get; set; }
-
+        public DbSet<Planning> Plannings { get; set; }
+        public DbSet<Sprint> Sprints { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
