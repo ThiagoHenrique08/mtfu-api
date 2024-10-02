@@ -37,6 +37,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                 {
                     SprintId = sprint.SprintId,
                     Title = sprint.Title,
+                    Description = sprint.Description,
                     StartDate = DateTime.Now,
                     EndDate = null,
                     Status = sprint.Status,
