@@ -20,7 +20,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpGet]
         [Route("getSprint")]
-        public async Task<ActionResult<IEnumerable<GETSprintDTO>>> GetPlanning(int planningId)
+        public async Task<ActionResult<IEnumerable<GETSprintDTO>>> GetSprint(int planningId)
         {
             var sprints =  _sprintRepository.SearchForAsync(p=>p.PlanningId == planningId);
 
@@ -48,7 +48,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         }
         [HttpPost]
         [Route("create")]
-        public async Task<ActionResult<POSTSprintDTO>> CreatePlanning([FromBody] POSTSprintDTO sprintDTO)
+        public async Task<ActionResult<GETSprintDTO>> CreateSprint([FromBody] POSTSprintDTO sprintDTO)
         {
             if (sprintDTO is null) { return NotFound(); }
 
@@ -66,12 +66,24 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             };
             await _sprintRepository.RegisterAsync(newSprint);
 
-            return Ok(newSprint);
+            var getSprint = await _sprintRepository.RecoverBy(s => s.Title!.ToUpper().Equals(newSprint.Title!.ToUpper()));
+
+            var getSprintDTO = new GETSprintDTO
+            {
+                SprintId = getSprint!.SprintId,
+                Title = getSprint.Title,
+                Description = getSprint.Description,
+                StartDate = getSprint.StartDate,
+                EndDate = getSprint.EndDate,
+                Status = getSprint.Status,
+            };
+
+            return Ok(getSprintDTO);
         }
 
         [HttpPatch]
-        [Route("upate")]
-        public async Task<ActionResult<PATCHSprintDTO>> UpdatePlanning([FromBody] PATCHSprintDTO sprintDTO)
+        [Route("update")]
+        public async Task<ActionResult<GETSprintDTO>> UpdateSprint([FromBody] PATCHSprintDTO sprintDTO)
         {
             if (sprintDTO is null) { return NotFound(); }
 
@@ -84,10 +96,21 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             sprint.Status = sprintDTO.Status ?? sprint.Status;
             sprint.EndDate = sprint.EndDate ?? sprint.EndDate;
 
-
             await _sprintRepository.UpdateAsync(sprint);
 
-            return Ok(sprint);
+            var getSprint = await _sprintRepository.RecoverBy(s => s.SprintId == sprint.SprintId);
+
+            var getSprintDTO = new GETSprintDTO
+            {
+                SprintId = getSprint!.SprintId,
+                Title = getSprint.Title,
+                Description = getSprint.Description,
+                StartDate = getSprint.StartDate,
+                EndDate = getSprint.EndDate,
+                Status = getSprint.Status,
+            };
+
+            return Ok(getSprintDTO);
         }
     }
 }
