@@ -271,6 +271,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Property<int?>("PlanningId")
                         .HasColumnType("INT");
 
+                    b.Property<int?>("SprintScore")
+                        .HasColumnType("INT");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("DATETIME")
                         .HasColumnName("Start Date");
@@ -288,6 +291,33 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.HasIndex("PlanningId");
 
                     b.ToTable("Sprints", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint_User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("DataCriacao");
+
+                    b.Property<int?>("SprintId")
+                        .HasColumnType("INT");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SprintId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SprintUsers", (string)null);
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Resources.ProjectCategory", b =>
@@ -661,6 +691,23 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("Planning");
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint_User", b =>
+                {
+                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Sprint", "Sprint")
+                        .WithMany("Sprint_Users")
+                        .HasForeignKey("SprintId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationUser", "User")
+                        .WithMany("Sprint_Users")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Sprint");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
                 {
                     b.HasOne("MoreThanFollowUp.Domain.Models.Enterprise", "Enterprise")
@@ -715,9 +762,16 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("Projects_Users");
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint", b =>
+                {
+                    b.Navigation("Sprint_Users");
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Projects_Users");
+
+                    b.Navigation("Sprint_Users");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>

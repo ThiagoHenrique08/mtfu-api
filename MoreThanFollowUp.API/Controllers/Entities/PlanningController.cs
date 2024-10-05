@@ -34,18 +34,12 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             }
             var sprints = _sprintRepository.SearchForAsync(s => s.PlanningId == planning.PlanningId);
 
-            var planningDTO = new GETPlanningDTO
-            {
-                PlanningDTO = new PlanningDTO
-                {
-                    PlanningId = planning.PlanningId,
-                    DocumentationLink = planning.DocumentationLink,
-                    PlanningDescription = planning.PlanningDescription
-                },
 
-                TotalSprint = sprints.Count()
-
-
+           var planningDTO = new GETPlanningDTO
+           {
+                PlanningId = planning.PlanningId,
+                DocumentationLink = planning.DocumentationLink,
+                PlanningDescription = planning.PlanningDescription
             };
 
             return Ok(planningDTO);
@@ -53,7 +47,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         }
         [HttpPost]
         [Route("create")]
-        public async Task<ActionResult<PlanningDTO>> CreatePlanning([FromBody] POSTPlanningDTO planningDTO)
+        public async Task<ActionResult<GETPlanningDTO>> CreatePlanning([FromBody] POSTPlanningDTO planningDTO)
         {
             if (planningDTO is null) { return NotFound(); }
 
@@ -74,7 +68,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             var idPlanning = projectResponse!.Planning!.PlanningId;
             var getPlanning = await _planningRepository.RecoverBy(s => s.PlanningId == idPlanning);
 
-            var getPlanningtDTO = new PlanningDTO
+            var getPlanningtDTO = new GETPlanningDTO
             {
                 PlanningId = getPlanning!.PlanningId,
                 DocumentationLink = getPlanning.DocumentationLink,
@@ -87,7 +81,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpPatch]
         [Route("update")]
-        public async Task<ActionResult<PlanningDTO>> UpdatePlanning([FromBody] PATCHPlanningDTO planningDTO)
+        public async Task<ActionResult<GETPlanningDTO>> UpdatePlanning([FromBody] PATCHPlanningDTO planningDTO)
         {
             if (planningDTO is null) { return NotFound(); }
 
@@ -102,7 +96,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
             var getPlanning = await _planningRepository.RecoverBy(s => s.PlanningId == planning.PlanningId);
 
-            var gePlanningDTO = new PlanningDTO
+            var gePlanningDTO = new GETPlanningDTO
             {
                 PlanningId = getPlanning!.PlanningId,
                 DocumentationLink = getPlanning.DocumentationLink,

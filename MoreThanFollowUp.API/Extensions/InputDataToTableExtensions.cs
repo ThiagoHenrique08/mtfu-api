@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Entities.Resources;
 using MoreThanFollowUp.Domain.Models;
@@ -25,7 +26,12 @@ namespace MoreThanFollowUp.API.Extensions
                 var listSubscription = aplicationServiceDb?.Subscriptions.ToList();
                 var listInvoice = aplicationServiceDb?.Invoices.ToList();
                 var listPlanning = aplicationServiceDb?.Plannings.ToList();
+                var listUsers = aplicationServiceDb?.Users.ToList();
+                var listRoles = aplicationServiceDb?.Roles.ToList();
+
                 var listSprint = aplicationServiceDb?.Sprints.ToList();
+
+
                 if (listProjectStatus.IsNullOrEmpty())
                 {
                     aplicationServiceDb!.ProjectStatus.Add(new ProjectStatus { Name = "Pendente" });
@@ -121,6 +127,7 @@ namespace MoreThanFollowUp.API.Extensions
                 if (listPlanning.IsNullOrEmpty())
                 {
                     var totalProjects = listProjects.Count;
+
                     for (int i = 1; i <= totalProjects; i++)
                     {
                         aplicationServiceDb!.Plannings.Add(new Planning
@@ -131,19 +138,83 @@ namespace MoreThanFollowUp.API.Extensions
                             ProjectId = i,
                             Sprints = new List<Sprint>
                         {
-                            new Sprint {Title = "MTFU Sprint 1", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído"},
-                            new Sprint {Title = "MTFU Sprint 2", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído"},
-                            new Sprint {Title = "MTFU Sprint 3", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído"},
-                            new Sprint {Title = "MTFU Sprint 4", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído"},
-                            new Sprint {Title = "MTFU Sprint 5", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Pendente" },
+                            new Sprint {Title = "MTFU Sprint 1", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
+                            new Sprint {Title = "MTFU Sprint 2", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
+                            new Sprint {Title = "MTFU Sprint 3", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
+                            new Sprint {Title = "MTFU Sprint 4", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
+                            new Sprint {Title = "MTFU Sprint 5", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Pendente" , SprintScore = 60},
                         }
                         });
                         aplicationServiceDb.SaveChanges();
                     }
+
+
                 }
+
+                if (listUsers.IsNullOrEmpty())
+                {
+                    aplicationServiceDb!.Users.Add(new ApplicationUser
+                    {
+                        Email = "thiago@gmail.com",
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        UserName = "thiagsilva",
+                        Function = "Backend",
+                        CompletedName = "Thiago Henrique"
+                    });
+
+                    aplicationServiceDb.Users.Add(new ApplicationUser
+                    {
+                        Email = "nicolas@gmail.com",
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        UserName = "nicolas",
+                        Function = "Frontend",
+                        CompletedName = "Nicolas Jeronimo"
+                    });
+                    aplicationServiceDb.Users.Add(new ApplicationUser
+                    {
+                        Email = "richard@gmail.com",
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        UserName = "richard",
+                        Function = "Frontend",
+                        CompletedName = "Richard França"
+                    });
+                    aplicationServiceDb.Users.Add(new ApplicationUser
+                    {
+                        Email = "guilherme@gmail.com",
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        UserName = "guilherme",
+                        Function = "Frontend",
+                        CompletedName = "Guilherme França"
+                    });
+                }
+
+                if (listRoles.IsNullOrEmpty())
+                {
+                    aplicationServiceDb!.Roles.Add(new IdentityRole
+                    {
+
+                        Name = "ScrumMaster",
+                        NormalizedName = "SCRUMMASTER",
+                        ConcurrencyStamp = null
+                    });
+                    aplicationServiceDb!.Roles.Add(new IdentityRole
+                    {
+
+                        Name = "Admin",
+                        NormalizedName = "ADMIN",
+                        ConcurrencyStamp = null
+                    });
+                    aplicationServiceDb!.Roles.Add(new IdentityRole
+                    {
+
+                        Name = "User",
+                        NormalizedName = "USER",
+                        ConcurrencyStamp = null
+                    });
+                }
+                Console.WriteLine("Done...!");
+                //
             }
-            Console.WriteLine("Done...!");
-            //
         }
     }
 }

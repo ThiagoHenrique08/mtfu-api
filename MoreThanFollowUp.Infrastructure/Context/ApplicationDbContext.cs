@@ -31,6 +31,7 @@ namespace MoreThanFollowUp.Infrastructure.Context
 
         public DbSet<Project> Projects { get; set; }
         public DbSet<Project_User> ProjectUsers { get; set; }
+        public DbSet<Sprint_User> SprintUsers { get; set; }
         public DbSet<ProjectCategory> Categories { get; set; }
         public DbSet<ProjectStatus> ProjectStatus { get; set; }
         public DbSet<ProjectResponsible> Responsible { get; set; }

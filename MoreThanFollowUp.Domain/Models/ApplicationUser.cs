@@ -12,6 +12,7 @@ namespace MoreThanFollowUp.Domain.Models
 
         public string? CompletedName { get; set; }
         public virtual ICollection<Project_User>? Projects_Users { get; set; }
+        public virtual ICollection<Sprint_User>? Sprint_Users { get; set; }
         //public int EnterpriseId { get; set; }
         public  virtual Enterprise? Enterprise { get; set; }
 

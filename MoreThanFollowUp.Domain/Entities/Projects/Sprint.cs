@@ -1,4 +1,6 @@
-﻿namespace MoreThanFollowUp.Domain.Entities.Projects
+﻿using MoreThanFollowUp.Domain.Models;
+
+namespace MoreThanFollowUp.Domain.Entities.Projects
 {
     public class Sprint
     {
@@ -10,7 +12,14 @@
 
         public DateTime? EndDate { get; set; }
         public string? Status { get; set; }
+
+        public int? SprintScore { get; set; }
         public int? PlanningId { get; set; }
         public virtual Planning? Planning { get; set; }
+
+        public virtual ICollection<Sprint_User>? Sprint_Users { get; set; }
+
+
+
     }
 }

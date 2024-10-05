@@ -69,7 +69,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
                 foreach (var user in projectRequest.UsersList!)
                 {
-                    var result = await _userApplicationRepository.RecoverBy(p => p.CompletedName!.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.UserName!);
+                    var result = await _userApplicationRepository.RecoverBy(p => p.Id == user.UserId);//_userManager.FindByNameAsync(user.UserName!);
 
                     if (result != null)
                     {
@@ -101,7 +101,6 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         {
             try
             {
-
                 var ProjectExist = await _projectRepository.RecoverBy(p => p.ProjectId.Equals(IdProject));
                 if (ProjectExist is null)
                 {
@@ -111,7 +110,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
                 foreach (var user in users)
                 {
-                    var result = await _userApplicationRepository.RecoverBy(p => p.CompletedName!.ToUpper().Equals(user.CompletedName));//_userManager.FindByNameAsync(user.com!);
+                    var result = await _userApplicationRepository.RecoverBy(p => p.Id == user.UserId);//_userManager.FindByNameAsync(user.com!);
 
                     if (result != null)
                     {
@@ -156,7 +155,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
 
             var newListProject = new List<GETProjectDTO>();
-            var usersList = new List<POSTUserToProjectDTO>();
+           // var usersList = new List<POSTUserToProjectDTO>();
             //var users = _project_UserRepository.RecuperarPorAsync(p => p.ProjectId == project.ProjectId);
             foreach (var project in projects)
             {

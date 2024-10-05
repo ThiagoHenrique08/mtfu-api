@@ -61,7 +61,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 },
                 UsersList = new List<POSTUserToProjectDTO>
                 {
-                new POSTUserToProjectDTO { CompletedName = "User1" }
+                new POSTUserToProjectDTO { UserId = "12345" }
                 }
             };
 
@@ -74,7 +74,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 CreateDate = DateTime.Now
             };
 
-            var applicationUser = new ApplicationUser { CompletedName = "User1" };
+            var applicationUser = new ApplicationUser { Id = "12345" };
 
             // Configura as simulações
             _projectRepositoryMock.Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
@@ -112,7 +112,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 },
                 UsersList = new List<POSTUserToProjectDTO>
                 {
-                new POSTUserToProjectDTO { CompletedName = "User1" }
+                new POSTUserToProjectDTO { UserId = "12345" }
                 }
             };
 
