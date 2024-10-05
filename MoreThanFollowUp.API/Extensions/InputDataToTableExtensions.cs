@@ -161,6 +161,7 @@ namespace MoreThanFollowUp.API.Extensions
                         Function = "Backend",
                         CompletedName = "Thiago Henrique"
                     });
+                    aplicationServiceDb.SaveChanges();
 
                     aplicationServiceDb.Users.Add(new ApplicationUser
                     {
@@ -170,6 +171,8 @@ namespace MoreThanFollowUp.API.Extensions
                         Function = "Frontend",
                         CompletedName = "Nicolas Jeronimo"
                     });
+                    aplicationServiceDb.SaveChanges();
+                    
                     aplicationServiceDb.Users.Add(new ApplicationUser
                     {
                         Email = "richard@gmail.com",
@@ -178,6 +181,8 @@ namespace MoreThanFollowUp.API.Extensions
                         Function = "Frontend",
                         CompletedName = "Richard França"
                     });
+                    aplicationServiceDb.SaveChanges();
+
                     aplicationServiceDb.Users.Add(new ApplicationUser
                     {
                         Email = "guilherme@gmail.com",
@@ -186,6 +191,7 @@ namespace MoreThanFollowUp.API.Extensions
                         Function = "Frontend",
                         CompletedName = "Guilherme França"
                     });
+                    aplicationServiceDb.SaveChanges();
                 }
 
                 if (listRoles.IsNullOrEmpty())
@@ -197,6 +203,8 @@ namespace MoreThanFollowUp.API.Extensions
                         NormalizedName = "SCRUMMASTER",
                         ConcurrencyStamp = null
                     });
+                    aplicationServiceDb.SaveChanges();
+
                     aplicationServiceDb!.Roles.Add(new IdentityRole
                     {
 
@@ -204,6 +212,8 @@ namespace MoreThanFollowUp.API.Extensions
                         NormalizedName = "ADMIN",
                         ConcurrencyStamp = null
                     });
+                    aplicationServiceDb.SaveChanges();
+
                     aplicationServiceDb!.Roles.Add(new IdentityRole
                     {
 
@@ -211,6 +221,7 @@ namespace MoreThanFollowUp.API.Extensions
                         NormalizedName = "USER",
                         ConcurrencyStamp = null
                     });
+                    aplicationServiceDb.SaveChanges();
                 }
                 Console.WriteLine("Done...!");
                 //
