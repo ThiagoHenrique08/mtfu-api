@@ -162,7 +162,7 @@ namespace MoreThanFollowUp.API.Extensions
                 //        CompletedName = "Thiago Henrique"
                 //    });
                 //    aplicationServiceDb.SaveChanges();
-                }
+                
                 //    aplicationServiceDb.Users.Add(new ApplicationUser
                 //    {
                 //        Email = "nicolas@gmail.com",

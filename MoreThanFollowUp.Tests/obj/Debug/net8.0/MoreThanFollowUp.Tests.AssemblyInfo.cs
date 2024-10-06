@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MoreThanFollowUp.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f750d9f5f41f0db7a91335256a8af317aa1762fd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef875f3111419e528b63132df2b662388d3f3fec")]
 [assembly: System.Reflection.AssemblyProductAttribute("MoreThanFollowUp.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MoreThanFollowUp.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
