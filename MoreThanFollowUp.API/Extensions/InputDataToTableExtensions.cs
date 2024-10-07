@@ -137,96 +137,19 @@ namespace MoreThanFollowUp.API.Extensions
                             PlanningDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
                             ProjectId = i,
                             Sprints = new List<Sprint>
-                        {
-                            new Sprint {Title = "MTFU Sprint 1", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
-                            new Sprint {Title = "MTFU Sprint 2", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
-                            new Sprint {Title = "MTFU Sprint 3", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
-                            new Sprint {Title = "MTFU Sprint 4", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
-                            new Sprint {Title = "MTFU Sprint 5", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Pendente" , SprintScore = 60},
-                        }
+                            {
+                                new Sprint {Title = "MTFU Sprint 1", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
+                                new Sprint {Title = "MTFU Sprint 2", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
+                                new Sprint {Title = "MTFU Sprint 3", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
+                                new Sprint {Title = "MTFU Sprint 4", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
+                                new Sprint {Title = "MTFU Sprint 5", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Pendente" , SprintScore = 60},
+                            }
                         });
                         aplicationServiceDb.SaveChanges();
                     }
-
-
                 }
-
-                //if (listUsers.IsNullOrEmpty())
-                //{
-                //    aplicationServiceDb!.Users.Add(new ApplicationUser
-                //    {
-                //        Email = "thiago@gmail.com",
-                //        SecurityStamp = Guid.NewGuid().ToString(),
-                //        UserName = "thiagsilva",
-                //        Function = "Backend",
-                //        CompletedName = "Thiago Henrique"
-                //    });
-                //    aplicationServiceDb.SaveChanges();
-                
-                //    aplicationServiceDb.Users.Add(new ApplicationUser
-                //    {
-                //        Email = "nicolas@gmail.com",
-                //        SecurityStamp = Guid.NewGuid().ToString(),
-                //        UserName = "nicolas",
-                //        Function = "Frontend",
-                //        CompletedName = "Nicolas Jeronimo"
-                //    });
-                //    aplicationServiceDb.SaveChanges();
-
-                //    aplicationServiceDb.Users.Add(new ApplicationUser
-                //    {
-                //        Email = "richard@gmail.com",
-                //        SecurityStamp = Guid.NewGuid().ToString(),
-                //        UserName = "richard",
-                //        Function = "Frontend",
-                //        CompletedName = "Richard França"
-                //    });
-                //    aplicationServiceDb.SaveChanges();
-
-                //    aplicationServiceDb.Users.Add(new ApplicationUser
-                //    {
-                //        Email = "guilherme@gmail.com",
-                //        SecurityStamp = Guid.NewGuid().ToString(),
-                //        UserName = "guilherme",
-                //        Function = "Frontend",
-                //        CompletedName = "Guilherme França"
-                //    });
-                //    aplicationServiceDb.SaveChanges();
-                //}
-
-                //if (listRoles.IsNullOrEmpty())
-                //{
-                //    aplicationServiceDb!.Roles.Add(new IdentityRole
-                //    {
-
-                //        Name = "ScrumMaster",
-                //        NormalizedName = "SCRUMMASTER",
-                //        ConcurrencyStamp = null
-                //    });
-                //    aplicationServiceDb.SaveChanges();
-
-                //    aplicationServiceDb!.Roles.Add(new IdentityRole
-                //    {
-
-                //        Name = "Admin",
-                //        NormalizedName = "ADMIN",
-                //        ConcurrencyStamp = null
-                //    });
-                //    aplicationServiceDb.SaveChanges();
-
-                //    aplicationServiceDb!.Roles.Add(new IdentityRole
-                //    {
-
-                //        Name = "User",
-                //        NormalizedName = "USER",
-                //        ConcurrencyStamp = null
-                //    });
-                //    aplicationServiceDb.SaveChanges();
-                //}
-                Console.WriteLine("Done...!");
-                    //
-              
             }
+            Console.WriteLine("Done...!");
         }
     }
 }
