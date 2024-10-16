@@ -67,6 +67,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
 
             var user = await _userManager.FindByEmailAsync(email);
 
+
             if (user != null)
             {
                 var result = await _userManager.AddToRoleAsync(user, roleName);

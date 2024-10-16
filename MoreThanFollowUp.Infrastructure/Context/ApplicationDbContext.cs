@@ -41,7 +41,7 @@ namespace MoreThanFollowUp.Infrastructure.Context
         public DbSet<Enterprise> Enteprises { get; set; }
         public DbSet<Planning> Plannings { get; set; }
         public DbSet<Sprint> Sprints { get; set; }
-
+        public DbSet<RequirementAnalysis> RequirementAnalysis { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

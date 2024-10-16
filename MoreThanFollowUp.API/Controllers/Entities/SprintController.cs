@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Project;
 using MoreThanFollowUp.Application.DTO.Project.Sprint;
 using MoreThanFollowUp.Domain.Entities.Projects;
-using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using MoreThanFollowUp.Infrastructure.Repository.Entities.Projects;
@@ -17,6 +17,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         private readonly IPlanningRepository _planningRepository;
         private readonly IUserApplicationRepository _userApplicationRepository;
         private readonly ISprint_UserRepository _sprintUserRepository;
+        private readonly IRequirementAnalysisRepository _requirementAnalysis;
         public SprintController(ISprintRepository sprintRepository, IPlanningRepository planningRepository, IUserApplicationRepository userApplicationRepository, ISprint_UserRepository sprintUserRepository)
         {
             _sprintRepository = sprintRepository;
@@ -27,66 +28,106 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpGet]
         [Route("getSprint")]
-        public async Task<ActionResult<IEnumerable<GETSprintDTO>>> GetSprint(int planningId)
+        public async Task<ActionResult<IEnumerable<GETSprintDTO>>> GetSprintPlanning(Guid? PhaseId)
         {
-            var sprints = _sprintRepository.SearchForAsync(p => p.PlanningId == planningId);
 
-            if (sprints is null)
-            {
-                return NotFound();
-            }
-
-            var sprintDTO = new List<GETSprintDTO>();
-
-            foreach (var sprint in sprints)
-            {
-                sprintDTO.Add(new GETSprintDTO
-                {
-                    SprintId = sprint.SprintId,
-                    Title = sprint.Title,
-                    Description = sprint.Description,
-                    StartDate = sprint.EndDate,
-                    EndDate = sprint.EndDate,
-                    Status = sprint.Status,
-                    Sprint_Users = sprint.Sprint_Users!.Select(p=>p.User!.CompletedName).ToList()!
-                });
-            }
-
-            return Ok(sprintDTO);
-
-        }
-        [HttpPost]
-        [Route("create")]
-        public async Task<ActionResult> CreateSprint([FromBody] RequestSprintDTO sprintRequest)
-        {
             try
             {
-                var planning = await _planningRepository.RecoverBy(p => p.PlanningId == sprintRequest.Sprint!.PlanningId);
-                if (sprintRequest.Sprint == null) { return NotFound(); }
+                var sprintPlannings = _sprintRepository.SearchForAsync(p => p.PlanningId == PhaseId);
+                var sprintRequirementAnalysis = _sprintRepository.SearchForAsync(p => p.RequirementAnalysisId == PhaseId);
 
-                var newSprint = new Sprint()
+                if (!sprintPlannings.IsNullOrEmpty())
                 {
-                    Title = sprintRequest.Sprint.Title,
-                    Description = sprintRequest.Sprint.Description,
-                    Status = sprintRequest.Sprint.Status,
-                    StartDate = DateTime.Now,
-                    EndDate = null,
-                    SprintScore = sprintRequest.Sprint.SprintScore,
-                    PlanningId = planning!.PlanningId,
-                    Planning = planning
-                };
-                var sprintExist = await _sprintRepository.RecoverBy(p => p.Title!.ToUpper().Equals(newSprint.Title!.ToUpper()));
+                    var sprintDTO = new List<GETSprintDTO>();
+                    foreach (var sprint in sprintPlannings)
+                    {
+                        sprintDTO.Add(new GETSprintDTO
+                        {
+                            SprintId = sprint.SprintId,
+                            Title = sprint.Title,
+                            Description = sprint.Description,
+                            StartDate = sprint.EndDate,
+                            EndDate = sprint.EndDate,
+                            Status = sprint.Status,
+                            Sprint_Users = sprint.Sprint_Users!.Select(p => p.User!.CompletedName).ToList()!
+                        });
+                    }
+                    return Ok(sprintDTO);
+                }
+                if (!sprintRequirementAnalysis.IsNullOrEmpty())
+                {
+                    var sprintDTO = new List<GETSprintDTO>();
+                    foreach (var sprint in sprintRequirementAnalysis)
+                    {
+                        sprintDTO.Add(new GETSprintDTO
+                        {
+                            SprintId = sprint.SprintId,
+                            Title = sprint.Title,
+                            Description = sprint.Description,
+                            StartDate = sprint.EndDate,
+                            EndDate = sprint.EndDate,
+                            Status = sprint.Status,
+                            Sprint_Users = sprint.Sprint_Users!.Select(p => p.User!.CompletedName).ToList()!
+                        });
+                    }
+                    return Ok(sprintDTO);
+                }
 
-                if (sprintExist is null)
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("create")]
+        public async Task<ActionResult> CreateSprintPlanning([FromBody] RequestSprintDTO sprintRequest)
+        {
+
+            try
+            {
+
+                var planning = await _planningRepository.RecoverBy(p => p.PlanningId == sprintRequest.Sprint!.PhaseId);
+                var RequirementAnalysis = await _requirementAnalysis.RecoverBy(p => p.RequirementAnalysisId == sprintRequest.Sprint!.PhaseId);
+                Guid SprintIdCreated = Guid.Empty;
+
+                if (planning is not null)
                 {
+                    var newSprint = new Sprint()
+                    {
+                        Title = sprintRequest.Sprint.Title,
+                        Description = sprintRequest.Sprint.Description,
+                        Status = sprintRequest.Sprint.Status,
+                        StartDate = DateTime.Now,
+                        EndDate = null,
+                        SprintScore = sprintRequest.Sprint.SprintScore,
+                        PlanningId = planning!.PlanningId,
+                        Planning = planning
+                    };
                     await _sprintRepository.RegisterAsync(newSprint);
+                    SprintIdCreated = newSprint.SprintId;
                 }
-                else
+                else if (RequirementAnalysis is not null)
                 {
-                    return NotFound("Sprint exist!");
+                    var newSprint = new Sprint()
+                    {
+                        Title = sprintRequest.Sprint!.Title,
+                        Description = sprintRequest.Sprint.Description,
+                        Status = sprintRequest.Sprint.Status,
+                        StartDate = DateTime.Now,
+                        EndDate = null,
+                        SprintScore = sprintRequest.Sprint.SprintScore,
+                        RequirementAnalysisId = RequirementAnalysis!.RequirementAnalysisId,
+                        RequirementAnalysis = RequirementAnalysis
+                    };
+                    await _sprintRepository.RegisterAsync(newSprint);
+                    SprintIdCreated = newSprint.SprintId;
                 }
 
-                var newSprintCadastrado = await _sprintRepository.RecoverBy(p => p.Title!.ToUpper().Equals(newSprint.Title!.ToUpper()));
+                var newSprintRegistred = await _sprintRepository.RecoverBy(p => p.SprintId == SprintIdCreated);
                 var newListSprintUser = new List<Sprint_User>();
 
                 foreach (var user in sprintRequest.UsersList!)
@@ -97,7 +138,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                     {
                         newListSprintUser.Add(new Sprint_User
                         {
-                            Sprint = newSprintCadastrado,
+                            Sprint = newSprintRegistred,
                             User = result,
                             CreateDate = DateTime.Now
                         });
@@ -121,7 +162,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         [HttpPost]
         [Route("addUserToSprint/{IdSprint:int}")]
         //[Authorize(Policy = "AdminOnlyAndScrumMasterOnly")]
-        public async Task<ActionResult> PostUserToSprint([FromRoute] int IdSprint, [FromBody] List<POSTUserToSprintDTO> users)
+        public async Task<ActionResult> PostUserToSprint([FromRoute] Guid IdSprint, [FromBody] List<POSTUserToSprintDTO> users)
         {
             try
             {
@@ -191,6 +232,57 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             };
 
             return Ok(getSprintDTO);
+        }
+
+
+        [HttpPost]
+        [Route("addManyUserToManySprints")]
+        //[Authorize(Policy = "AdminOnlyAndScrumMasterOnly")]
+        public async Task<ActionResult> PostManyUserToManyProjects([FromBody] List<POSTUserToProjectDTO> users)
+        {
+            try
+            {
+
+                var listSprints = await _sprintRepository.ToListAsync();
+
+
+                if (listSprints is null)
+                {
+                    return NotFound();
+                }
+
+                var newListSprintUser = new List<Sprint_User>();
+
+                foreach (var sprint in listSprints)
+                {
+
+                    foreach (var user in users)
+                    {
+                        var result = await _userApplicationRepository.RecoverBy(p => p.Id == user.UserId);//_userManager.FindByNameAsync(user.com!);
+
+                        if (result != null)
+                        {
+                            newListSprintUser.Add(new Sprint_User
+                            {
+                                Sprint = sprint,
+                                User = result,
+                                CreateDate = DateTime.Now
+                            });
+                        }
+                        else
+                        {
+                            return NotFound("User not exist!");
+                        }
+
+                    }
+                }
+                await _sprintUserRepository.RegisterList(newListSprintUser);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

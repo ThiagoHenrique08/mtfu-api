@@ -103,7 +103,7 @@ namespace MoreThanFollowUp.API.Extensions
             services.AddScoped<IPlanningRepository, PlanningRepository>();
             services.AddScoped<ISprintRepository, SprintRepository>();
             services.AddScoped<ISprint_UserRepository, Sprint_UserRepository>();
-
+            services.AddScoped<IRequirementAnalysisRepository, RequirementAnalysisRepository>();
 
             return services;
         }

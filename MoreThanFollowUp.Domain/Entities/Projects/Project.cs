@@ -15,6 +15,7 @@ namespace MoreThanFollowUp.Domain.Entities.Projects
         public virtual Enterprise? Enterprise { get; set; }
 
         public virtual Planning? Planning { get; set; }
+        public virtual RequirementAnalysis? RequirementAnalysis { get; set; }
         public virtual ICollection<Project_User>? Projects_Users { get; set; }
 
     }

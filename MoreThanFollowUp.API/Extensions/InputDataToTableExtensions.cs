@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Entities.Resources;
 using MoreThanFollowUp.Domain.Models;
@@ -30,7 +29,7 @@ namespace MoreThanFollowUp.API.Extensions
                 var listRoles = aplicationServiceDb?.Roles.ToList();
 
                 var listSprint = aplicationServiceDb?.Sprints.ToList();
-
+                var listRequirementAnalysis = aplicationServiceDb?.RequirementAnalysis.ToList();
 
                 if (listProjectStatus.IsNullOrEmpty())
                 {
@@ -124,30 +123,79 @@ namespace MoreThanFollowUp.API.Extensions
                     aplicationServiceDb!.Projects.Add(new Project { Title = "MTFU-30", Responsible = "Guilherme França", Category = "Integração", Status = "Em aprovação", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = 1 });
                     aplicationServiceDb.SaveChanges();
                 }
+
                 if (listPlanning.IsNullOrEmpty())
                 {
-                    var totalProjects = listProjects.Count;
+                    var listProjects2 = aplicationServiceDb!.Projects.ToList();
+                    var totalProjects = listProjects2.Count;
 
                     for (int i = 1; i <= totalProjects; i++)
                     {
                         aplicationServiceDb!.Plannings.Add(new Planning
 
                         {
+                            StartDate = DateTime.Now,
+                            EndDate = null,
                             DocumentationLink = "link.com.br",
-                            PlanningDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                            PlanningDescription = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"",
                             ProjectId = i,
-                            Sprints = new List<Sprint>
-                            {
-                                new Sprint {Title = "MTFU Sprint 1", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
-                                new Sprint {Title = "MTFU Sprint 2", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
-                                new Sprint {Title = "MTFU Sprint 3", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
-                                new Sprint {Title = "MTFU Sprint 4", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Concluído", SprintScore = 60},
-                                new Sprint {Title = "MTFU Sprint 5", Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s", StartDate = DateTime.Now,EndDate = null, Status = "Pendente" , SprintScore = 60},
-                            }
+                            
                         });
                         aplicationServiceDb.SaveChanges();
+
                     }
+
+
+                    var plannings = aplicationServiceDb!.Plannings.ToList();
+
+
+                    foreach (var p in plannings)
+                    {
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 1", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Concluído", SprintScore = 60, PlanningId = p.PlanningId, Planning = p });
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 2", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Concluído", SprintScore = 60, PlanningId = p.PlanningId, Planning = p });
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 3", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Concluído", SprintScore = 60, PlanningId = p.PlanningId, Planning = p });
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 4", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Em andamento", SprintScore = 60, PlanningId = p.PlanningId, Planning = p });
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 5", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Pendente", SprintScore = 60, PlanningId = p.PlanningId, Planning = p });
+                        aplicationServiceDb.SaveChanges();
+                    }
+
                 }
+
+                if (listRequirementAnalysis.IsNullOrEmpty())
+                {
+                    var listProjects2 = aplicationServiceDb!.Projects.ToList();
+                    var totalProjects = listProjects2.Count;
+
+                    for (int i = 1; i <= totalProjects; i++)
+                    {
+                        aplicationServiceDb!.RequirementAnalysis.Add(new RequirementAnalysis
+
+                        {
+                            StartDate = DateTime.Now,
+                            EndDate = null,
+                            ProjectId = i,
+                        });
+                        aplicationServiceDb.SaveChanges();
+
+                    }
+
+                    var RequirementAnalysis = aplicationServiceDb!.RequirementAnalysis.ToList();
+
+
+                    foreach (var p in RequirementAnalysis)
+                    {
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 1", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Concluído", SprintScore = 60, RequirementAnalysisId = p.RequirementAnalysisId, RequirementAnalysis = p });
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 2", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Concluído", SprintScore = 60, RequirementAnalysisId = p.RequirementAnalysisId, RequirementAnalysis = p });
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 3", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Concluído", SprintScore = 60, RequirementAnalysisId = p.RequirementAnalysisId, RequirementAnalysis = p });
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 4", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Em andamento", SprintScore = 60, RequirementAnalysisId = p.RequirementAnalysisId, RequirementAnalysis = p });
+                        aplicationServiceDb.Sprints.Add(new Sprint { Title = "MTFU Sprint 5", Description = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"", StartDate = DateTime.Now, EndDate = null, Status = "Pendente", SprintScore = 60, RequirementAnalysisId = p.RequirementAnalysisId, RequirementAnalysis = p });
+
+                        aplicationServiceDb.SaveChanges();
+                    }
+
+                }
+
+
             }
             Console.WriteLine("Done...!");
         }

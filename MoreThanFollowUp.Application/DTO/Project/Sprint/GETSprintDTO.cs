@@ -4,7 +4,7 @@ namespace MoreThanFollowUp.Application.DTO.Project.Sprint
 {
     public class GETSprintDTO
     {
-        public int SprintId { get; set; }
+        public Guid SprintId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public int? SprintScorte {  get; set; }

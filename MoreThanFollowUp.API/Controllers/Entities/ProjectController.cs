@@ -155,7 +155,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
 
             var newListProject = new List<GETProjectDTO>();
-           // var usersList = new List<POSTUserToProjectDTO>();
+            // var usersList = new List<POSTUserToProjectDTO>();
             //var users = _project_UserRepository.RecuperarPorAsync(p => p.ProjectId == project.ProjectId);
             foreach (var project in projects)
             {
@@ -279,7 +279,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             var responsibles = await _projectResponsibleRepository.ToListAsync();
             var categories = await _projectCategoryRepository.ToListAsync();
             var projectStatus = await _projectStatusRepository.ToListAsync();
-            
+
             //if (users.IsNullOrEmpty() || responsibles.IsNullOrEmpty() || categories.IsNullOrEmpty() || projectStatus.IsNullOrEmpty())
             //{
             //    return NotFound();
@@ -306,6 +306,57 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
             return Ok(resourcesForProject);
 
+        }
+
+
+        [HttpPost]
+        [Route("addManyUserToManyProjects")]
+        //[Authorize(Policy = "AdminOnlyAndScrumMasterOnly")]
+        public async Task<ActionResult> PostManyUserToManyProjects([FromBody] List<POSTUserToProjectDTO> users)
+        {
+            try
+            {
+
+                var listProjects = await _projectRepository.ToListAsync();
+
+
+                if (listProjects is null)
+                {
+                    return NotFound();
+                }
+
+                var newListProjectUser = new List<Project_User>();
+
+                foreach (var project in listProjects)
+                {
+
+                    foreach (var user in users)
+                    {
+                        var result = await _userApplicationRepository.RecoverBy(p => p.Id == user.UserId);//_userManager.FindByNameAsync(user.com!);
+
+                        if (result != null)
+                        {
+                            newListProjectUser.Add(new Project_User
+                            {
+                                Project = project,
+                                User = result,
+                                CreateDate = DateTime.Now
+                            });
+                        }
+                        else
+                        {
+                            return NotFound("User not exist!");
+                        }
+                        
+                    }
+                }
+                await _project_UserRepository.RegisterList(newListProjectUser);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 

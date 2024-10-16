@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoreThanFollowUp.Application.DTO.Project.Planning;
-using MoreThanFollowUp.Application.DTO.Project.Sprint;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 
@@ -39,7 +38,9 @@ namespace MoreThanFollowUp.API.Controllers.Entities
            {
                 PlanningId = planning.PlanningId,
                 DocumentationLink = planning.DocumentationLink,
-                PlanningDescription = planning.PlanningDescription
+                PlanningDescription = planning.PlanningDescription,
+                StartDate = planning.StartDate,
+                EndDate = planning.EndDate
             };
 
             return Ok(planningDTO);
@@ -52,28 +53,34 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             if (planningDTO is null) { return NotFound(); }
 
             var project = await _projectRepository.RecoverBy(p => p.ProjectId == planningDTO.ProjectId);
-
+            
+            if (project is null) { return NotFound(); }
+            
             var newPlanning = new Planning()
             {
                 DocumentationLink = planningDTO.DocumentationLink,
                 PlanningDescription = planningDTO.PlanningDescription,
+                StartDate = DateTime.Now,
+                EndDate = null,
                 ProjectId = planningDTO.ProjectId,
                 Project = project
 
             };
             await _planningRepository.RegisterAsync(newPlanning);
+            var idPlanningCreated = newPlanning.PlanningId;
 
-            var projectResponse = await _projectRepository.RecoverBy(p => p.ProjectId == p.ProjectId);
+            //var projectResponse = await _projectRepository.RecoverBy(p => p.ProjectId == p.ProjectId);
+            //var idPlanning = projectResponse!.Planning!.PlanningId;
 
-            var idPlanning = projectResponse!.Planning!.PlanningId;
-            var getPlanning = await _planningRepository.RecoverBy(s => s.PlanningId == idPlanning);
+            var getPlanning = await _planningRepository.RecoverBy(s => s.PlanningId == idPlanningCreated);
 
             var getPlanningtDTO = new GETPlanningDTO
             {
                 PlanningId = getPlanning!.PlanningId,
                 DocumentationLink = getPlanning.DocumentationLink,
                 PlanningDescription = getPlanning.PlanningDescription,
-          
+                StartDate = getPlanning.StartDate,
+                EndDate = getPlanning.StartDate,
             };
 
             return Ok(getPlanningtDTO);
@@ -85,12 +92,13 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         {
             if (planningDTO is null) { return NotFound(); }
 
-            var planning = await _planningRepository.RecoverBy(p => p.PlanningId == planningDTO.PlanningId);
+            var planning = await _planningRepository.RecoverBy(p => p.PlanningId == planningDTO.PhaseId);
 
             if (planning is null) { return NotFound(); }
 
             planning!.DocumentationLink = planningDTO.DocumentationLink ?? planning!.DocumentationLink;
             planning.PlanningDescription = planningDTO.PlanningDescription ?? planning.PlanningDescription;
+            planning.EndDate = planningDTO.EndDate ?? planning.EndDate;
 
             await _planningRepository.UpdateAsync(planning);
 
@@ -101,6 +109,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                 PlanningId = getPlanning!.PlanningId,
                 DocumentationLink = getPlanning.DocumentationLink,
                 PlanningDescription = getPlanning.PlanningDescription,
+                EndDate = planningDTO.EndDate,
             };
 
             return Ok(gePlanningDTO);

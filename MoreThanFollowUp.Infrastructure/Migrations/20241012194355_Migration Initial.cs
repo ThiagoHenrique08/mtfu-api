@@ -190,21 +190,25 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Squads",
+                name: "Projects",
                 columns: table => new
                 {
-                    SquadId = table.Column<int>(type: "INT", nullable: false)
+                    ProjectId = table.Column<int>(type: "INT", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "VARCHAR(100)", nullable: true),
-                    EnterpriseId = table.Column<int>(type: "INT", nullable: false),
-
+                    Title = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Responsible = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Category = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Status = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Description = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    EnterpriseId = table.Column<int>(type: "INT", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Squads", x => x.SquadId);
-                    table.UniqueConstraint("AK_Squads_EnterpriseId", x => x.EnterpriseId);
+                    table.PrimaryKey("PK_Projects", x => x.ProjectId);
                     table.ForeignKey(
-                        name: "FK_Squads_Enterprises_EnterpriseId",
+                        name: "FK_Projects_Enterprises_EnterpriseId",
                         column: x => x.EnterpriseId,
                         principalTable: "Enterprises",
                         principalColumn: "EnterpriseId",
@@ -320,28 +324,24 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Projects",
+                name: "Plannings",
                 columns: table => new
                 {
-                    ProjectId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Responsible = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Category = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Status = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Description = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "DATETIME", nullable: true),
-                    SquadId = table.Column<int>(type: "INT", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                    PlanningId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    DocumentationLink = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    PlanningDescription = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    StartDate = table.Column<DateTime>(name: "Start Date", type: "DATETIME", nullable: true),
+                    EndDate = table.Column<DateTime>(name: "End Date", type: "DATETIME", nullable: true),
+                    ProjectId = table.Column<int>(type: "INT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Projects", x => x.ProjectId);
+                    table.PrimaryKey("PK_Plannings", x => x.PlanningId);
                     table.ForeignKey(
-                        name: "FK_Projects_Squads_SquadId",
-                        column: x => x.SquadId,
-                        principalTable: "Squads",
-                        principalColumn: "EnterpriseId",
+                        name: "FK_Plannings_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "ProjectId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -370,6 +370,84 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         principalTable: "Projects",
                         principalColumn: "ProjectId",
                         onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequirementAnalysis",
+                columns: table => new
+                {
+                    RequirementAnalysisId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    StartDate = table.Column<DateTime>(name: "Start Date", type: "DATETIME", nullable: true),
+                    EndDate = table.Column<DateTime>(name: "End Date", type: "DATETIME", nullable: true),
+                    ProjectId = table.Column<int>(type: "INT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequirementAnalysis", x => x.RequirementAnalysisId);
+                    table.ForeignKey(
+                        name: "FK_RequirementAnalysis_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sprints",
+                columns: table => new
+                {
+                    SprintId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Link = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    Description = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    StartDate = table.Column<DateTime>(name: "Start Date", type: "DATETIME", nullable: true),
+                    EndDate = table.Column<DateTime>(name: "End Date", type: "DATETIME", nullable: true),
+                    Status = table.Column<string>(type: "VARCHAR(20)", nullable: true),
+                    SprintScore = table.Column<int>(type: "INT", nullable: true),
+                    PlanningId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    RequirementAnalysisId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sprints", x => x.SprintId);
+                    table.ForeignKey(
+                        name: "FK_Sprints_Plannings_PlanningId",
+                        column: x => x.PlanningId,
+                        principalTable: "Plannings",
+                        principalColumn: "PlanningId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Sprints_RequirementAnalysis_RequirementAnalysisId",
+                        column: x => x.RequirementAnalysisId,
+                        principalTable: "RequirementAnalysis",
+                        principalColumn: "RequirementAnalysisId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SprintUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INT", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SprintId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DataCriacao = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SprintUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SprintUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SprintUsers_Sprints_SprintId",
+                        column: x => x.SprintId,
+                        principalTable: "Sprints",
+                        principalColumn: "SprintId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -429,9 +507,16 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 filter: "[SubscriptionId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projects_SquadId",
+                name: "IX_Plannings_ProjectId",
+                table: "Plannings",
+                column: "ProjectId",
+                unique: true,
+                filter: "[ProjectId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projects_EnterpriseId",
                 table: "Projects",
-                column: "SquadId");
+                column: "EnterpriseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectUsers_ProjectId",
@@ -444,9 +529,31 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Squads_EnterpriseId",
-                table: "Squads",
-                column: "EnterpriseId");
+                name: "IX_RequirementAnalysis_ProjectId",
+                table: "RequirementAnalysis",
+                column: "ProjectId",
+                unique: true,
+                filter: "[ProjectId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sprints_PlanningId",
+                table: "Sprints",
+                column: "PlanningId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sprints_RequirementAnalysisId",
+                table: "Sprints",
+                column: "RequirementAnalysisId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SprintUsers_SprintId",
+                table: "SprintUsers",
+                column: "SprintId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SprintUsers_UserId",
+                table: "SprintUsers",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_TenantId",
@@ -489,6 +596,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "Responsible");
 
             migrationBuilder.DropTable(
+                name: "SprintUsers");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -498,10 +608,16 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Projects");
+                name: "Sprints");
 
             migrationBuilder.DropTable(
-                name: "Squads");
+                name: "Plannings");
+
+            migrationBuilder.DropTable(
+                name: "RequirementAnalysis");
+
+            migrationBuilder.DropTable(
+                name: "Projects");
 
             migrationBuilder.DropTable(
                 name: "Enterprises");

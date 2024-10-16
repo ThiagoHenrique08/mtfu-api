@@ -12,7 +12,7 @@ namespace MoreThanFollowUp.Infrastructure.Configuration.Entities.Projects
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).HasColumnType("INT").UseIdentityColumn();
             builder.Property(p => p.CreateDate).HasColumnName("DataCriacao").HasColumnType("DATETIME").IsRequired(false);
-            builder.Property(p => p.SprintId).HasColumnType("INT").IsRequired(false);
+            builder.Property(p => p.SprintId).HasColumnType("UNIQUEIDENTIFIER").IsRequired(false);
             builder.HasOne(p => p.Sprint).WithMany(c => c.Sprint_Users).HasForeignKey(c => c.SprintId);
             builder.HasOne(p => p.User).WithMany(l => l.Sprint_Users).HasPrincipalKey(c => c.Id);
         }

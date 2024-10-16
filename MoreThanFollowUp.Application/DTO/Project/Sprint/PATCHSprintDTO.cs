@@ -2,7 +2,7 @@
 {
     public class PATCHSprintDTO
     {
-        public int SprintId { get; set; }
+        public Guid SprintId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public int? SprintScore { get; set; }

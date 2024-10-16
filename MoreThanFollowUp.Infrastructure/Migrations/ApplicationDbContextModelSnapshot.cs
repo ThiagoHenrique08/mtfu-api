@@ -160,20 +160,26 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Planning", b =>
                 {
-                    b.Property<int>("PlanningId")
+                    b.Property<Guid>("PlanningId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanningId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("DocumentationLink")
                         .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("End Date");
 
                     b.Property<string>("PlanningDescription")
                         .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<int?>("ProjectId")
                         .HasColumnType("INT");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("Start Date");
 
                     b.HasKey("PlanningId");
 
@@ -252,13 +258,37 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.ToTable("ProjectUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint", b =>
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.RequirementAnalysis", b =>
                 {
-                    b.Property<int>("SprintId")
+                    b.Property<Guid>("RequirementAnalysisId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("End Date");
+
+                    b.Property<int?>("ProjectId")
                         .HasColumnType("INT");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SprintId"));
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("Start Date");
+
+                    b.HasKey("RequirementAnalysisId");
+
+                    b.HasIndex("ProjectId")
+                        .IsUnique()
+                        .HasFilter("[ProjectId] IS NOT NULL");
+
+                    b.ToTable("RequirementAnalysis", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint", b =>
+                {
+                    b.Property<Guid>("SprintId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("Description")
                         .HasColumnType("VARCHAR(MAX)")
@@ -268,8 +298,11 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasColumnType("DATETIME")
                         .HasColumnName("End Date");
 
-                    b.Property<int?>("PlanningId")
-                        .HasColumnType("INT");
+                    b.Property<Guid?>("PlanningId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<Guid?>("RequirementAnalysisId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<int?>("SprintScore")
                         .HasColumnType("INT");
@@ -290,6 +323,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
                     b.HasIndex("PlanningId");
 
+                    b.HasIndex("RequirementAnalysisId");
+
                     b.ToTable("Sprints", (string)null);
                 });
 
@@ -305,8 +340,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasColumnType("DATETIME")
                         .HasColumnName("DataCriacao");
 
-                    b.Property<int?>("SprintId")
-                        .HasColumnType("INT");
+                    b.Property<Guid?>("SprintId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -681,14 +716,31 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.RequirementAnalysis", b =>
+                {
+                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Project", "Project")
+                        .WithOne("RequirementAnalysis")
+                        .HasForeignKey("MoreThanFollowUp.Domain.Entities.Projects.RequirementAnalysis", "ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint", b =>
                 {
                     b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.Planning", "Planning")
                         .WithMany("Sprints")
                         .HasForeignKey("PlanningId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.RequirementAnalysis", "RequirementAnalysis")
+                        .WithMany("Sprints")
+                        .HasForeignKey("RequirementAnalysisId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Planning");
+
+                    b.Navigation("RequirementAnalysis");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint_User", b =>
@@ -760,6 +812,13 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("Planning");
 
                     b.Navigation("Projects_Users");
+
+                    b.Navigation("RequirementAnalysis");
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.RequirementAnalysis", b =>
+                {
+                    b.Navigation("Sprints");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint", b =>

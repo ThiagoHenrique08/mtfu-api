@@ -6,7 +6,7 @@
         public string? Description { get; set; }
         public string? Status { get; set; }
         public int? SprintScore { get; set; }
-        public int? PlanningId { get; set; }
+        public Guid? PhaseId { get; set; }
      
     }
 }
