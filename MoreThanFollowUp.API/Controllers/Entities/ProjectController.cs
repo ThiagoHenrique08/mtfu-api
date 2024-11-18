@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MoreThanFollowUp.Application.DTO.Project;
 using MoreThanFollowUp.Application.DTO.Resources;
 using MoreThanFollowUp.Application.DTO.Users;
@@ -144,6 +145,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         }
         [HttpGet]
         [Route("get")]
+        [OutputCache(Duration =400)]
         public async Task<ActionResult<IEnumerable<GETProjectDTO>>> GetProjectWithPagination([FromQuery] ProjectsParameters projectsParametersPagination, string? parameter, string? category, string? status,Guid enterpriseId)
         {
             try
@@ -281,6 +283,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpGet]
         [Route("getResourcesForProject")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<ICollection<GetResourcesForProjectDTO>>> GetResourcesForProject()
         {
             var users = await _userApplicationRepository.ToListAsync();

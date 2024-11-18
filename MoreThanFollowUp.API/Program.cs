@@ -35,6 +35,7 @@ builder.Services.AddControllers()
         // Outras configurações podem ser adicionadas aqui
         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore; // Para ignorar valores nulos
     });
+builder.Services.AddOutputCache();
 
 var app = builder.Build();
 
@@ -50,5 +51,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.UseCors("MyPolicy");
+app.UseOutputCache();
 
 app.Run();

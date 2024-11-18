@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Tenant;
 using MoreThanFollowUp.Domain.Models;
@@ -22,6 +23,7 @@ namespace MoreThanFollowUp.API.Controllers.Models
 
         [HttpGet]
         [Route("get")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<IEnumerable<GETTenantDTO>>> getTenant()
         {
             try

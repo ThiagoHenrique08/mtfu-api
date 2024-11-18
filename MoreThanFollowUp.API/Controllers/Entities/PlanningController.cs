@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MoreThanFollowUp.Application.DTO.Project.Planning;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
@@ -22,6 +23,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpGet]
         [Route("getPlanning")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<GETPlanningDTO>> GetPlanning(Guid ProjectId)
         {
             var planning = await _planningRepository.RecoverBy(p => p.ProjectId == ProjectId);

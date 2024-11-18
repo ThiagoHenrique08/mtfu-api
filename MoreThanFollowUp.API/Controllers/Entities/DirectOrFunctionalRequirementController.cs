@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Project.DirectOrFunctionalRequirement;
 using MoreThanFollowUp.Domain.Entities.Projects;
@@ -69,6 +70,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpGet]
         [Route("list")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<IEnumerable<GETDirectOrFunctionalDTO>>> GetDirectOrFunctionalRequirement(Guid RequirementAnalysisID)
         {
             try

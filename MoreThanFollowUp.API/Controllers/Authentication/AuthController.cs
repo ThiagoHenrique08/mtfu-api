@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.API.Interfaces;
 using MoreThanFollowUp.Application.DTO.Enterprise;
@@ -421,6 +422,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         }
         [HttpGet]
         [Route("getUsers")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
         {
             var users = await _userApplicationRepository.ToListAsync();
@@ -446,6 +448,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         }
         [HttpGet]
         [Route("getUserPerId")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUserPerId(string UserId)
         {
             var user = await _userApplicationRepository.RecoverBy(u => u.Id == UserId);
@@ -468,6 +471,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         }
         [HttpGet]
         [Route("getRolePerUserAndPerEnterprise")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<IEnumerable<GETRolePerUserPerEntepriseDTO>>> GetRolePerUserAndPerEnterprise(string UserId, Guid EnterpriseId)
         {
 

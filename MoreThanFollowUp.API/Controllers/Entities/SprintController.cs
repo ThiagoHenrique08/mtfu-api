@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Project;
 using MoreThanFollowUp.Application.DTO.Project.Sprint;
@@ -28,6 +29,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpGet]
         [Route("getSprint")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<IEnumerable<GETSprintDTO>>> GetSprintPlanning(Guid? PhaseId)
         {
 

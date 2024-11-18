@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MoreThanFollowUp.Application.DTO.Project.RequirementAnalysis;
 using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
@@ -22,6 +23,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpGet]
         [Route("getRequirementAnalysis")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<IEnumerable<GETRequirementAnalysisDTO>>> GetRequirementAnalysis(Guid ProjectId)
         {
             try

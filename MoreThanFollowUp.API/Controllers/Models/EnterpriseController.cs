@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Enterprise;
 using MoreThanFollowUp.Application.DTO.Tenant;
@@ -131,6 +132,7 @@ namespace MoreThanFollowUp.API.Controllers.Models
 
         [HttpGet]
         [Route("getEnterprise")]
+        [OutputCache(Duration = 400)]
         public async Task<ActionResult<IEnumerable<GETEnterpriseDTO>>> GetEnterprise(Guid TenantId)
         {
             try
