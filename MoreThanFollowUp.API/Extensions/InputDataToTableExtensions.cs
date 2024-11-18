@@ -75,18 +75,19 @@ namespace MoreThanFollowUp.API.Extensions
 
                 var project = scope.ServiceProvider.GetRequiredService<IProjectRepository>();
                 var project_user = scope.ServiceProvider.GetRequiredService<IProject_UserRepository>();
+                var planning = scope.ServiceProvider.GetRequiredService<IPlanningRepository>();
 
                 // Chame o método assíncrono de forma síncrona com GetAwaiter().GetResult() (caso seu método Configure não seja assíncrono)
                 Console.WriteLine("Input Data Users...");
                 ImputeDataInTheEnvironment(userManager, roleManager, tenant, enterprise, enterprise_User, user_role_enterprise).GetAwaiter().GetResult();
 
                 Console.WriteLine("Input Data Projects...");
-               ImputeDataTheProjects(project, project_user, enterprise, userManager).GetAwaiter().GetResult();
+               ImputeDataTheProjects(project, project_user, enterprise, userManager, planning).GetAwaiter().GetResult();
 
             }
         }
 
-        private static  async Task ImputeDataTheProjects(IProjectRepository _project, IProject_UserRepository _project_user, IEnterpriseRepository _enterprise, UserManager<ApplicationUser> _userManager)
+        private static  async Task ImputeDataTheProjects(IProjectRepository _project, IProject_UserRepository _project_user, IEnterpriseRepository _enterprise, UserManager<ApplicationUser> _userManager, IPlanningRepository _planning)
         {
             var userList = await _userManager.Users.ToListAsync();
 
@@ -113,7 +114,24 @@ namespace MoreThanFollowUp.API.Extensions
                 var project_userList = new List<Project_User>();
                 foreach (var project in listProjectCreated)
                 {
-                    
+                    Console.WriteLine("");
+                    Console.WriteLine($"Creating Planning per Project:  {project.Title}...");
+
+                    var newPlanning = new Planning
+
+                    {
+                        StartDate = DateTime.Now,
+                        EndDate = null,
+                        DocumentationLink = "link.com.br",
+                        PlanningDescription = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"",
+                        ProjectId = project.ProjectId,
+                        Project = project
+                    };
+                    await _planning.RegisterAsync(newPlanning);
+
+                    Console.WriteLine("");
+                    Console.WriteLine($"Planning per Project:  {project.Title}, Created with successfull!");
+
                     foreach (var user in userList)
                     {
                         project_userList.Add(new Project_User
@@ -129,6 +147,7 @@ namespace MoreThanFollowUp.API.Extensions
                     project_userList.Clear();
                     Console.WriteLine("");
                     Console.WriteLine($"Relationship the  all users Created with successfull!");
+
 
                 }
                 Console.WriteLine("Creating projects next Enterprise...");
