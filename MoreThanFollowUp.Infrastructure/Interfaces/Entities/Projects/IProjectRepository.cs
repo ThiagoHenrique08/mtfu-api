@@ -10,8 +10,8 @@ namespace MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects
     {
         Task<ICollection<Project>> SearchByName(string? title);
 
-        Task<IPagedList<Project>> GetProjectPaginationAsync(ProjectsParameters projectsParametersPagination, string paramenter, string category, string status);
+        Task<IPagedList<Project>> GetProjectPaginationAsync(ProjectsParameters projectsParametersPagination, string paramenter, string category, string status, Guid enterpriseId);
 
-        Task<ICollection<Project>> GetAllWithParameters(string parameter, string category, string status);
+        Task<ICollection<Project>> GetAllWithParameters(string parameter, string category, string status, Guid enterpriseId);
     }
 }

@@ -9,7 +9,7 @@ namespace MoreThanFollowUp.Application.DTO.Project.Planning
 
         public string? PlanningDescription { get; set; }
 
-        public int? ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
 
     }
 }

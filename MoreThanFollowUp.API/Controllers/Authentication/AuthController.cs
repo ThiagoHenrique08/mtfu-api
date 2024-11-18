@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.API.Interfaces;
+using MoreThanFollowUp.Application.DTO.Enterprise;
 using MoreThanFollowUp.Application.DTO.Login;
 using MoreThanFollowUp.Application.DTO.Users;
 using MoreThanFollowUp.Domain.Models;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,12 +21,16 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
     {
         private readonly ITokenService _tokenService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthController> _logger;
         private readonly IUserApplicationRepository _userApplicationRepository;
+        private readonly IApplicationUserRoleEnterpriseRepository _userRoleEnterpriseRepository;
+        private readonly IEnterpriseRepository _enterpriseRepository;
+        private readonly ITenantRepository _tenantRepository;
+        private readonly IEnterprise_UserRepository _enterpriseUserRepository;
 
-        public AuthController(ITokenService tokenService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ILogger<AuthController> logger, IUserApplicationRepository userApplicationRepository)
+        public AuthController(ITokenService tokenService, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IConfiguration configuration, ILogger<AuthController> logger, IUserApplicationRepository userApplicationRepository, IApplicationUserRoleEnterpriseRepository userRoleEnterpriseRepository, IEnterpriseRepository enterpriseRepository, ITenantRepository tenantRepository, IEnterprise_UserRepository enterpriseUserRepository)
         {
             _tokenService = tokenService;
             _userManager = userManager;
@@ -31,18 +38,29 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
             _configuration = configuration;
             _logger = logger;
             _userApplicationRepository = userApplicationRepository;
+            _userRoleEnterpriseRepository = userRoleEnterpriseRepository;
+            _enterpriseRepository = enterpriseRepository;
+            _tenantRepository = tenantRepository;
+            _enterpriseUserRepository = enterpriseUserRepository;
         }
 
         [HttpPost]
         [Route("CreateRole")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> CreateRole(string roleName)
         {
             var roleExist = await _roleManager.RoleExistsAsync(roleName);
 
+            ApplicationRole role = new()
+            {
+                Name = roleName,
+                NormalizedName = roleName.ToUpper(),
+                ConcurrencyStamp = Guid.NewGuid().ToString(),
+            };
+
             if (!roleExist)
             {
-                var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
+                var roleResult = await _roleManager.CreateAsync(role);
                 if (roleResult.Succeeded)
                 {
                     _logger.LogInformation(1, "Roles Added");
@@ -60,30 +78,43 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         }
 
         [HttpPost]
-        [Route("AddUserToRole")]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> AddUserToRole(string email, string roleName)
+        [Route("AddUserToRoleToEnterprise")]
+        [Authorize(Policy = "ADMIN")]
+        public async Task<IActionResult> AddUserToRoleToEnterprise(string email, string roleName, Guid enterpriseId)
         {
 
             var user = await _userManager.FindByEmailAsync(email);
-
-
+            var role = await _roleManager.FindByNameAsync(roleName);
+            var enterprise = await _enterpriseRepository.RecoverBy(p => p.EnterpriseId == enterpriseId);
             if (user != null)
             {
-                var result = await _userManager.AddToRoleAsync(user, roleName);
+                //var result = await _userManager.AddToRoleAsync(user, roleName);
 
-                if (result.Succeeded)
+
+                var roleToUserObject = new ApplicationUserRoleEnterprise
+                {
+                    UserId = user.Id,
+                    User = user,
+                    RoleId = role!.Id,
+                    Role = role,
+                    EnterpriseId = enterprise!.EnterpriseId,
+                    Enterprise = enterprise
+
+                };
+                var result = await _userRoleEnterpriseRepository.RegisterAsync(roleToUserObject);
+
+                if (result is not null)
 
                 {
-                    _logger.LogInformation(1, $"User {user.Email} Added to the {roleName} role");
+                    _logger.LogInformation(1, $"User {user.Email} Added to the {roleName} role and {enterprise.CorporateReason}");
                     return StatusCode(StatusCodes.Status200OK,
-                    new ResponseDTO { Status = "Success", Message = $"User {user.Email} to the {roleName} role" });
+                    new ResponseDTO { Status = "Success", Message = $"User {user.Email} to the {roleName} role and {enterprise.CorporateReason}" });
                 }
 
                 else
                 {
-                    _logger.LogInformation(1, $"Error: Unable to add user {user.Email} to the {roleName} role");
-                    return StatusCode(StatusCodes.Status400BadRequest, new ResponseDTO { Status = "Error", Message = $"Error: Unable to add user {user.Email} to the {roleName} role" });
+                    _logger.LogInformation(1, $"Error: Unable to add user {user.Email} to the {roleName} role and {enterprise.CorporateReason}");
+                    return StatusCode(StatusCodes.Status400BadRequest, new ResponseDTO { Status = "Error", Message = $"Error: Unable to add user {user.Email} to the {roleName} role and {enterprise.CorporateReason}" });
                 }
             }
             return BadRequest(new { error = "Unable to find user" });
@@ -140,35 +171,129 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var userExists = await _userManager.FindByNameAsync(model.Username!);
-
-            if (userExists != null)
+            try
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new ResponseDTO { Status = "Error", Message = "User already exists!" });
+                //CRIA UM NOVO USUARIO CASO ELE NÃO EXISTA
+                //============================================================================
+                var userExists = await _userManager.FindByNameAsync(model.Username!);
+
+                if (userExists != null)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        new ResponseDTO { Status = "Error", Message = "User already exists!" });
+                }
+
+                ApplicationUser user = new()
+                {
+                    Email = model.Email,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    UserName = model.Username,
+                    Function = model.Function,
+                    CompletedName = model.CompletedName,
+                };
+                var result = await _userManager.CreateAsync(user, model.Password!);
+                var createdUser = await _userManager.FindByEmailAsync(user.Email!);
+                if (!result.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { Status = "Error", Message = "User creation failed!" });
+                }
+                //============================================================================
+
+                //CRIA UM NOVO TENANT
+                //============================================================================
+                var newTenant = new Tenant
+                {
+                    TenantName = model.EnterpriseName,
+                    TenantCustomDomain = null,
+                    TenantStatus = "Ativo",
+                    Responsible = model.CompletedName,
+                    Email = model.Email,
+                    PhoneNumber = null,
+                    CreatedAt = DateTime.Now,
+                    UpdateAt = DateTime.Now,
+                };
+                var tenantCreated = await _tenantRepository.RegisterAsync(newTenant);
+                //============================================================================
+
+
+                //CRIA UMA NOVA EMPRESA E ASSOCIA AO TENANT CRIADO ACIMA
+                //============================================================================
+                var newEnterprise = new Enterprise
+                {
+                    CorporateReason = model.EnterpriseName,
+                    CNPJ = null,
+                    Segment = null,
+                    TenantId = tenantCreated.TenantId,
+                    Tenant = tenantCreated
+                };
+                var enterpriseCreated = await _enterpriseRepository.RegisterAsync(newEnterprise);
+                //============================================================================
+
+
+                //CRIA O RELACIONAMENTO USUARIO E EMPRESA N:N
+                //============================================================================
+                var enterpriseUser = new Enterprise_User
+                {
+                    EnterpriseId = enterpriseCreated.EnterpriseId,
+                    Enterprise = enterpriseCreated,
+                    User = createdUser,
+                };
+                await _enterpriseUserRepository.RegisterAsync(enterpriseUser);
+                //============================================================================
+
+                //CRIA A ROLE ADMIN CASO ELA NÃO EXISTA
+                //============================================================================
+                var roleExist = await _roleManager.RoleExistsAsync("ADMIN");
+
+                if (!roleExist)
+                {
+                    ApplicationRole role = new()
+                    {
+                        Name = "ADMIN",
+                        NormalizedName = "ADMIN".ToUpper(),
+                        ConcurrencyStamp = Guid.NewGuid().ToString(),
+                    };
+                    await _roleManager.CreateAsync(role);
+                }
+                //============================================================================
+
+
+                //ADICIONA A ROLE DO USUÁRIO NA CRIAÇÃO
+                //============================================================================
+                var recoverUser = await _userManager.FindByIdAsync(createdUser!.Id!);
+                var recoverRole = await _roleManager.FindByNameAsync("ADMIN");
+                var recoverEnterprise = await _enterpriseRepository.RecoverBy(p => p.EnterpriseId == enterpriseCreated.EnterpriseId);
+
+                if (recoverUser != null)
+                {
+                    //var result = await _userManager.AddToRoleAsync(user, roleName);
+                    var roleToUserObject = new ApplicationUserRoleEnterprise
+                    {
+                        UserId = recoverUser!.Id,
+                        User = recoverUser,
+                        RoleId = recoverRole!.Id,
+                        Role = recoverRole,
+                        EnterpriseId = recoverEnterprise!.EnterpriseId,
+                        Enterprise = recoverEnterprise
+
+                    };
+                    await _userRoleEnterpriseRepository.RegisterAsync(roleToUserObject);
+
+                    //=========================================================================
+
+                }
+                return Ok(new ResponseDTO { Status = "Success", Message = "User created successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            ApplicationUser user = new()
-            {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username,
-                Function = model.Function,
-                CompletedName = model.CompletedName
-            };
-
-            var result = await _userManager.CreateAsync(user, model.Password!);
-
-            if (!result.Succeeded)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { Status = "Error", Message = "User creation failed!" });
-            }
-            return Ok(new ResponseDTO { Status = "Success", Message = "User created successfully!" });
         }
 
         [HttpPost]
         [Route("refresh-token")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
         {
             if (tokenModel is null)
@@ -212,7 +337,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
 
         [HttpPost]
         [Route("revoke/{username}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> Revoke(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
@@ -228,7 +353,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
 
         [HttpPost]
         [Route("RevokeRoleToUser")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> RevokeRole(string name, string role)
         {
             var user = await _userManager.FindByNameAsync(name);
@@ -311,17 +436,61 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
                     UserId = user.Id,
                     NameCompleted = user.CompletedName,
                     Function = user.Function,
-
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
                 });
 
             }
 
             return Ok(listUsersDTO);
+        }
+        [HttpGet]
+        [Route("getUserPerId")]
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUserPerId(string UserId)
+        {
+            var user = await _userApplicationRepository.RecoverBy(u => u.Id == UserId);
 
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            var userDTO = new GetUsersDTO
+            {
+                UserId = user.Id,
+                NameCompleted = user.CompletedName,
+                Function = user.Function,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+            };
+
+            return Ok(userDTO);
+        }
+        [HttpGet]
+        [Route("getRolePerUserAndPerEnterprise")]
+        public async Task<ActionResult<IEnumerable<GETRolePerUserPerEntepriseDTO>>> GetRolePerUserAndPerEnterprise(string UserId, Guid EnterpriseId)
+        {
+
+            var list =  _userRoleEnterpriseRepository.SearchForAsync(p => p.UserId == UserId).Where(p => p.EnterpriseId == EnterpriseId);
+
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound("User Not existe at the enterprise!");
+            }
+            var roleDTO = new List<GETRolePerUserPerEntepriseDTO>();
+
+            foreach (var item in list)
+            {
+                roleDTO.Add(new GETRolePerUserPerEntepriseDTO
+                {
+                    Role_User_Enterprise = list!.Select(p => p.Role!.Name).ToList()!
+
+                });
+            }
+            return Ok(roleDTO);
         }
     }
-
-
 }
+
 
 

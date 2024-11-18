@@ -2,6 +2,6 @@
 {
     public class POSTRequirementAnalysisDTO
     {
-        public int? ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
     }
 }

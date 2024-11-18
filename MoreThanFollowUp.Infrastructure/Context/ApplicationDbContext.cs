@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MoreThanFollowUp.Domain.Entities.Projects;
@@ -8,7 +9,14 @@ using MoreThanFollowUp.Domain.Models;
 
 namespace MoreThanFollowUp.Infrastructure.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser,
+    ApplicationRole,
+    string,
+    IdentityUserClaim<string>,
+    IdentityUserRole<string>,
+    IdentityUserLogin<string>,
+    IdentityRoleClaim<string>,
+    IdentityUserToken<string>>
     {
         private readonly string? _connectionString;
 
@@ -17,7 +25,8 @@ namespace MoreThanFollowUp.Infrastructure.Context
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
+                //.AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.Development.json")
                 .Build();
 
             _connectionString = configuration.GetConnectionString("ConnectionString")!;
@@ -38,10 +47,14 @@ namespace MoreThanFollowUp.Infrastructure.Context
         public DbSet<Tenant> Tenants { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<Enterprise> Enteprises { get; set; }
+        public DbSet<Enterprise> Enterprises { get; set; }
         public DbSet<Planning> Plannings { get; set; }
         public DbSet<Sprint> Sprints { get; set; }
         public DbSet<RequirementAnalysis> RequirementAnalysis { get; set; }
+        public DbSet<DirectOrFunctionalRequirement> DirectOrFunctionalRequirements { get; set; }
+        public DbSet<Enterprise_User> EnterpriseUsers { get; set; }
+
+        public DbSet<ApplicationUserRoleEnterprise> ApplicationUserRoleEnterprises { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -68,6 +81,7 @@ namespace MoreThanFollowUp.Infrastructure.Context
             }
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
 
         }
     }

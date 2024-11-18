@@ -10,7 +10,7 @@ namespace MoreThanFollowUp.Infrastructure.Configuration.Entities.Projects
         {
             builder.ToTable("SprintUsers");
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.Id).HasColumnType("INT").UseIdentityColumn();
+            builder.Property(p => p.Id).HasColumnType("UNIQUEIDENTIFIER").ValueGeneratedOnAdd();
             builder.Property(p => p.CreateDate).HasColumnName("DataCriacao").HasColumnType("DATETIME").IsRequired(false);
             builder.Property(p => p.SprintId).HasColumnType("UNIQUEIDENTIFIER").IsRequired(false);
             builder.HasOne(p => p.Sprint).WithMany(c => c.Sprint_Users).HasForeignKey(c => c.SprintId);

@@ -8,7 +8,7 @@ namespace MoreThanFollowUp.Application.DTO.Resources
 {
     public class GetResponsibleDTO
     {
-        public int ResponsibleId { get; set; }
+        public Guid ResponsibleId { get; set; }
         public string? Name { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace MoreThanFollowUp.Infrastructure.Configuration.Entities.Resources
         {
             builder.ToTable("Categories");
             builder.HasKey(p => p.CategoryId);
-            builder.Property(p => p.CategoryId).HasColumnType("INT").UseIdentityColumn();
+            builder.Property(p => p.CategoryId).HasColumnType("UNIQUEIDENTIFIER").ValueGeneratedOnAdd();
             builder.Property(p => p.Name).HasColumnName("Name").HasColumnType("VARCHAR(30)").IsRequired(false);
 
         }

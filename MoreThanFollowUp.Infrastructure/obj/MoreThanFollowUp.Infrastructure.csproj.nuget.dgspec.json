@@ -199,31 +199,31 @@
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[8.0.10, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[8.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[8.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.Proxies": {
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[8.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[8.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[8.0.10, )"
             },
             "Microsoft.Extensions.Configuration.FileExtensions": {
               "target": "Package",
@@ -231,7 +231,7 @@
             },
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[8.0.1, )"
             },
             "X.Extensions.PagedList.EF": {
               "target": "Package",
@@ -239,11 +239,11 @@
             },
             "X.PagedList": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.5.7, )"
             },
             "X.PagedList.Mvc.Core": {
               "target": "Package",
-              "version": "[10.1.2, )"
+              "version": "[10.5.7, )"
             },
             "X.Web.PagedList": {
               "target": "Package",
@@ -251,7 +251,7 @@
             },
             "Z.EntityFramework.Extensions.EFCore": {
               "target": "Package",
-              "version": "[8.103.3, )"
+              "version": "[8.103.6, )"
             }
           },
           "imports": [

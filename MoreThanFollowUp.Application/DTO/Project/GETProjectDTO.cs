@@ -6,7 +6,7 @@ namespace MoreThanFollowUp.Application.DTO.Project
     public class GETProjectDTO
     {
 
-        public int ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
         public string? Title { get; set; }
         public string? Responsible { get; set; }
         public string? Category { get; set; }

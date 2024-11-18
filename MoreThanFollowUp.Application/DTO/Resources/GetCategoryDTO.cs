@@ -8,7 +8,7 @@ namespace MoreThanFollowUp.Application.DTO.Resources
 {
     public class GetCategoryDTO
     {
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public string? Name { get; set; }
     }
 }

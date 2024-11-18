@@ -2,10 +2,10 @@
 {
     public class Invoice
     {
-        public int InvoiceId { get; set; }
+        public Guid InvoiceId { get; set; } = Guid.NewGuid();
         public double? Amount { get; set; }
         public string? Status { get; set; }
-        public int? SubscriptionId { get; set; }
+        public Guid? SubscriptionId { get; set; }
         public virtual Subscription? Subscription { get; set; }
         public DateTime? CreateAt { get; set; }
         public DateTime? DueDate { get; set; }

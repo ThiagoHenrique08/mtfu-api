@@ -7,7 +7,9 @@ using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
+using MoreThanFollowUp.Infrastructure.Repository.Models;
 using System.Linq.Expressions;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Projects
@@ -24,6 +26,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
         private readonly Mock<IProjectStatusRepository> _mockStatusRepositoryMock;
         private readonly Mock<IPlanningRepository> _PlanningRepositoryMock;
+        private readonly Mock<IEnterpriseRepository> _EnterpriseRepository;
         private readonly ProjectController _controller;
 
 
@@ -39,23 +42,24 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
             _mockStatusRepositoryMock = new Mock<IProjectStatusRepository>();
             _PlanningRepositoryMock = new Mock<IPlanningRepository>();
+            _EnterpriseRepository= new Mock<IEnterpriseRepository>();
             _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
                                                      _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object,
-                                                        _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object);
+                                                        _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object, _EnterpriseRepository.Object);
         }
 
         [Fact]
         public async Task DeleteProject_ShouldReturnNotFound_WhenProjectDoesNotExist()
         {
             // Arrange
-            var projectDTO = new Project { ProjectId = 1, Title = "teste" };
+            var projectDTO = new Project { ProjectId = Guid.NewGuid(), Title = "teste" };
 
             _projectRepositoryMock
                 .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync((Project)null!);
 
             // Act
-            var result = await _controller.DeleteProject(1);
+            var result = await _controller.DeleteProject(projectDTO.ProjectId);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
@@ -68,35 +72,37 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
 
             var existingProject = new Project
             {
-                ProjectId = 1,
+                ProjectId = Guid.NewGuid(),
                 Title = "Old Title"
             };
+
+            var auxId = existingProject.ProjectId;
 
             _projectRepositoryMock
                 .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ReturnsAsync(existingProject);
 
             // Act
-            var result = await _controller.DeleteProject(1);
+            var result = await _controller.DeleteProject(existingProject.ProjectId);
 
             // Assert
             Assert.IsType<OkResult>(result);
             _projectRepositoryMock.Verify(repo => repo.DeleteAsync(existingProject), Times.Once);
-            Assert.Equal(1, existingProject.ProjectId);
+            Assert.Equal(auxId, existingProject.ProjectId);
         }
 
         [Fact]
         public async Task DeleteProject_ShouldReturnBadRequest_WhenExceptionThrown()
         {
             // Arrange
-            var projectDTO = new PATCHProjectDTO { ProjectId = 1 };
+            var projectDTO = new PATCHProjectDTO { ProjectId = Guid.NewGuid() };
 
             _projectRepositoryMock
                 .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
                 .ThrowsAsync(new Exception("Error"));
 
             // Act
-            var result = await _controller.DeleteProject(1);
+            var result = await _controller.DeleteProject(projectDTO.ProjectId);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);

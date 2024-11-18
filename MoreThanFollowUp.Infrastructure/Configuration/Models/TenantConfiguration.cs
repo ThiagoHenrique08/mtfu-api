@@ -10,7 +10,7 @@ namespace MoreThanFollowUp.Infrastructure.Configuration.Models
         {
             builder.ToTable("Tenants");
             builder.HasKey(t => t.TenantId);
-            builder.Property(t=>t.TenantId).HasColumnType("INT").UseIdentityColumn();
+            builder.Property(t=>t.TenantId).HasColumnType("UNIQUEIDENTIFIER").ValueGeneratedOnAdd();
             builder.Property(t => t.TenantName).HasColumnType("VARCHAR(50)").IsRequired();
             builder.Property(t=>t.TenantCustomDomain).HasColumnType("VARCHAR(100)").IsRequired(false);
             builder.Property(t=>t.TenantStatus).HasColumnType("VARCHAR(100)").IsRequired(false);

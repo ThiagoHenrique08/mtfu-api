@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MoreThanFollowUp.Domain.Entities.Resources
+﻿namespace MoreThanFollowUp.Domain.Entities.Resources
 {
     public class ProjectResponsible
     {
-        public int ResponsibleId { get; set; }
+        public Guid ResponsibleId { get; set; } = Guid.NewGuid();
         public string? Name { get; set; }
     }
 }

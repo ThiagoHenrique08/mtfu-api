@@ -3,8 +3,8 @@
     public class Subscription
     {
 
-        public int SubscriptionId { get; set; }
-        public int? TenantId { get; set; }
+        public Guid SubscriptionId { get; set; } = Guid.NewGuid();
+        public Guid? TenantId { get; set; }
         public virtual Tenant? Tenant { get; set; }
         public virtual Invoice? Invoice { get; set; }
         public string? Plan { get; set; }// Free, Professional, Enterprise

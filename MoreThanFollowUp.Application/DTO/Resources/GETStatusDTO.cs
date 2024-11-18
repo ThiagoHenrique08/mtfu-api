@@ -2,7 +2,7 @@
 {
     public class GETStatusDTO
     {
-        public int StatusProjectId { get; set; }
+        public Guid StatusProjectId { get; set; }
         public string? Name { get; set; }
 
     }

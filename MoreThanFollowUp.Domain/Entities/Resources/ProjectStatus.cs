@@ -2,7 +2,7 @@
 {
     public class ProjectStatus
     {
-        public int  StatusProjectId { get; set; }
+        public Guid  StatusProjectId { get; set; } = Guid.NewGuid();    
         public string? Name { get; set; }
 
 

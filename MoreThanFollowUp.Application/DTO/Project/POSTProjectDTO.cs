@@ -11,5 +11,7 @@
 
         public string? Description { get; set; }
 
+        public Guid EnterpriseId { get; set; }
+
     }
 }

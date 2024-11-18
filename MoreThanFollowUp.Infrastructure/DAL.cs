@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Context;
 using MoreThanFollowUp.Infrastructure.Interfaces;
 using System.Linq.Expressions;

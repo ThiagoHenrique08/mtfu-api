@@ -4,5 +4,7 @@
     {
         public Guid RequirementAnalysisId { get; set; } = Guid.NewGuid();
 
+        public virtual ICollection<DirectOrFunctionalRequirement>? DirectOrFunctionalRequirement { get; set; }
+
     }
 }

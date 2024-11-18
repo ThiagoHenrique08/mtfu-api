@@ -7,6 +7,7 @@ using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using System.Linq.Expressions;
 
@@ -24,6 +25,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
         private readonly Mock<IProjectStatusRepository> _mockStatusRepositoryMock;
         private readonly Mock<IPlanningRepository> _PlanningRepositoryMock;
+        private readonly Mock<IEnterpriseRepository> _EnterpriseRepository;
         private readonly ProjectController _controller;
 
 
@@ -39,9 +41,11 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
             _mockStatusRepositoryMock = new Mock<IProjectStatusRepository>();
             _PlanningRepositoryMock = new Mock<IPlanningRepository>();
+            _EnterpriseRepository = new Mock<IEnterpriseRepository>();
             _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
                                                      _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object, 
-                                                     _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object
+                                                     _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object,
+                                                     _EnterpriseRepository.Object
                                                      );
         }
 

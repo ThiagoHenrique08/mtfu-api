@@ -168,3 +168,9 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.0\MoreThanFollowUp.Tests.pdb
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.0\MoreThanFollowUp.Tests.genruntimeconfig.cache
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\obj\Debug\net8.0\ref\MoreThanFollowUp.Tests.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.Tests\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll

@@ -8,6 +8,7 @@ using MoreThanFollowUp.API.Controllers.Authentication;
 using MoreThanFollowUp.API.Interfaces;
 using MoreThanFollowUp.Application.DTO.Login;
 using MoreThanFollowUp.Domain.Models;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 
 namespace MoreThanFollowUp.Tests.UnitTests.Authentication
@@ -16,33 +17,44 @@ namespace MoreThanFollowUp.Tests.UnitTests.Authentication
     {
         private readonly Mock<ITokenService> _mockTokenService;
         private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
-        private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
+        private readonly Mock<RoleManager<ApplicationRole>> _mockRoleManager;
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ILogger<AuthController>> _mockLogger;
         private readonly Mock<IUserApplicationRepository> _mockUserApplicationRepository;
+        private readonly Mock<IApplicationUserRoleEnterpriseRepository> _mockUserRoleEnterpriseRepository;
+        private readonly Mock<IEnterpriseRepository> _mockEnterpriseRepository;
+        private readonly Mock<ITenantRepository> _mockTenantRepository;
+        private readonly Mock<IEnterprise_UserRepository> _mockEnterpriseUserRepository;
         private readonly AuthController _controller;
 
         public PostCreateRoleUnitTests()
         {
-            var roleStore = new Mock<IRoleStore<IdentityRole>>(); // Necessário para o RoleManager
+            var roleStore = new Mock<IRoleStore<ApplicationRole>>(); // Necessário para o RoleManager
             _mockTokenService = new Mock<ITokenService>();
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(
                 new Mock<IUserStore<ApplicationUser>>().Object, null, null, null, null, null, null, null, null
             );
-            _mockRoleManager = new Mock<RoleManager<IdentityRole>>(
+            _mockRoleManager = new Mock<RoleManager<ApplicationRole>>(
                 roleStore.Object, null, null, null, null
             );
             _mockConfiguration = new Mock<IConfiguration>();
             _mockLogger = new Mock<ILogger<AuthController>>();
             _mockUserApplicationRepository = new Mock<IUserApplicationRepository>();
-
+            _mockUserRoleEnterpriseRepository = new Mock<IApplicationUserRoleEnterpriseRepository>();
+            _mockEnterpriseRepository = new Mock<IEnterpriseRepository>();
+            _mockTenantRepository = new Mock<ITenantRepository>();
+            _mockEnterpriseUserRepository = new Mock<IEnterprise_UserRepository>();
             _controller = new AuthController(
                 _mockTokenService.Object,
                 _mockUserManager.Object,
                 _mockRoleManager.Object,
                 _mockConfiguration.Object,
                 _mockLogger.Object,
-                _mockUserApplicationRepository.Object
+                _mockUserApplicationRepository.Object,
+                _mockUserRoleEnterpriseRepository.Object,
+                _mockEnterpriseRepository.Object,
+                _mockTenantRepository.Object,
+                _mockEnterpriseUserRepository.Object
             );
         }
 
@@ -52,7 +64,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Authentication
             // Arrange
             var roleName = "Admin";
             _mockRoleManager.Setup(x => x.RoleExistsAsync(roleName)).ReturnsAsync(false);
-            _mockRoleManager.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Success);
+            _mockRoleManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationRole>())).ReturnsAsync(IdentityResult.Success);
 
             // Act
             var result = await _controller.CreateRole(roleName);
@@ -91,7 +103,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Authentication
             // Arrange
             var roleName = "Admin";
             _mockRoleManager.Setup(x => x.RoleExistsAsync(roleName)).ReturnsAsync(false);
-            _mockRoleManager.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Failed());
+            _mockRoleManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationRole>())).ReturnsAsync(IdentityResult.Failed());
 
             // Act
             var result = await _controller.CreateRole(roleName);

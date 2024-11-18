@@ -7,6 +7,7 @@ using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using System.Linq.Expressions;
 
@@ -24,6 +25,8 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
         private readonly Mock<IProjectStatusRepository> _mockStatusRepositoryMock;
         private readonly Mock<IPlanningRepository> _PlanningRepositoryMock;
+        private readonly Mock<IEnterpriseRepository> _EnterpriseRepository;
+
         private readonly ProjectController _controller;
 
 
@@ -39,9 +42,10 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
             _mockStatusRepositoryMock = new Mock<IProjectStatusRepository>();
             _PlanningRepositoryMock = new Mock<IPlanningRepository>();
+            _EnterpriseRepository = new Mock<IEnterpriseRepository>();
             _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
-                                                     _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object, 
-                                                     _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object);
+                                                     _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object,
+                                                     _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object, _EnterpriseRepository.Object);
         }
 
 
@@ -64,7 +68,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         public async Task PatchProject_ShouldReturnNotFound_WhenProjectDoesNotExist()
         {
             // Arrange
-            var projectDTO = new PATCHProjectDTO { ProjectId = 1 };
+            var projectDTO = new PATCHProjectDTO { ProjectId = Guid.NewGuid() };
 
             _projectRepositoryMock
                 .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))
@@ -83,13 +87,13 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             // Arrange
             var projectDTO = new PATCHProjectDTO
             {
-                ProjectId = 1,
+                ProjectId = Guid.NewGuid(),
                 Title = "Updated Title"
             };
 
             var existingProject = new Project
             {
-                ProjectId = 1,
+                ProjectId = Guid.NewGuid(),
                 Title = "Old Title"
             };
 
@@ -110,7 +114,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         public async Task PatchProject_ShouldReturnBadRequest_WhenExceptionThrown()
         {
             // Arrange
-            var projectDTO = new PATCHProjectDTO { ProjectId = 1 };
+            var projectDTO = new PATCHProjectDTO { ProjectId = Guid.NewGuid() };
 
             _projectRepositoryMock
                 .Setup(repo => repo.RecoverBy(It.IsAny<Expression<Func<Project, bool>>>()))

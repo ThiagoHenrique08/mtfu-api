@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Project;
 using MoreThanFollowUp.Application.DTO.Resources;
 using MoreThanFollowUp.Application.DTO.Users;
@@ -8,6 +7,7 @@ using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using MoreThanFollowUp.Infrastructure.Pagination;
 using Newtonsoft.Json;
@@ -27,7 +27,9 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         private readonly IProjectResponsibleRepository _projectResponsibleRepository;
         private readonly IProjectStatusRepository _projectStatusRepository;
         private readonly IPlanningRepository _planningRepository;
-        public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository, IUserApplicationRepository userApplicationRepository, IProjectCategoryRepository projectCategoryRepository, IProjectResponsibleRepository projectResponsibleRepository, IProjectStatusRepository projectStatusRepository, IPlanningRepository planningRepository)
+        private readonly IEnterpriseRepository _enterpriseRepository;
+
+        public ProjectController(IProjectRepository projectRepository, UserManager<ApplicationUser> userManager, IProject_UserRepository project_UserRepository, IUserApplicationRepository userApplicationRepository, IProjectCategoryRepository projectCategoryRepository, IProjectResponsibleRepository projectResponsibleRepository, IProjectStatusRepository projectStatusRepository, IPlanningRepository planningRepository, IEnterpriseRepository enterpriseRepository)
         {
             _projectRepository = projectRepository;
             _userManager = userManager;
@@ -37,6 +39,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             _projectResponsibleRepository = projectResponsibleRepository;
             _projectStatusRepository = projectStatusRepository;
             _planningRepository = planningRepository;
+            _enterpriseRepository = enterpriseRepository;
         }
 
 
@@ -49,6 +52,9 @@ namespace MoreThanFollowUp.API.Controllers.Entities
             {
                 if (projectRequest.Project == null) { return NotFound(); }
 
+                var enterprise = await _enterpriseRepository.RecoverBy(p => p.EnterpriseId == projectRequest.Project.EnterpriseId);
+
+
                 var newProject = new Project()
                 {
                     Title = projectRequest.Project.Title,
@@ -56,6 +62,8 @@ namespace MoreThanFollowUp.API.Controllers.Entities
                     Category = projectRequest.Project.Category,
                     Description = projectRequest.Project.Description,
                     CreateDate = DateTime.Now,
+                    EnterpriseId = projectRequest.Project.EnterpriseId,
+                    Enterprise = enterprise
                 };
                 var ProjectExist = await _projectRepository.RecoverBy(p => p.Title!.ToUpper().Equals(newProject.Title!.ToUpper()));
 
@@ -136,11 +144,11 @@ namespace MoreThanFollowUp.API.Controllers.Entities
         }
         [HttpGet]
         [Route("get")]
-        public async Task<ActionResult<IEnumerable<GETProjectDTO>>> GetProjectWithPagination([FromQuery] ProjectsParameters projectsParametersPagination, string? parameter, string? category, string? status)
+        public async Task<ActionResult<IEnumerable<GETProjectDTO>>> GetProjectWithPagination([FromQuery] ProjectsParameters projectsParametersPagination, string? parameter, string? category, string? status,Guid enterpriseId)
         {
             try
             {
-                var projects = await _projectRepository.GetProjectPaginationAsync(projectsParametersPagination, parameter!, category!, status!);
+                var projects = await _projectRepository.GetProjectPaginationAsync(projectsParametersPagination, parameter!, category!, status!, enterpriseId);
 
                 return GetProjects(projects);
             }
@@ -233,7 +241,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<ActionResult> DeleteProject(int idProject)
+        public async Task<ActionResult> DeleteProject(Guid idProject)
         {
             try
             {

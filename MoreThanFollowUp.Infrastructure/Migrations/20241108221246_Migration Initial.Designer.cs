@@ -12,7 +12,7 @@ using MoreThanFollowUp.Infrastructure.Context;
 namespace MoreThanFollowUp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241012194355_Migration Initial")]
+    [Migration("20241108221246_Migration Initial")]
     partial class MigrationInitial
     {
         /// <inheritdoc />
@@ -20,40 +20,13 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -161,6 +134,28 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.DirectOrFunctionalRequirement", b =>
+                {
+                    b.Property<Guid>("DirectOrFunctionalRequirementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<string>("FunctionOrAction")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<Guid?>("RequirementAnalysisId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<string>("SystemBehavior")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.HasKey("DirectOrFunctionalRequirementId");
+
+                    b.HasIndex("RequirementAnalysisId");
+
+                    b.ToTable("DirectOrFunctionalRequirements", (string)null);
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Planning", b =>
                 {
                     b.Property<Guid>("PlanningId")
@@ -177,8 +172,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Property<string>("PlanningDescription")
                         .HasColumnType("VARCHAR(MAX)");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("INT");
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("DATETIME")
@@ -195,11 +190,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project", b =>
                 {
-                    b.Property<int>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("Category")
                         .HasColumnType("VARCHAR(50)");
@@ -215,8 +208,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasColumnType("DATETIME")
                         .HasColumnName("EndDate");
 
-                    b.Property<int?>("EnterpriseId")
-                        .HasColumnType("INT");
+                    b.Property<Guid?>("EnterpriseId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("Responsible")
                         .HasColumnType("VARCHAR(50)");
@@ -236,18 +229,16 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Project_User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("DATETIME")
                         .HasColumnName("DataCriacao");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("INT");
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -271,8 +262,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasColumnType("DATETIME")
                         .HasColumnName("End Date");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("INT");
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("DATETIME")
@@ -333,11 +324,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Sprint_User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("DATETIME")
@@ -360,11 +349,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Resources.ProjectCategory", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("Name")
                         .HasColumnType("VARCHAR(30)")
@@ -377,11 +364,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Resources.ProjectResponsible", b =>
                 {
-                    b.Property<int>("ResponsibleId")
+                    b.Property<Guid>("ResponsibleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResponsibleId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -395,11 +380,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Resources.ProjectStatus", b =>
                 {
-                    b.Property<int>("StatusProjectId")
+                    b.Property<Guid>("StatusProjectId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusProjectId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -409,6 +392,40 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.HasKey("StatusProjectId");
 
                     b.ToTable("ProjectStatus", (string)null);
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasDiscriminator().HasValue("ApplicationRole");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
@@ -432,9 +449,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("EnterpriseId")
-                        .HasColumnType("INT");
 
                     b.Property<string>("Function")
                         .HasColumnType("nvarchar(max)");
@@ -480,8 +494,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnterpriseId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -493,13 +505,39 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUserRoleEnterprise", b =>
+                {
+                    b.Property<Guid>("ApplicationUserRoleEnterpriseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<Guid?>("EnterpriseId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("RoleId");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("ApplicationUserRoleEnterpriseId");
+
+                    b.HasIndex("EnterpriseId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ApplicationUserRoleEnterprises", (string)null);
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
                 {
-                    b.Property<int>("EnterpriseId")
+                    b.Property<Guid>("EnterpriseId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnterpriseId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<string>("CNPJ")
                         .HasColumnType("VARCHAR(18)");
@@ -510,8 +548,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Property<string>("Segment")
                         .HasColumnType("VARCHAR(100)");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("INT");
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.HasKey("EnterpriseId");
 
@@ -520,13 +558,32 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.ToTable("Enterprises", (string)null);
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise_User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<Guid?>("EnterpriseId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnterpriseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EnterpriseUsers", (string)null);
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Invoice", b =>
                 {
-                    b.Property<int>("InvoiceId")
+                    b.Property<Guid>("InvoiceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<decimal?>("Amount")
                         .HasColumnType("DECIMAL(10,2)");
@@ -540,8 +597,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("VARCHAR(30)");
 
-                    b.Property<int?>("SubscriptionId")
-                        .HasColumnType("INT");
+                    b.Property<Guid?>("SubscriptionId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.HasKey("InvoiceId");
 
@@ -554,11 +611,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Subscription", b =>
                 {
-                    b.Property<int>("SubscriptionId")
+                    b.Property<Guid>("SubscriptionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptionId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("DATETIME");
@@ -572,9 +627,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("VARCHAR(30)");
 
-                    b.Property<int?>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .IsRequired()
-                        .HasColumnType("INT");
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<int?>("TotalAvailable")
                         .HasColumnType("INT");
@@ -595,11 +650,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Tenant", b =>
                 {
-                    b.Property<int>("TenantId")
+                    b.Property<Guid>("TenantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INT");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TenantId"));
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("DATETIME");
@@ -633,7 +686,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -660,7 +713,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -680,6 +733,16 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.DirectOrFunctionalRequirement", b =>
+                {
+                    b.HasOne("MoreThanFollowUp.Domain.Entities.Projects.RequirementAnalysis", "RequirementAnalysis")
+                        .WithMany("DirectOrFunctionalRequirement")
+                        .HasForeignKey("RequirementAnalysisId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("RequirementAnalysis");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.Planning", b =>
@@ -763,14 +826,28 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUserRoleEnterprise", b =>
                 {
                     b.HasOne("MoreThanFollowUp.Domain.Models.Enterprise", "Enterprise")
-                        .WithMany("Users")
+                        .WithMany("Users_Roles_Enteprises")
                         .HasForeignKey("EnterpriseId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationRole", "Role")
+                        .WithMany("Users_Roles_Enteprises")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationUser", "User")
+                        .WithMany("Users_Roles_Enteprises")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Enterprise");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
@@ -778,10 +855,26 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.HasOne("MoreThanFollowUp.Domain.Models.Tenant", "Tenant")
                         .WithMany("Enterprises")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise_User", b =>
+                {
+                    b.HasOne("MoreThanFollowUp.Domain.Models.Enterprise", "Enterprise")
+                        .WithMany("Enterprises_Users")
+                        .HasForeignKey("EnterpriseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationUser", "User")
+                        .WithMany("Enterprises_Users")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Enterprise");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Invoice", b =>
@@ -821,6 +914,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Entities.Projects.RequirementAnalysis", b =>
                 {
+                    b.Navigation("DirectOrFunctionalRequirement");
+
                     b.Navigation("Sprints");
                 });
 
@@ -829,18 +924,29 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("Sprint_Users");
                 });
 
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationRole", b =>
+                {
+                    b.Navigation("Users_Roles_Enteprises");
+                });
+
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Enterprises_Users");
+
                     b.Navigation("Projects_Users");
 
                     b.Navigation("Sprint_Users");
+
+                    b.Navigation("Users_Roles_Enteprises");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
                 {
+                    b.Navigation("Enterprises_Users");
+
                     b.Navigation("Projects");
 
-                    b.Navigation("Users");
+                    b.Navigation("Users_Roles_Enteprises");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Subscription", b =>

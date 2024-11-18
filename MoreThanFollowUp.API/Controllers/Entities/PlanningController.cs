@@ -22,7 +22,7 @@ namespace MoreThanFollowUp.API.Controllers.Entities
 
         [HttpGet]
         [Route("getPlanning")]
-        public async Task<ActionResult<GETPlanningDTO>> GetPlanning(int ProjectId)
+        public async Task<ActionResult<GETPlanningDTO>> GetPlanning(Guid ProjectId)
         {
             var planning = await _planningRepository.RecoverBy(p => p.ProjectId == ProjectId);
 

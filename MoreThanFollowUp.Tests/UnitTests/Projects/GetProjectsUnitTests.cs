@@ -9,6 +9,7 @@ using MoreThanFollowUp.Domain.Entities.Projects;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Projects;
 using MoreThanFollowUp.Infrastructure.Interfaces.Entities.Resources;
+using MoreThanFollowUp.Infrastructure.Interfaces.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
 using MoreThanFollowUp.Infrastructure.Pagination;
 using Newtonsoft.Json;
@@ -28,6 +29,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         private readonly Mock<IProjectResponsibleRepository> _mockResponsibleRepo;
         private readonly Mock<IProjectStatusRepository> _mockStatusRepositoryMock;
         private readonly Mock<IPlanningRepository> _PlanningRepositoryMock;
+        private readonly Mock<IEnterpriseRepository> _EnterpriseRepository;
         private readonly ProjectController _controller;
 
         public GetProjectsUnitTests()
@@ -42,9 +44,10 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             _mockResponsibleRepo = new Mock<IProjectResponsibleRepository>();
             _mockStatusRepositoryMock = new Mock<IProjectStatusRepository>();
             _PlanningRepositoryMock = new Mock<IPlanningRepository>();
+            _EnterpriseRepository = new Mock<IEnterpriseRepository>();
             _controller = new ProjectController(_projectRepositoryMock.Object, _userManagerMock.Object, _projectUserRepositoryMock.Object,
                                                      _mockUserApplicationRepo.Object, _mockCategoryRepo.Object, _mockResponsibleRepo.Object, 
-                                                     _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object);
+                                                     _mockStatusRepositoryMock.Object, _PlanningRepositoryMock.Object, _EnterpriseRepository.Object);
         }
 
         [Fact]
@@ -56,11 +59,12 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             string category = "Integração";
             string status = "Completed";
             string parameter = "MTFU";
-            _projectRepositoryMock.Setup(repo => repo.GetProjectPaginationAsync(It.IsAny<ProjectsParameters>(),parameter, category, status)).ReturnsAsync(new StaticPagedList<Project>(
+            var enterprise = Guid.NewGuid(); //new GETProjectPerEnterprise { EnterpriseId = Guid.NewGuid() };
+            _projectRepositoryMock.Setup(repo => repo.GetProjectPaginationAsync(It.IsAny<ProjectsParameters>(),parameter, category, status, enterprise)).ReturnsAsync(new StaticPagedList<Project>(
             new List<Project>
             {
-                new Project { ProjectId = 1, Title = "Project 1", Category = "Backend", Description = "Description 1", Responsible = "John", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() },
-                new Project { ProjectId = 2, Title = "Project 2", Category = "Frontend", Description = "Description 2", Responsible = "Doe", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() }
+                new Project { ProjectId = Guid.NewGuid(), Title = "Project 1", Category = "Backend", Description = "Description 1", Responsible = "John", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() },
+                new Project { ProjectId = Guid.NewGuid(), Title = "Project 2", Category = "Frontend", Description = "Description 2", Responsible = "Doe", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() }
             },
             1, // Página atual
             2, // Tamanho da página
@@ -74,7 +78,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
                 HttpContext = httpContext
             };
             // Act
-            var result = await _controller.GetProjectWithPagination(parametersPagination, parameter, category,status);
+            var result = await _controller.GetProjectWithPagination(parametersPagination, parameter, category,status, enterprise);
 
             // Assert
 
@@ -108,12 +112,12 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
             string category = "Integração";
             string status = "Completed";
             string parameter = "MTFU";
-
-            _projectRepositoryMock.Setup(repo => repo.GetProjectPaginationAsync(It.IsAny<ProjectsParameters>(), parameter, category, status)).ReturnsAsync(new StaticPagedList<Project>(
+            var enterprise = Guid.NewGuid();//new GETProjectPerEnterprise { EnterpriseId = Guid.NewGuid() };
+            _projectRepositoryMock.Setup(repo => repo.GetProjectPaginationAsync(It.IsAny<ProjectsParameters>(), parameter, category, status,enterprise)).ReturnsAsync(new StaticPagedList<Project>(
             new List<Project>
             {
-                new Project { ProjectId = 1, Title = "Project 1", Category = "Backend", Description = "Description 1", Responsible = "John", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() },
-                new Project { ProjectId = 2, Title = "Project 2", Category = "Frontend", Description = "Description 2", Responsible = "Doe", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() }
+                new Project { ProjectId = Guid.NewGuid(), Title = "Project 1", Category = "Backend", Description = "Description 1", Responsible = "John", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() },
+                new Project { ProjectId = Guid.NewGuid(), Title = "Project 2", Category = "Frontend", Description = "Description 2", Responsible = "Doe", CreateDate = DateTime.Now, EndDate = DateTime.Now, Projects_Users = new List<Project_User>() }
             },
             1, // Página atual
             2, // Tamanho da página
@@ -121,7 +125,7 @@ namespace MoreThanFollowUp.Tests.UnitTests.Projects
         ));
 
             // Act
-            var result = await _controller.GetProjectWithPagination(parametersPagination,parameter, category, status);
+            var result = await _controller.GetProjectWithPagination(parametersPagination,parameter, category, status, enterprise);
 
             // Assert
 

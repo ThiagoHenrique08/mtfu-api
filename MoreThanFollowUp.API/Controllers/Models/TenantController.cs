@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Tenant;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models;
@@ -27,7 +28,7 @@ namespace MoreThanFollowUp.API.Controllers.Models
             {
                 var tenantList = await _tenantRepository.ToListAsync();
 
-                if (tenantList is null) { return NotFound(); }
+                if (tenantList.IsNullOrEmpty()) { return NotFound(); }
 
                 var tenantDTOList = new List<GETTenantDTO>();
 
@@ -125,7 +126,7 @@ namespace MoreThanFollowUp.API.Controllers.Models
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<ActionResult> Delete(int idTenant)
+        public async Task<ActionResult> Delete(Guid idTenant)
         {
             try
             {

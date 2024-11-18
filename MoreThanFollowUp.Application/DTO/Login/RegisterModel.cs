@@ -21,5 +21,9 @@ namespace MoreThanFollowUp.Application.DTO.Login
         public string? Function { get; set; }
 
 
+        [Required(ErrorMessage = "EnterpriseName is required")]
+        public string? EnterpriseName { get; set; }
+
+
     }
 }

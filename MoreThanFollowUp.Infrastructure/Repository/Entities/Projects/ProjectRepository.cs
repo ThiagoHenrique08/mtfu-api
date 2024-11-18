@@ -31,9 +31,9 @@ namespace MoreThanFollowUp.Infrastructure.Repository.Entities.Projects
             return results;
         }
 
-        public async Task<IPagedList<Project>> GetProjectPaginationAsync(ProjectsParameters projectsParametersPagination, string parameter, string category, string status)
+        public async Task<IPagedList<Project>> GetProjectPaginationAsync(ProjectsParameters projectsParametersPagination, string parameter, string category, string status, Guid enterpriseId)
         {
-            var projects = await GetAllWithParameters(parameter, category, status);
+            var projects = await GetAllWithParameters(parameter, category, status, enterpriseId);
             var projectsOrdened = projects.OrderBy(p => p.ProjectId).AsQueryable();
             //var projectsOrdened = projects.OrderBy(p => p.ProjectId).AsQueryable().Include(p=>p.Projects_Users!.Select(u=>u.User!.CompletedName));
             //var ordenedProjects =  PagedList<Project>.ToPagedList(projects, projectsParameters.PageNumber, projectsParameters.PageSize);
@@ -43,16 +43,21 @@ namespace MoreThanFollowUp.Infrastructure.Repository.Entities.Projects
             return projectsResult;
         }
 
-        public async Task<ICollection<Project>> GetAllWithParameters(string? parameter, string? category, string? status)
+        public async Task<ICollection<Project>> GetAllWithParameters(string? parameter, string? category, string? status, Guid enterpriseId)
         {
-            var query = _context.Projects.AsQueryable();
+            var query = _context.Projects.AsQueryable().Where(p=>p.EnterpriseId.Equals(enterpriseId));
+
+            //if (!enterpriseId.ToString().IsNullOrEmpty())
+            //{
+            //    query = query.Where(p => p.EnterpriseId!.Equals(enterpriseId));
+
+            //}
 
             if (!string.IsNullOrEmpty(parameter))
             {
                 query = query.Where(p => p.Description!.Contains(parameter) || p.Title!.Contains(parameter));
 
             }
-
 
             if (!string.IsNullOrEmpty(category))
             {

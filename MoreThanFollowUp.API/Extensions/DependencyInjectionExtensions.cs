@@ -58,7 +58,7 @@ namespace MoreThanFollowUp.API.Extensions
 
         public static IServiceCollection AddIdentityService(this IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -104,7 +104,10 @@ namespace MoreThanFollowUp.API.Extensions
             services.AddScoped<ISprintRepository, SprintRepository>();
             services.AddScoped<ISprint_UserRepository, Sprint_UserRepository>();
             services.AddScoped<IRequirementAnalysisRepository, RequirementAnalysisRepository>();
-
+            services.AddScoped<IDirectOrFunctionalRequirementRepository, DirectOrFunctionalRequirementRepository>();
+            services.AddScoped<IApplicationUserRoleEnterpriseRepository, ApplicationUserRoleEnterpriseRepository>();
+            services.AddScoped<IEnterprise_UserRepository, Enterprise_UserRepository>();
+            services.AddScoped<IApplicationRoleRepository, ApplicationRoleRepository>();
             return services;
         }
 
@@ -170,22 +173,33 @@ namespace MoreThanFollowUp.API.Extensions
 
             services.AddAuthorization(options =>
             {
+                //ADMIN, SQUADLEAD,TECHLEAD,PO,DEVELOPER,BILLING
                 //RequireRole - Exige que o usuário tenha uma determinada Role/Perfil para acessar um recurso protegido
-                options.AddPolicy("ScrumMasterOnly", policy => policy.RequireRole("ScrumMaster"));
+                const string Admin = "ADMIN";
+                const string SquadLead = "SQUADLEAD";
+                const string TechLead = "TECHLEAD";
+                const string ProductOwner = "PO";
+                const string Developer = "DEVELOPER";
+                const string Billing = "BILLING";
+                const string GlobalUserMasterClaim = "thiagsilva";
+                
+                options.AddPolicy(SquadLead, policy => policy.RequireRole(SquadLead));
+                options.AddPolicy(TechLead, policy => policy.RequireRole(TechLead));
+                options.AddPolicy(ProductOwner, policy => policy.RequireRole(ProductOwner));
+                options.AddPolicy(Developer, policy => policy.RequireRole(Developer));
+                options.AddPolicy(Billing, policy => policy.RequireRole(Billing));
 
-                options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 
                 //RequireAssertion - Permite definir uma expressão lambda e com uma condição customizada para autorização
-                options.AddPolicy("AdminOnly", policy => policy.RequireAssertion(context =>
-                    context.User.HasClaim(claim => claim.Type == "id" && claim.Value == "thiagsilva") ||
-                                                                        context.User.IsInRole("Admin")));
+                options.AddPolicy(Admin, policy => policy.RequireAssertion(context =>
+                    context.User.HasClaim(claim => claim.Type == "id" && claim.Value == GlobalUserMasterClaim) ||
+                                                                        context.User.IsInRole(Admin)));
 
-                options.AddPolicy("AdminOnlyAndScrumMasterOnly", policy => policy.RequireAssertion(context =>
-                    context.User.IsInRole("ScrumMaster") || context.User.IsInRole("Admin")));
+                //options.AddPolicy("AdminOnlyAndScrumMasterOnly", policy => policy.RequireAssertion(context =>
+                //    context.User.IsInRole("ScrumMaster") || context.User.IsInRole("Admin")));
 
-                options.AddPolicy("AdminOnlyAndScrumMasterOnlyAndUserOnly", policy => policy.RequireAssertion(context =>
-                    context.User.IsInRole("ScrumMaster") || context.User.IsInRole("Admin") || context.User.IsInRole("User")));
-
+                //options.AddPolicy("AdminOnlyAndScrumMasterOnlyAndUserOnly", policy => policy.RequireAssertion(context =>
+                //    context.User.IsInRole("ScrumMaster") || context.User.IsInRole("Admin") || context.User.IsInRole("User")));
 
                 //RequireClaim - Exige que o usuário tenha uma Claim específica para acessar um recurso protegido
                 //options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin").RequireClaim("id", "thiagsilva"));

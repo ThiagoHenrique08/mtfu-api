@@ -7,7 +7,7 @@ namespace MoreThanFollowUp.Domain.Entities.Projects
     {
          
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public Guid? SprintId { get; set; }
         public virtual Sprint? Sprint { get; set; }
         public virtual ApplicationUser? User { get; set; }

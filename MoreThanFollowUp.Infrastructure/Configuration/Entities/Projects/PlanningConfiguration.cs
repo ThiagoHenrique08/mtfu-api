@@ -15,7 +15,7 @@ namespace MoreThanFollowUp.Infrastructure.Configuration.Entities.Projects
             builder.Property(p => p.PlanningDescription).HasColumnType("VARCHAR(MAX)").IsRequired(false);
             builder.Property(p => p.StartDate).HasColumnName("Start Date").HasColumnType("DATETIME").IsRequired(false);
             builder.Property(p => p.EndDate).HasColumnName("End Date").HasColumnType("DATETIME").IsRequired(false);
-            builder.Property(p => p.ProjectId).HasColumnType("INT").IsRequired(false);
+            builder.Property(p => p.ProjectId).HasColumnType("UNIQUEIDENTIFIER").IsRequired(false);
             builder.HasOne(p => p.Project).WithOne(c => c.Planning).HasPrincipalKey<Project>(c => c.ProjectId);
         }
     }

@@ -10,8 +10,8 @@ namespace MoreThanFollowUp.Infrastructure.Configuration.Models
         {
             builder.ToTable("Subscriptions");
             builder.HasKey(i => i.SubscriptionId);
-            builder.Property(i => i.SubscriptionId).HasColumnType("INT").UseIdentityColumn();
-            builder.Property(i => i.TenantId).HasColumnType("INT").IsRequired();
+            builder.Property(i => i.SubscriptionId).HasColumnType("UNIQUEIDENTIFIER").ValueGeneratedOnAdd();
+            builder.Property(i => i.TenantId).HasColumnType("UNIQUEIDENTIFIER").IsRequired();
             builder.HasOne(i => i.Tenant).WithOne(i => i.Subscription).HasPrincipalKey<Tenant>(t => t.TenantId);
             builder.Property(i => i.Plan).HasColumnType("VARCHAR(30)").IsRequired(false);
             builder.Property(i => i.Status).HasColumnType("VARCHAR(30)").IsRequired(false);

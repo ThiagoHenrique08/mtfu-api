@@ -8,7 +8,7 @@ namespace MoreThanFollowUp.Application.DTO.Tenant
 {
     public class PATCHTenantDTO
     {
-        public int TenantId { get; set; }
+        public Guid TenantId { get; set; }
         public string? TenantName { get; set; }
         public string? TenantCustomDomain { get; set; }
         public string? TenantStatus { get; set; }

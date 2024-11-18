@@ -16,6 +16,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -26,11 +27,39 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Function = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompletedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
-                    CategoryId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     Name = table.Column<string>(type: "VARCHAR(30)", nullable: true)
                 },
                 constraints: table =>
@@ -42,8 +71,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "ProjectStatus",
                 columns: table => new
                 {
-                    StatusProjectId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StatusProjectId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     Name = table.Column<string>(type: "VARCHAR(30)", nullable: false)
                 },
                 constraints: table =>
@@ -55,8 +83,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "Responsible",
                 columns: table => new
                 {
-                    ResponsibleId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ResponsibleId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     Name = table.Column<string>(type: "VARCHAR(30)", nullable: false)
                 },
                 constraints: table =>
@@ -68,8 +95,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "Tenants",
                 columns: table => new
                 {
-                    TenantId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     TenantName = table.Column<string>(type: "VARCHAR(50)", nullable: false),
                     TenantCustomDomain = table.Column<string>(type: "VARCHAR(100)", nullable: true),
                     TenantStatus = table.Column<string>(type: "VARCHAR(100)", nullable: true),
@@ -102,139 +128,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Enterprises",
-                columns: table => new
-                {
-                    EnterpriseId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CorporateReason = table.Column<string>(type: "VARCHAR(100)", nullable: true),
-                    CNPJ = table.Column<string>(type: "VARCHAR(18)", nullable: true),
-                    Segment = table.Column<string>(type: "VARCHAR(100)", nullable: true),
-                    TenantId = table.Column<int>(type: "INT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Enterprises", x => x.EnterpriseId);
-                    table.ForeignKey(
-                        name: "FK_Enterprises_Tenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Tenants",
-                        principalColumn: "TenantId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Subscriptions",
-                columns: table => new
-                {
-                    SubscriptionId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(type: "INT", nullable: false),
-                    Plan = table.Column<string>(type: "VARCHAR(30)", nullable: true),
-                    Status = table.Column<string>(type: "VARCHAR(30)", nullable: true),
-                    TotalLicense = table.Column<int>(type: "INT", nullable: true),
-                    TotalAvailable = table.Column<int>(type: "INT", nullable: true),
-                    TotalUsed = table.Column<int>(type: "INT", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "DATETIME", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subscriptions", x => x.SubscriptionId);
-                    table.ForeignKey(
-                        name: "FK_Subscriptions_Tenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Tenants",
-                        principalColumn: "TenantId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Function = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompletedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EnterpriseId = table.Column<int>(type: "INT", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Enterprises_EnterpriseId",
-                        column: x => x.EnterpriseId,
-                        principalTable: "Enterprises",
-                        principalColumn: "EnterpriseId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Projects",
-                columns: table => new
-                {
-                    ProjectId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Responsible = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Category = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Status = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Description = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "DATETIME", nullable: true),
-                    EnterpriseId = table.Column<int>(type: "INT", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Projects", x => x.ProjectId);
-                    table.ForeignKey(
-                        name: "FK_Projects_Enterprises_EnterpriseId",
-                        column: x => x.EnterpriseId,
-                        principalTable: "Enterprises",
-                        principalColumn: "EnterpriseId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Invoices",
-                columns: table => new
-                {
-                    InvoiceId = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<decimal>(type: "DECIMAL(10,2)", nullable: true),
-                    Status = table.Column<string>(type: "VARCHAR(30)", nullable: true),
-                    SubscriptionId = table.Column<int>(type: "INT", nullable: true),
-                    CreateAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
-                    DueDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Invoices", x => x.InvoiceId);
-                    table.ForeignKey(
-                        name: "FK_Invoices_Subscriptions_SubscriptionId",
-                        column: x => x.SubscriptionId,
-                        principalTable: "Subscriptions",
-                        principalColumn: "SubscriptionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -324,6 +217,156 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Enterprises",
+                columns: table => new
+                {
+                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    CorporateReason = table.Column<string>(type: "VARCHAR(100)", nullable: true),
+                    CNPJ = table.Column<string>(type: "VARCHAR(18)", nullable: true),
+                    Segment = table.Column<string>(type: "VARCHAR(100)", nullable: true),
+                    TenantId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enterprises", x => x.EnterpriseId);
+                    table.ForeignKey(
+                        name: "FK_Enterprises_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "TenantId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subscriptions",
+                columns: table => new
+                {
+                    SubscriptionId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    TenantId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Plan = table.Column<string>(type: "VARCHAR(30)", nullable: true),
+                    Status = table.Column<string>(type: "VARCHAR(30)", nullable: true),
+                    TotalLicense = table.Column<int>(type: "INT", nullable: true),
+                    TotalAvailable = table.Column<int>(type: "INT", nullable: true),
+                    TotalUsed = table.Column<int>(type: "INT", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscriptions", x => x.SubscriptionId);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "TenantId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserRoleEnterprises",
+                columns: table => new
+                {
+                    ApplicationUserRoleEnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserRoleEnterprises", x => x.ApplicationUserRoleEnterpriseId);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRoleEnterprises_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRoleEnterprises_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRoleEnterprises_Enterprises_EnterpriseId",
+                        column: x => x.EnterpriseId,
+                        principalTable: "Enterprises",
+                        principalColumn: "EnterpriseId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EnterpriseUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EnterpriseUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EnterpriseUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EnterpriseUsers_Enterprises_EnterpriseId",
+                        column: x => x.EnterpriseId,
+                        principalTable: "Enterprises",
+                        principalColumn: "EnterpriseId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Projects",
+                columns: table => new
+                {
+                    ProjectId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Title = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Responsible = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Category = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Status = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Description = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.ProjectId);
+                    table.ForeignKey(
+                        name: "FK_Projects_Enterprises_EnterpriseId",
+                        column: x => x.EnterpriseId,
+                        principalTable: "Enterprises",
+                        principalColumn: "EnterpriseId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Invoices",
+                columns: table => new
+                {
+                    InvoiceId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Amount = table.Column<decimal>(type: "DECIMAL(10,2)", nullable: true),
+                    Status = table.Column<string>(type: "VARCHAR(30)", nullable: true),
+                    SubscriptionId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    CreateAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoices", x => x.InvoiceId);
+                    table.ForeignKey(
+                        name: "FK_Invoices_Subscriptions_SubscriptionId",
+                        column: x => x.SubscriptionId,
+                        principalTable: "Subscriptions",
+                        principalColumn: "SubscriptionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Plannings",
                 columns: table => new
                 {
@@ -332,7 +375,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     PlanningDescription = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
                     StartDate = table.Column<DateTime>(name: "Start Date", type: "DATETIME", nullable: true),
                     EndDate = table.Column<DateTime>(name: "End Date", type: "DATETIME", nullable: true),
-                    ProjectId = table.Column<int>(type: "INT", nullable: true)
+                    ProjectId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -349,9 +392,8 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "ProjectUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectId = table.Column<int>(type: "INT", nullable: true),
+                    Id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     DataCriacao = table.Column<DateTime>(type: "DATETIME", nullable: true)
                 },
@@ -363,13 +405,13 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProjectUsers_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -379,7 +421,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     RequirementAnalysisId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     StartDate = table.Column<DateTime>(name: "Start Date", type: "DATETIME", nullable: true),
                     EndDate = table.Column<DateTime>(name: "End Date", type: "DATETIME", nullable: true),
-                    ProjectId = table.Column<int>(type: "INT", nullable: true)
+                    ProjectId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -389,6 +431,26 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DirectOrFunctionalRequirements",
+                columns: table => new
+                {
+                    DirectOrFunctionalRequirementId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    FunctionOrAction = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    SystemBehavior = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    RequirementAnalysisId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DirectOrFunctionalRequirements", x => x.DirectOrFunctionalRequirementId);
+                    table.ForeignKey(
+                        name: "FK_DirectOrFunctionalRequirements_RequirementAnalysis_RequirementAnalysisId",
+                        column: x => x.RequirementAnalysisId,
+                        principalTable: "RequirementAnalysis",
+                        principalColumn: "RequirementAnalysisId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -427,8 +489,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "SprintUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INT", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     SprintId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     DataCriacao = table.Column<DateTime>(type: "DATETIME", nullable: true)
@@ -449,6 +510,21 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         principalColumn: "SprintId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserRoleEnterprises_EnterpriseId",
+                table: "ApplicationUserRoleEnterprises",
+                column: "EnterpriseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserRoleEnterprises_RoleId",
+                table: "ApplicationUserRoleEnterprises",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserRoleEnterprises_UserId",
+                table: "ApplicationUserRoleEnterprises",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -483,11 +559,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_EnterpriseId",
-                table: "AspNetUsers",
-                column: "EnterpriseId");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -495,9 +566,24 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DirectOrFunctionalRequirements_RequirementAnalysisId",
+                table: "DirectOrFunctionalRequirements",
+                column: "RequirementAnalysisId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Enterprises_TenantId",
                 table: "Enterprises",
                 column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnterpriseUsers_EnterpriseId",
+                table: "EnterpriseUsers",
+                column: "EnterpriseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnterpriseUsers_UserId",
+                table: "EnterpriseUsers",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_SubscriptionId",
@@ -566,6 +652,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ApplicationUserRoleEnterprises");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -582,6 +671,12 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "DirectOrFunctionalRequirements");
+
+            migrationBuilder.DropTable(
+                name: "EnterpriseUsers");
 
             migrationBuilder.DropTable(
                 name: "Invoices");

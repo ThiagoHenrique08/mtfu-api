@@ -2,7 +2,7 @@
 {
     public class Tenant
     {
-        public int TenantId { get; set; }
+        public Guid TenantId { get; set; } = Guid.NewGuid();
         public string? TenantName { get; set; }
         public string? TenantCustomDomain { get; set; }
         public string? TenantStatus { get; set; }

@@ -8,7 +8,7 @@ namespace MoreThanFollowUp.Domain.Entities.Resources
 {
     public class ProjectCategory
     {
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; } = Guid.NewGuid();
         public string? Name { get; set; }
     }
 }

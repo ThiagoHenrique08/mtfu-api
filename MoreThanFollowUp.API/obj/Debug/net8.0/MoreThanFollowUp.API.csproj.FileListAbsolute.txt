@@ -220,7 +220,6 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.AssemblyInfoInputs.cache
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.AssemblyInfo.cs
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.csproj.CoreCompileInputs.cache
-C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.sourcelink.json
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\staticwebassets.build.json
@@ -237,3 +236,10 @@ C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.pdb
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.genruntimeconfig.cache
 C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\ref\MoreThanFollowUp.API.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Estudos - C#\Projetos\MoreThanFollowUp\MoreThanFollowUp.API\obj\Debug\net8.0\MoreThanFollowUp.API.MvcApplicationPartsAssemblyInfo.cs
