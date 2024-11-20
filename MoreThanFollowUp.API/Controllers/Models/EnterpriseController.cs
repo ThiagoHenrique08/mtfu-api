@@ -176,28 +176,26 @@ namespace MoreThanFollowUp.API.Controllers.Models
 
             try
             {
-                var enterpriseList = await _enterpriseRepository.RecoverBy(t => t.EnterpriseId == enterpriseDTO.EnterpriseId);
+                var enterprise = await _enterpriseRepository.RecoverBy(t => t.EnterpriseId == enterpriseDTO.EnterpriseId);
 
-                if (enterpriseList is not null)
+                if (enterprise is not null)
                 {
-                    enterpriseList.CorporateReason = enterpriseDTO.CorporateReason ?? enterpriseList.CorporateReason;
-                    enterpriseList.CNPJ = enterpriseDTO.CNPJ ?? enterpriseList.CNPJ;
-                    enterpriseList.CNPJ = enterpriseDTO.CNPJ ?? enterpriseList.CNPJ;
+                    enterprise.CorporateReason = enterpriseDTO.CorporateReason ?? enterprise.CorporateReason;
+                    enterprise.CNPJ = enterpriseDTO.CNPJ ?? enterprise.CNPJ;
+                    enterprise.Segment = enterpriseDTO.Segment ?? enterprise.Segment;
                 }
                 else
                 {
                     NotFound();
                 }
 
-                await _enterpriseRepository.UpdateAsync(enterpriseList!);
+                await _enterpriseRepository.UpdateAsync(enterprise!);
 
-                return Ok(enterpriseList
-                       );
+                return Ok(enterprise);
 
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
 
