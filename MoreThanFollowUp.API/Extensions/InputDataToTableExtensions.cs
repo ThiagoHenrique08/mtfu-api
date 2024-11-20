@@ -82,75 +82,78 @@ namespace MoreThanFollowUp.API.Extensions
                 ImputeDataInTheEnvironment(userManager, roleManager, tenant, enterprise, enterprise_User, user_role_enterprise).GetAwaiter().GetResult();
 
                 Console.WriteLine("Input Data Projects...");
-               ImputeDataTheProjects(project, project_user, enterprise, userManager, planning).GetAwaiter().GetResult();
+                ImputeDataTheProjects(project, project_user, enterprise, userManager, planning).GetAwaiter().GetResult();
 
             }
         }
 
-        private static  async Task ImputeDataTheProjects(IProjectRepository _project, IProject_UserRepository _project_user, IEnterpriseRepository _enterprise, UserManager<ApplicationUser> _userManager, IPlanningRepository _planning)
+        private static async Task ImputeDataTheProjects(IProjectRepository _project, IProject_UserRepository _project_user, IEnterpriseRepository _enterprise, UserManager<ApplicationUser> _userManager, IPlanningRepository _planning)
         {
             var userList = await _userManager.Users.ToListAsync();
 
             var EnterpriseList = await _enterprise.ToListAsync();
 
-            foreach (var enterprise in EnterpriseList)
+            if (EnterpriseList.IsNullOrEmpty())
             {
-                var projectList = new List<Project>();
-                var project1 = new Project { Title = "MTFU-1", Responsible = "Nicolas Jeronimo", Category = "Refatoração", Status = "Não iniciado", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = enterprise.EnterpriseId };
-                var project2 = new Project { Title = "MTFU-2", Responsible = "Thiago Henrique", Category = "Inovação", Status = "Em andamento", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = enterprise.EnterpriseId };
-                var project3 = new Project { Title = "MTFU-3", Responsible = "Richard França", Category = "Manutenção", Status = "Concluído", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = enterprise.EnterpriseId };
-                var project4 = new Project { Title = "MTFU-4", Responsible = "Guilherme França", Category = "UX-UI", Status = "Em revisão", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = enterprise.EnterpriseId };
-
-                projectList.Add(project1);
-                projectList.Add(project2);
-                projectList.Add(project3);
-                projectList.Add(project4);
-
-                await _project.RegisterList(projectList);
-                Console.WriteLine("");
-                Console.WriteLine($"Projects the Enteprise {enterprise.CorporateReason} Created with successfull!");
-
-                var listProjectCreated = _project.SearchForAsync(p => p.EnterpriseId == enterprise.EnterpriseId);
-                var project_userList = new List<Project_User>();
-                foreach (var project in listProjectCreated)
+                foreach (var enterprise in EnterpriseList)
                 {
+                    var projectList = new List<Project>();
+                    var project1 = new Project { Title = "MTFU-1", Responsible = "Nicolas Jeronimo", Category = "Refatoração", Status = "Não iniciado", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = enterprise.EnterpriseId };
+                    var project2 = new Project { Title = "MTFU-2", Responsible = "Thiago Henrique", Category = "Inovação", Status = "Em andamento", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = enterprise.EnterpriseId };
+                    var project3 = new Project { Title = "MTFU-3", Responsible = "Richard França", Category = "Manutenção", Status = "Concluído", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = enterprise.EnterpriseId };
+                    var project4 = new Project { Title = "MTFU-4", Responsible = "Guilherme França", Category = "UX-UI", Status = "Em revisão", Description = "Projeto da SWIF Tecnology", EndDate = null, CreateDate = DateTime.Now, Projects_Users = null, EnterpriseId = enterprise.EnterpriseId };
+
+                    projectList.Add(project1);
+                    projectList.Add(project2);
+                    projectList.Add(project3);
+                    projectList.Add(project4);
+
+                    await _project.RegisterList(projectList);
                     Console.WriteLine("");
-                    Console.WriteLine($"Creating Planning per Project:  {project.Title}...");
+                    Console.WriteLine($"Projects the Enteprise {enterprise.CorporateReason} Created with successfull!");
 
-                    var newPlanning = new Planning
-
+                    var listProjectCreated = _project.SearchForAsync(p => p.EnterpriseId == enterprise.EnterpriseId);
+                    var project_userList = new List<Project_User>();
+                    foreach (var project in listProjectCreated)
                     {
-                        StartDate = DateTime.Now,
-                        EndDate = null,
-                        DocumentationLink = "link.com.br",
-                        PlanningDescription = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"",
-                        ProjectId = project.ProjectId,
-                        Project = project
-                    };
-                    await _planning.RegisterAsync(newPlanning);
-
-                    Console.WriteLine("");
-                    Console.WriteLine($"Planning per Project:  {project.Title}, Created with successfull!");
-
-                    foreach (var user in userList)
-                    {
-                        project_userList.Add(new Project_User
-                        {
-                            Project = project,
-                            User = user,
-                            CreateDate = DateTime.Now
-                        });
                         Console.WriteLine("");
-                        Console.WriteLine($"Relationship the  {project.Title} and {user.CompletedName} Created with successfull!");
+                        Console.WriteLine($"Creating Planning per Project:  {project.Title}...");
+
+                        var newPlanning = new Planning
+
+                        {
+                            StartDate = DateTime.Now,
+                            EndDate = null,
+                            DocumentationLink = "link.com.br",
+                            PlanningDescription = "\"[\\n  {\\n    \\\"id\\\": \\\"9f93c501-9747-47d7-9a70-790386add372\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [\\n      {\\n        \\\"type\\\": \\\"text\\\",\\n        \\\"text\\\": \\\"AAAAAAAAAAAAAAAAAAAAAAAAA\\\",\\n        \\\"styles\\\": {}\\n      }\\n    ],\\n    \\\"children\\\": []\\n  },\\n  {\\n    \\\"id\\\": \\\"9ec4df74-a85c-456c-bbb1-7e4373eb11aa\\\",\\n    \\\"type\\\": \\\"paragraph\\\",\\n    \\\"props\\\": {\\n      \\\"textColor\\\": \\\"default\\\",\\n      \\\"backgroundColor\\\": \\\"default\\\",\\n      \\\"textAlignment\\\": \\\"left\\\"\\n    },\\n    \\\"content\\\": [],\\n    \\\"children\\\": []\\n  }\\n]\"",
+                            ProjectId = project.ProjectId,
+                            Project = project
+                        };
+                        await _planning.RegisterAsync(newPlanning);
+
+                        Console.WriteLine("");
+                        Console.WriteLine($"Planning per Project:  {project.Title}, Created with successfull!");
+
+                        foreach (var user in userList)
+                        {
+                            project_userList.Add(new Project_User
+                            {
+                                Project = project,
+                                User = user,
+                                CreateDate = DateTime.Now
+                            });
+                            Console.WriteLine("");
+                            Console.WriteLine($"Relationship the  {project.Title} and {user.CompletedName} Created with successfull!");
+                        }
+                        await _project_user.RegisterList(project_userList);
+                        project_userList.Clear();
+                        Console.WriteLine("");
+                        Console.WriteLine($"Relationship the  all users Created with successfull!");
+
+
                     }
-                    await _project_user.RegisterList(project_userList);
-                    project_userList.Clear();
-                    Console.WriteLine("");
-                    Console.WriteLine($"Relationship the  all users Created with successfull!");
-
-
+                    Console.WriteLine("Creating projects next Enterprise...");
                 }
-                Console.WriteLine("Creating projects next Enterprise...");
             }
         }
 

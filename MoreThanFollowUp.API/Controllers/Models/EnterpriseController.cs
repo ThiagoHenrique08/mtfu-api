@@ -22,7 +22,8 @@ namespace MoreThanFollowUp.API.Controllers.Models
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IEnterprise_UserRepository _enterpriseUserRepository;
         private readonly IApplicationUserRoleEnterpriseRepository _userRoleEnterpriseRepository;
-        public EnterpriseController(IEnterpriseRepository enterpriseRepository, ITenantRepository tenantRepository, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IEnterprise_UserRepository enterpriseUserRepository, IApplicationUserRoleEnterpriseRepository userRoleEnterpriseRepository)
+        private readonly IEnterprise_UserRepository _enterprise_UserRepository;
+        public EnterpriseController(IEnterpriseRepository enterpriseRepository, ITenantRepository tenantRepository, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IEnterprise_UserRepository enterpriseUserRepository, IApplicationUserRoleEnterpriseRepository userRoleEnterpriseRepository, IEnterprise_UserRepository enterprise_UserRepository)
         {
             _enterpriseRepository = enterpriseRepository;
             _tenantRepository = tenantRepository;
@@ -30,6 +31,7 @@ namespace MoreThanFollowUp.API.Controllers.Models
             _roleManager = roleManager;
             _enterpriseUserRepository = enterpriseUserRepository;
             _userRoleEnterpriseRepository = userRoleEnterpriseRepository;
+            _enterprise_UserRepository = enterprise_UserRepository;
         }
 
         [HttpPost]
@@ -133,24 +135,30 @@ namespace MoreThanFollowUp.API.Controllers.Models
         [HttpGet]
         [Route("getEnterprise")]
         [OutputCache(Duration = 400)]
-        public async Task<ActionResult<IEnumerable<GETEnterpriseDTO>>> GetEnterprise(Guid TenantId)
+        public async Task<ActionResult<IEnumerable<GETEnterpriseDTO>>> GetEnterprise(string UserId)
         {
             try
             {
-                var enteprises = _enterpriseRepository.SearchForAsync(p => p.TenantId == TenantId);
+                //var enteprises = _enterpriseRepository.SearchForAsync(p => p.TenantId == TenantId);
+                var enterprise_users = _enterprise_UserRepository.SearchForAsync(p => p.User.Id == UserId);
 
-                if (enteprises.IsNullOrEmpty()) { return NotFound(); }
+                if (enterprise_users.IsNullOrEmpty()) { return NotFound(); }
                 var enteprisesDTO = new List<GETEnterpriseDTO>();
 
-                foreach (var enterprise in enteprises)
+                foreach (var enterprise in enterprise_users)
                 {
                     enteprisesDTO.Add(new GETEnterpriseDTO
                     {
-                        EnterpriseId = enterprise.EnterpriseId,
-                        CorporateReason = enterprise.CorporateReason,
-                        CNPJ = enterprise.CNPJ,
-                        Segment = enterprise.Segment,
-                        TenantId = enterprise.TenantId,
+                        //EnterpriseId = enterprise.EnterpriseId,
+                        //CorporateReason = enterprise.CorporateReason,
+                        //CNPJ = enterprise.CNPJ,
+                        //Segment = enterprise.Segment,
+                        //TenantId = enterprise.TenantId,
+                        EnterpriseId = enterprise.Enterprise!.EnterpriseId,
+                        CorporateReason = enterprise.Enterprise.CorporateReason,
+                        CNPJ = enterprise.Enterprise.CNPJ,
+                        Segment = enterprise.Enterprise.Segment,
+                        TenantId = enterprise.Enterprise.TenantId
                     });
                 }
                 return Ok(enteprisesDTO);
