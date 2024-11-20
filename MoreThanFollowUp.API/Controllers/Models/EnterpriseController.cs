@@ -191,7 +191,7 @@ namespace MoreThanFollowUp.API.Controllers.Models
 
                 await _enterpriseRepository.UpdateAsync(enterprise!);
 
-                return Ok(enterprise);
+                return Ok();
 
             }
             catch (Exception ex)
