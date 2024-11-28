@@ -157,13 +157,14 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
 
                 user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(refreshTokenValidityInMinutes);
 
-                await _userManager.UpdateAsync(user);
-
+               await _userManager.UpdateAsync(user);
+               
                 return Ok(new
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     RefreshToken = refreshToken,
-                    Expiration = token.ValidTo
+                    Expiration = token.ValidTo,
+                    user.Id
                 });
             }
             return Unauthorized();
