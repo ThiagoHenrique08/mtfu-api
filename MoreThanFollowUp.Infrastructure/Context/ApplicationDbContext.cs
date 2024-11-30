@@ -52,9 +52,8 @@ namespace MoreThanFollowUp.Infrastructure.Context
         public DbSet<Sprint> Sprints { get; set; }
         public DbSet<RequirementAnalysis> RequirementAnalysis { get; set; }
         public DbSet<DirectOrFunctionalRequirement> DirectOrFunctionalRequirements { get; set; }
-        public DbSet<Enterprise_User> EnterpriseUsers { get; set; }
 
-        public DbSet<ApplicationUserRoleEnterprise> ApplicationUserRoleEnterprises { get; set; }
+        public DbSet<ApplicationUserRoleEnterpriseTenant> ApplicationUserRoleEnterprisesTenants { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

@@ -12,7 +12,7 @@ using MoreThanFollowUp.Infrastructure.Context;
 namespace MoreThanFollowUp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241108221246_Migration Initial")]
+    [Migration("20241130173129_Migration Initial")]
     partial class MigrationInitial
     {
         /// <inheritdoc />
@@ -505,9 +505,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUserRoleEnterprise", b =>
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUserRoleEnterpriseTenant", b =>
                 {
-                    b.Property<Guid>("ApplicationUserRoleEnterpriseId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("UNIQUEIDENTIFIER");
 
@@ -518,19 +518,24 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("RoleId");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("UserId");
 
-                    b.HasKey("ApplicationUserRoleEnterpriseId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EnterpriseId");
 
                     b.HasIndex("RoleId");
 
+                    b.HasIndex("TenantId");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("ApplicationUserRoleEnterprises", (string)null);
+                    b.ToTable("ApplicationUserRoleEnterprisesTenants", (string)null);
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
@@ -548,35 +553,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Property<string>("Segment")
                         .HasColumnType("VARCHAR(100)");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("UNIQUEIDENTIFIER");
-
                     b.HasKey("EnterpriseId");
 
-                    b.HasIndex("TenantId");
-
                     b.ToTable("Enterprises", (string)null);
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise_User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER");
-
-                    b.Property<Guid?>("EnterpriseId")
-                        .HasColumnType("UNIQUEIDENTIFIER");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnterpriseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EnterpriseUsers", (string)null);
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Invoice", b =>
@@ -826,20 +805,25 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUserRoleEnterprise", b =>
+            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUserRoleEnterpriseTenant", b =>
                 {
                     b.HasOne("MoreThanFollowUp.Domain.Models.Enterprise", "Enterprise")
-                        .WithMany("Users_Roles_Enteprises")
+                        .WithMany("Users_Roles_Enteprises_Tenants")
                         .HasForeignKey("EnterpriseId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationRole", "Role")
-                        .WithMany("Users_Roles_Enteprises")
+                        .WithMany("Users_Roles_Enteprises_Tenants")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("MoreThanFollowUp.Domain.Models.Tenant", "Tenant")
+                        .WithMany("Users_Roles_Enteprises_Tenants")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationUser", "User")
-                        .WithMany("Users_Roles_Enteprises")
+                        .WithMany("Users_Roles_Enteprises_Tenants")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -847,32 +831,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
                     b.Navigation("Role");
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
-                {
-                    b.HasOne("MoreThanFollowUp.Domain.Models.Tenant", "Tenant")
-                        .WithMany("Enterprises")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.Navigation("Tenant");
-                });
-
-            modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise_User", b =>
-                {
-                    b.HasOne("MoreThanFollowUp.Domain.Models.Enterprise", "Enterprise")
-                        .WithMany("Enterprises_Users")
-                        .HasForeignKey("EnterpriseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MoreThanFollowUp.Domain.Models.ApplicationUser", "User")
-                        .WithMany("Enterprises_Users")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Enterprise");
 
                     b.Navigation("User");
                 });
@@ -926,27 +885,23 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationRole", b =>
                 {
-                    b.Navigation("Users_Roles_Enteprises");
+                    b.Navigation("Users_Roles_Enteprises_Tenants");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Enterprises_Users");
-
                     b.Navigation("Projects_Users");
 
                     b.Navigation("Sprint_Users");
 
-                    b.Navigation("Users_Roles_Enteprises");
+                    b.Navigation("Users_Roles_Enteprises_Tenants");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Enterprise", b =>
                 {
-                    b.Navigation("Enterprises_Users");
-
                     b.Navigation("Projects");
 
-                    b.Navigation("Users_Roles_Enteprises");
+                    b.Navigation("Users_Roles_Enteprises_Tenants");
                 });
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Subscription", b =>
@@ -956,9 +911,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             modelBuilder.Entity("MoreThanFollowUp.Domain.Models.Tenant", b =>
                 {
-                    b.Navigation("Enterprises");
-
                     b.Navigation("Subscription");
+
+                    b.Navigation("Users_Roles_Enteprises_Tenants");
                 });
 #pragma warning restore 612, 618
         }

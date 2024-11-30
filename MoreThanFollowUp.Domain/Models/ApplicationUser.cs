@@ -13,10 +13,9 @@ namespace MoreThanFollowUp.Domain.Models
         public string? CompletedName { get; set; }
         public virtual ICollection<Project_User>? Projects_Users { get; set; }
         public virtual ICollection<Sprint_User>? Sprint_Users { get; set; }
-        //public int EnterpriseId { get; set; }
-        public virtual ICollection<Enterprise_User>? Enterprises_Users { get; set; }
+        //public virtual ICollection<Enterprise_User_Tenant>? Enterprises_Users_Tenants { get; set; }
 
-        public virtual ICollection<ApplicationUserRoleEnterprise>? Users_Roles_Enteprises { get; set; }
+        public virtual ICollection<ApplicationUserRoleEnterpriseTenant>? Users_Roles_Enteprises_Tenants { get; set; }
 
 
 

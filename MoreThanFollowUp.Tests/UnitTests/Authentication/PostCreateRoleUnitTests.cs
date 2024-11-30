@@ -21,10 +21,9 @@ namespace MoreThanFollowUp.Tests.UnitTests.Authentication
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ILogger<AuthController>> _mockLogger;
         private readonly Mock<IUserApplicationRepository> _mockUserApplicationRepository;
-        private readonly Mock<IApplicationUserRoleEnterpriseRepository> _mockUserRoleEnterpriseRepository;
         private readonly Mock<IEnterpriseRepository> _mockEnterpriseRepository;
         private readonly Mock<ITenantRepository> _mockTenantRepository;
-        private readonly Mock<IEnterprise_UserRepository> _mockEnterpriseUserRepository;
+        private readonly Mock<IApplicationUserRoleEnterpriseTenantRepository> _mockUserRoleEnterpriseTenantRepository;
         private readonly AuthController _controller;
 
         public PostCreateRoleUnitTests()
@@ -40,10 +39,9 @@ namespace MoreThanFollowUp.Tests.UnitTests.Authentication
             _mockConfiguration = new Mock<IConfiguration>();
             _mockLogger = new Mock<ILogger<AuthController>>();
             _mockUserApplicationRepository = new Mock<IUserApplicationRepository>();
-            _mockUserRoleEnterpriseRepository = new Mock<IApplicationUserRoleEnterpriseRepository>();
             _mockEnterpriseRepository = new Mock<IEnterpriseRepository>();
             _mockTenantRepository = new Mock<ITenantRepository>();
-            _mockEnterpriseUserRepository = new Mock<IEnterprise_UserRepository>();
+            _mockUserRoleEnterpriseTenantRepository = new Mock<IApplicationUserRoleEnterpriseTenantRepository>();
             _controller = new AuthController(
                 _mockTokenService.Object,
                 _mockUserManager.Object,
@@ -51,10 +49,9 @@ namespace MoreThanFollowUp.Tests.UnitTests.Authentication
                 _mockConfiguration.Object,
                 _mockLogger.Object,
                 _mockUserApplicationRepository.Object,
-                _mockUserRoleEnterpriseRepository.Object,
                 _mockEnterpriseRepository.Object,
                 _mockTenantRepository.Object,
-                _mockEnterpriseUserRepository.Object
+                _mockUserRoleEnterpriseTenantRepository.Object
             );
         }
 

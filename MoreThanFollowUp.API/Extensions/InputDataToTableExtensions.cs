@@ -70,8 +70,7 @@ namespace MoreThanFollowUp.API.Extensions
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
                 var tenant = scope.ServiceProvider.GetRequiredService<ITenantRepository>();
                 var enterprise = scope.ServiceProvider.GetRequiredService<IEnterpriseRepository>();
-                var enterprise_User = scope.ServiceProvider.GetRequiredService<IEnterprise_UserRepository>();
-                var user_role_enterprise = scope.ServiceProvider.GetRequiredService<IApplicationUserRoleEnterpriseRepository>();
+                var user_role_enterprise_tenant = scope.ServiceProvider.GetRequiredService<IApplicationUserRoleEnterpriseTenantRepository>();
 
                 var project = scope.ServiceProvider.GetRequiredService<IProjectRepository>();
                 var project_user = scope.ServiceProvider.GetRequiredService<IProject_UserRepository>();
@@ -79,10 +78,11 @@ namespace MoreThanFollowUp.API.Extensions
 
                 // Chame o método assíncrono de forma síncrona com GetAwaiter().GetResult() (caso seu método Configure não seja assíncrono)
                 Console.WriteLine("Input Data Users...");
-                ImputeDataInTheEnvironment(userManager, roleManager, tenant, enterprise, enterprise_User, user_role_enterprise).GetAwaiter().GetResult();
+                ImputeDataInTheEnvironment(userManager, roleManager, tenant, enterprise, user_role_enterprise_tenant).GetAwaiter().GetResult();
 
                 Console.WriteLine("Input Data Projects...");
                 ImputeDataTheProjects(project, project_user, enterprise, userManager, planning).GetAwaiter().GetResult();
+
 
             }
         }
@@ -92,8 +92,8 @@ namespace MoreThanFollowUp.API.Extensions
             var userList = await _userManager.Users.ToListAsync();
 
             var EnterpriseList = await _enterprise.ToListAsync();
-
-            if (EnterpriseList.IsNullOrEmpty())
+            var projects = await _project.ToListAsync();
+            if (projects.IsNullOrEmpty())
             {
                 foreach (var enterprise in EnterpriseList)
                 {
@@ -161,8 +161,7 @@ namespace MoreThanFollowUp.API.Extensions
                                                                 RoleManager<ApplicationRole> _roleManager,
                                                                        ITenantRepository _tenant,
                                                                             IEnterpriseRepository _enterprise,
-                                                                                  IEnterprise_UserRepository _enterprise_user,
-                                                                                       IApplicationUserRoleEnterpriseRepository _user_role_enterprise)
+                                                                                       IApplicationUserRoleEnterpriseTenantRepository _user_role_enterprise_tenant)
         {
             var listUser = new List<RegisterModel>();
             // Verifique se o usuário já existe para evitar duplicação
@@ -275,25 +274,11 @@ namespace MoreThanFollowUp.API.Extensions
                         CorporateReason = user.EnterpriseName,
                         CNPJ = null,
                         Segment = null,
-                        TenantId = tenantCreated.TenantId,
-                        Tenant = tenantCreated
+                        //TenantId = tenantCreated.TenantId,
+                        //Tenant = tenantCreated
                     };
                     var enterpriseCreated = await _enterprise.RegisterAsync(newEnterprise);
                     Console.WriteLine($"Enterprise {enterpriseCreated.CorporateReason}, created with successfull...");
-                    //============================================================================
-
-
-                    //CRIA O RELACIONAMENTO USUARIO E EMPRESA N:N
-                    //============================================================================
-                    var enterpriseUser = new Enterprise_User
-                    {
-                        EnterpriseId = enterpriseCreated.EnterpriseId,
-                        Enterprise = enterpriseCreated,
-                        User = createdUser,
-                    };
-                    await _enterprise_user.RegisterAsync(enterpriseUser);
-                    Console.WriteLine($"relationship between  {enterpriseUser.Enterprise.CorporateReason} e {enterpriseUser.User!.CompletedName}, created with successfull...");
-
                     //============================================================================
 
                     //CRIA A ROLE ADMIN CASO ELA NÃO EXISTA
@@ -312,27 +297,30 @@ namespace MoreThanFollowUp.API.Extensions
                         Console.WriteLine($"Role  {role.Name}, created with successfull...");
                     }
 
-                    //ADICIONA A ROLE DO USUÁRIO NA CRIAÇÃO
+                    //ADICIONA A ROLE DO USUÁRIO NA CRIAÇÃO e CRIA O RELACIONAMENTO USUARIO,EMPRESA,ROLE E TENANT
                     //============================================================================
                     var recoverUser = await _userManager.FindByEmailAsync(createdUser!.Email!);
                     var recoverRole = await _roleManager.FindByNameAsync("ADMIN");
                     var recoverEnterprise = await _enterprise.RecoverBy(p => p.EnterpriseId == enterpriseCreated.EnterpriseId);
-
+                    var recoverTenant = await _tenant.RecoverBy(p => p.TenantId == tenantCreated.TenantId);
+                    
                     if (recoverUser != null)
                     {
                         //var result = await _userManager.AddToRoleAsync(user, roleName);
-                        var roleToUserObject = new ApplicationUserRoleEnterprise
+                        var relationshipObject = new ApplicationUserRoleEnterpriseTenant
                         {
                             UserId = recoverUser!.Id,
                             User = recoverUser,
                             RoleId = recoverRole!.Id,
                             Role = recoverRole,
                             EnterpriseId = recoverEnterprise!.EnterpriseId,
-                            Enterprise = recoverEnterprise
+                            Enterprise = recoverEnterprise,
+                            TenantId = recoverTenant!.TenantId,
+                            Tenant = recoverTenant
 
                         };
-                        await _user_role_enterprise.RegisterAsync(roleToUserObject);
-                        Console.WriteLine($"relationship between  {roleToUserObject.User.CompletedName} e {roleToUserObject.Enterprise!.CorporateReason} e {roleToUserObject.Role.Name}, created with successfull...");
+                        await _user_role_enterprise_tenant.RegisterAsync(relationshipObject);
+                        Console.WriteLine($"relationship between  {relationshipObject.User.CompletedName} and {relationshipObject.Enterprise!.CorporateReason} and {relationshipObject.Role.Name} and {relationshipObject.Tenant.TenantName}, created with successfull...");
                         //=========================================================================
 
                     }

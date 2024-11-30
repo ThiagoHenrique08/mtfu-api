@@ -3,12 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using MoreThanFollowUp.Application.DTO.Enterprise;
-using MoreThanFollowUp.Application.DTO.Tenant;
 using MoreThanFollowUp.Domain.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models;
 using MoreThanFollowUp.Infrastructure.Interfaces.Models.Users;
-using MoreThanFollowUp.Infrastructure.Repository.Models;
-using System.Linq.Expressions;
 
 namespace MoreThanFollowUp.API.Controllers.Models
 {
@@ -20,18 +17,16 @@ namespace MoreThanFollowUp.API.Controllers.Models
         private readonly ITenantRepository _tenantRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly IEnterprise_UserRepository _enterpriseUserRepository;
-        private readonly IApplicationUserRoleEnterpriseRepository _userRoleEnterpriseRepository;
-        private readonly IEnterprise_UserRepository _enterprise_UserRepository;
-        public EnterpriseController(IEnterpriseRepository enterpriseRepository, ITenantRepository tenantRepository, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IEnterprise_UserRepository enterpriseUserRepository, IApplicationUserRoleEnterpriseRepository userRoleEnterpriseRepository, IEnterprise_UserRepository enterprise_UserRepository)
+        private readonly IApplicationUserRoleEnterpriseTenantRepository _enterpriseUserRepository;
+        private readonly IApplicationUserRoleEnterpriseTenantRepository _userRoleEnterpriseTenantRepository;
+        public EnterpriseController(IEnterpriseRepository enterpriseRepository, ITenantRepository tenantRepository, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IApplicationUserRoleEnterpriseTenantRepository enterpriseUserRepository, IApplicationUserRoleEnterpriseTenantRepository userRoleEnterpriseTenantRepository)
         {
             _enterpriseRepository = enterpriseRepository;
             _tenantRepository = tenantRepository;
             _userManager = userManager;
             _roleManager = roleManager;
             _enterpriseUserRepository = enterpriseUserRepository;
-            _userRoleEnterpriseRepository = userRoleEnterpriseRepository;
-            _enterprise_UserRepository = enterprise_UserRepository;
+            _userRoleEnterpriseTenantRepository = userRoleEnterpriseTenantRepository;
         }
 
         [HttpPost]
@@ -40,8 +35,7 @@ namespace MoreThanFollowUp.API.Controllers.Models
         {
             try
             {
-                var tenant = await _tenantRepository.RecoverBy(p=>p.TenantId == enterpriseDTO.TenantId);
-                if (tenant is null) { return NotFound("Tenant is not exist"); }
+               
                 if (enterpriseDTO is null) { return NotFound(); }
 
                 var newEnterprise = new Enterprise
@@ -49,24 +43,9 @@ namespace MoreThanFollowUp.API.Controllers.Models
                     CorporateReason = enterpriseDTO.CorporateReason,
                     CNPJ = enterpriseDTO.CNPJ,
                     Segment = enterpriseDTO.Segment,
-                    TenantId = tenant.TenantId,
-                    Tenant = tenant,
                 };
                var EnterpriseCreated =  await _enterpriseRepository.RegisterAsync(newEnterprise);
 
-
-
-                //CRIA O RELACIONAMENTO USUARIO E EMPRESA N:N
-                //============================================================================
-
-                var User = await _userManager.FindByIdAsync(UserId);
-                var enterpriseUser = new Enterprise_User
-                {
-                    EnterpriseId = EnterpriseCreated.EnterpriseId,
-                    Enterprise = EnterpriseCreated,
-                    User = User,
-                };
-                await _enterpriseUserRepository.RegisterAsync(enterpriseUser);
                 //============================================================================
 
                 //CRIA A ROLE ADMIN CASO ELA NÃO EXISTA
@@ -93,26 +72,28 @@ namespace MoreThanFollowUp.API.Controllers.Models
                     var recoverUser = await _userManager.FindByIdAsync(UserId);
                     var recoverRole = await _roleManager.FindByNameAsync("ADMIN");
                     var recoverEnterprise = await _enterpriseRepository.RecoverBy(p => p.EnterpriseId == EnterpriseCreated.EnterpriseId);
-
-                    if (recoverUser != null)
+                    var relationshipObject = await _userRoleEnterpriseTenantRepository.RecoverBy(u => u.UserId == recoverUser!.Id);
+                    var result = new ApplicationUserRoleEnterpriseTenant();
+                if (recoverUser != null)
                     {
                         //var result = await _userManager.AddToRoleAsync(user, roleName);
-                        var roleToUserObject = new ApplicationUserRoleEnterprise
+                        var roleToUserObject = new ApplicationUserRoleEnterpriseTenant
                         {
                             UserId = recoverUser!.Id,
                             User = recoverUser,
                             RoleId = recoverRole!.Id,
                             Role = recoverRole,
                             EnterpriseId = recoverEnterprise!.EnterpriseId,
-                            Enterprise = recoverEnterprise
+                            Enterprise = recoverEnterprise,
+                            TenantId = relationshipObject!.TenantId,
+                            Tenant = relationshipObject.Tenant,
 
                         };
-                        await _userRoleEnterpriseRepository.RegisterAsync(roleToUserObject);
+                         result = await _userRoleEnterpriseTenantRepository.RegisterAsync(roleToUserObject);
 
                         //=========================================================================
 
                     }
-
 
 
                 var getEnterpriseDTO = new GETEnterpriseDTO
@@ -120,7 +101,7 @@ namespace MoreThanFollowUp.API.Controllers.Models
                     EnterpriseId = newEnterprise.EnterpriseId,
                     CNPJ = newEnterprise.CNPJ,
                     Segment = newEnterprise.Segment,
-                    TenantId = newEnterprise.TenantId,
+                    TenantId = result.Tenant!.TenantId,
                 };
 
 
@@ -133,32 +114,27 @@ namespace MoreThanFollowUp.API.Controllers.Models
         }
 
         [HttpGet]
-        [Route("getEnterprise")]
-        [OutputCache(Duration = 400)]
-        public async Task<ActionResult<IEnumerable<GETEnterpriseDTO>>> GetEnterprise(string UserId)
+        [Route("getEnterprisePerUser")]
+        [OutputCache(Duration = 300)]
+        public async Task<ActionResult<IEnumerable<GETEnterpriseDTO>>> GetEnterprisePerUser(string UserId)
         {
             try
             {
-                //var enteprises = _enterpriseRepository.SearchForAsync(p => p.TenantId == TenantId);
-                var enterprise_users = _enterprise_UserRepository.SearchForAsync(p => p.User.Id == UserId);
+           
+                var relationshipObjectList = _userRoleEnterpriseTenantRepository.SearchForAsync(p => p.User!.Id == UserId);
 
-                if (enterprise_users.IsNullOrEmpty()) { return NotFound(); }
+                if (relationshipObjectList.IsNullOrEmpty()) { return NotFound(); }
                 var enteprisesDTO = new List<GETEnterpriseDTO>();
 
-                foreach (var enterprise in enterprise_users)
+                foreach (var enterprise in relationshipObjectList)
                 {
                     enteprisesDTO.Add(new GETEnterpriseDTO
                     {
-                        //EnterpriseId = enterprise.EnterpriseId,
-                        //CorporateReason = enterprise.CorporateReason,
-                        //CNPJ = enterprise.CNPJ,
-                        //Segment = enterprise.Segment,
-                        //TenantId = enterprise.TenantId,
                         EnterpriseId = enterprise.Enterprise!.EnterpriseId,
                         CorporateReason = enterprise.Enterprise.CorporateReason,
                         CNPJ = enterprise.Enterprise.CNPJ,
                         Segment = enterprise.Enterprise.Segment,
-                        TenantId = enterprise.Enterprise.TenantId
+                        TenantId = enterprise.TenantId
                     });
                 }
                 return Ok(enteprisesDTO);
@@ -168,6 +144,36 @@ namespace MoreThanFollowUp.API.Controllers.Models
                 return BadRequest(ex.Message);
             }
 
+        }
+
+        [HttpGet]
+        [Route("getEnterprisePerId")]
+        [OutputCache(Duration = 400)]
+        public async Task<ActionResult<GETEnterpriseDTO>> GetEnterprise(Guid Enterpriseid)
+        {
+            try
+            {
+
+                var enterprise = await _enterpriseRepository.RecoverBy(p => p.EnterpriseId == Enterpriseid);
+                var tenant = await _userRoleEnterpriseTenantRepository.RecoverBy(p => p.EnterpriseId == enterprise!.EnterpriseId);
+                if (enterprise is null) { return NotFound(); }
+                
+
+                var enterpriseDTO = new GETEnterpriseDTO
+                {
+                    EnterpriseId = enterprise.EnterpriseId,
+                    CorporateReason = enterprise.CorporateReason,
+                    CNPJ = enterprise.CNPJ,
+                    Segment = enterprise.Segment,
+                    TenantId = tenant!.TenantId
+                };
+
+                return Ok(enterpriseDTO);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPatch]
         [Route("update")]

@@ -26,12 +26,11 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthController> _logger;
         private readonly IUserApplicationRepository _userApplicationRepository;
-        private readonly IApplicationUserRoleEnterpriseRepository _userRoleEnterpriseRepository;
         private readonly IEnterpriseRepository _enterpriseRepository;
         private readonly ITenantRepository _tenantRepository;
-        private readonly IEnterprise_UserRepository _enterpriseUserRepository;
+        private readonly IApplicationUserRoleEnterpriseTenantRepository _userRoleEnterpriseTenantRepository;
 
-        public AuthController(ITokenService tokenService, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IConfiguration configuration, ILogger<AuthController> logger, IUserApplicationRepository userApplicationRepository, IApplicationUserRoleEnterpriseRepository userRoleEnterpriseRepository, IEnterpriseRepository enterpriseRepository, ITenantRepository tenantRepository, IEnterprise_UserRepository enterpriseUserRepository)
+        public AuthController(ITokenService tokenService, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IConfiguration configuration, ILogger<AuthController> logger, IUserApplicationRepository userApplicationRepository, IEnterpriseRepository enterpriseRepository, ITenantRepository tenantRepository, IApplicationUserRoleEnterpriseTenantRepository userRoleEnterpriseTenantRepository)
         {
             _tokenService = tokenService;
             _userManager = userManager;
@@ -39,10 +38,9 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
             _configuration = configuration;
             _logger = logger;
             _userApplicationRepository = userApplicationRepository;
-            _userRoleEnterpriseRepository = userRoleEnterpriseRepository;
             _enterpriseRepository = enterpriseRepository;
             _tenantRepository = tenantRepository;
-            _enterpriseUserRepository = enterpriseUserRepository;
+            _userRoleEnterpriseTenantRepository = userRoleEnterpriseTenantRepository;
         }
 
         [HttpPost]
@@ -79,43 +77,47 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         }
 
         [HttpPost]
-        [Route("AddUserToRoleToEnterprise")]
+        [Route("AddUserToRoleToEnterpriseToTenant")]
         [Authorize(Policy = "ADMIN")]
-        public async Task<IActionResult> AddUserToRoleToEnterprise(string email, string roleName, Guid enterpriseId)
+        public async Task<IActionResult> AddUserToRoleToEnterpriseToTenant(string email, string roleName, Guid enterpriseId)
         {
+            
 
             var user = await _userManager.FindByEmailAsync(email);
             var role = await _roleManager.FindByNameAsync(roleName);
             var enterprise = await _enterpriseRepository.RecoverBy(p => p.EnterpriseId == enterpriseId);
+            var tenant = await _userRoleEnterpriseTenantRepository.RecoverBy(p => p.EnterpriseId == enterprise!.EnterpriseId);
             if (user != null)
             {
                 //var result = await _userManager.AddToRoleAsync(user, roleName);
 
 
-                var roleToUserObject = new ApplicationUserRoleEnterprise
+                var roleToUserObject = new ApplicationUserRoleEnterpriseTenant
                 {
                     UserId = user.Id,
                     User = user,
                     RoleId = role!.Id,
                     Role = role,
                     EnterpriseId = enterprise!.EnterpriseId,
-                    Enterprise = enterprise
+                    Enterprise = enterprise,
+                    TenantId = tenant!.TenantId,
+                    Tenant = tenant!.Tenant,
 
                 };
-                var result = await _userRoleEnterpriseRepository.RegisterAsync(roleToUserObject);
-
+                var result = await _userRoleEnterpriseTenantRepository.RegisterAsync(roleToUserObject);
+            
                 if (result is not null)
 
                 {
                     _logger.LogInformation(1, $"User {user.Email} Added to the {roleName} role and {enterprise.CorporateReason}");
                     return StatusCode(StatusCodes.Status200OK,
-                    new ResponseDTO { Status = "Success", Message = $"User {user.Email} to the {roleName} role and {enterprise.CorporateReason}" });
+                    new ResponseDTO { Status = "Success", Message = $"User {user.Email} to the {roleName} role and {enterprise.CorporateReason}  and {tenant.Tenant!.TenantName}" });
                 }
 
                 else
                 {
                     _logger.LogInformation(1, $"Error: Unable to add user {user.Email} to the {roleName} role and {enterprise.CorporateReason}");
-                    return StatusCode(StatusCodes.Status400BadRequest, new ResponseDTO { Status = "Error", Message = $"Error: Unable to add user {user.Email} to the {roleName} role and {enterprise.CorporateReason}" });
+                    return StatusCode(StatusCodes.Status400BadRequest, new ResponseDTO { Status = "Error", Message = $"Error: Unable to add user {user.Email} to the {roleName} role and {enterprise.CorporateReason} and {tenant.Tenant!.TenantName}" });
                 }
             }
             return BadRequest(new { error = "Unable to find user" });
@@ -225,22 +227,8 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
                     CorporateReason = model.EnterpriseName,
                     CNPJ = null,
                     Segment = null,
-                    TenantId = tenantCreated.TenantId,
-                    Tenant = tenantCreated
                 };
                 var enterpriseCreated = await _enterpriseRepository.RegisterAsync(newEnterprise);
-                //============================================================================
-
-
-                //CRIA O RELACIONAMENTO USUARIO E EMPRESA N:N
-                //============================================================================
-                var enterpriseUser = new Enterprise_User
-                {
-                    EnterpriseId = enterpriseCreated.EnterpriseId,
-                    Enterprise = enterpriseCreated,
-                    User = createdUser,
-                };
-                await _enterpriseUserRepository.RegisterAsync(enterpriseUser);
                 //============================================================================
 
                 //CRIA A ROLE ADMIN CASO ELA NÃO EXISTA
@@ -260,26 +248,28 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
                 //============================================================================
 
 
-                //ADICIONA A ROLE DO USUÁRIO NA CRIAÇÃO
+                //ADICIONA A ROLE DO USUÁRIO NA CRIAÇÃO e CRIA O RELACIONAMENTO USUARIO,EMPRESA,ROLE E TENANT
                 //============================================================================
                 var recoverUser = await _userManager.FindByIdAsync(createdUser!.Id!);
                 var recoverRole = await _roleManager.FindByNameAsync("ADMIN");
                 var recoverEnterprise = await _enterpriseRepository.RecoverBy(p => p.EnterpriseId == enterpriseCreated.EnterpriseId);
-
+                var recoverTenant = await _tenantRepository.RecoverBy(p=>p.TenantId == tenantCreated.TenantId);
                 if (recoverUser != null)
                 {
                     //var result = await _userManager.AddToRoleAsync(user, roleName);
-                    var roleToUserObject = new ApplicationUserRoleEnterprise
+                    var roleToUserObject = new Domain.Models.ApplicationUserRoleEnterpriseTenant
                     {
                         UserId = recoverUser!.Id,
                         User = recoverUser,
                         RoleId = recoverRole!.Id,
                         Role = recoverRole,
                         EnterpriseId = recoverEnterprise!.EnterpriseId,
-                        Enterprise = recoverEnterprise
+                        Enterprise = recoverEnterprise,
+                        TenantId = recoverTenant!.TenantId,
+                        Tenant = recoverTenant
 
                     };
-                    await _userRoleEnterpriseRepository.RegisterAsync(roleToUserObject);
+                    await _userRoleEnterpriseTenantRepository.RegisterAsync(roleToUserObject);
 
                     //=========================================================================
 
@@ -424,9 +414,11 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         [HttpGet]
         [Route("getUsers")]
         [OutputCache(Duration = 400)]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<GetUsersDTO>>> GetUsers(Guid entepriseId)
         {
-            var users = await _userApplicationRepository.ToListAsync();
+           
+            
+            var users =  _userRoleEnterpriseTenantRepository.SearchForAsync(p=>p.EnterpriseId == entepriseId);
 
             if (users is null) { return NotFound(); }
 
@@ -436,11 +428,11 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
             {
                 listUsersDTO.Add(new GetUsersDTO
                 {
-                    UserId = user.Id,
-                    NameCompleted = user.CompletedName,
-                    Function = user.Function,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
+                    UserId = user.User!.Id,
+                    NameCompleted = user.User.CompletedName,
+                    Function = user.User.Function,
+                    Email = user.User.Email,
+                    PhoneNumber = user.User.PhoneNumber,
                 });
 
             }
@@ -450,7 +442,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         [HttpGet]
         [Route("getUserPerId")]
         [OutputCache(Duration = 400)]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUserPerId(string UserId)
+        public async Task<ActionResult<IEnumerable<GetUsersDTO>>> GetUserPerId(string UserId)
         {
             var user = await _userApplicationRepository.RecoverBy(u => u.Id == UserId);
 
@@ -476,7 +468,7 @@ namespace MoreThanFollowUp.API.Controllers.Authentication
         public async Task<ActionResult<IEnumerable<GETRolePerUserPerEntepriseDTO>>> GetRolePerUserAndPerEnterprise(string UserId, Guid EnterpriseId)
         {
 
-            var list =  _userRoleEnterpriseRepository.SearchForAsync(p => p.UserId == UserId).Where(p => p.EnterpriseId == EnterpriseId);
+            var list =  _userRoleEnterpriseTenantRepository.SearchForAsync(p => p.UserId == UserId).Where(p => p.EnterpriseId == EnterpriseId);
 
             if (list.IsNullOrEmpty())
             {

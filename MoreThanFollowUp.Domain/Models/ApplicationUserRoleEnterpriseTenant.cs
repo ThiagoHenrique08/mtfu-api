@@ -3,9 +3,9 @@
 namespace MoreThanFollowUp.Domain.Models
 
 {
-    public class ApplicationUserRoleEnterprise
+    public class ApplicationUserRoleEnterpriseTenant
     {
-        public Guid ApplicationUserRoleEnterpriseId { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string? UserId { get; set; }
         public virtual ApplicationUser? User { get; set; }
 
@@ -14,5 +14,8 @@ namespace MoreThanFollowUp.Domain.Models
 
         public Guid? EnterpriseId { get; set; }
         public virtual Enterprise? Enterprise { get; set; }
+
+        public Guid? TenantId { get; set; }
+        public virtual Tenant? Tenant { get; set; }
     }
 }

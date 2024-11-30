@@ -8,11 +8,11 @@ namespace MoreThanFollowUp.Domain.Models
         public string? CorporateReason { get; set; }
         public string? CNPJ { get; set; }
         public string? Segment { get; set; }
-        public Guid? TenantId { get; set; }
-        public virtual Tenant? Tenant { get; set; }
+        //public Guid? TenantId { get; set; }
+        //public virtual Tenant? Tenant { get; set; }
         public virtual ICollection<Project>? Projects { get; set; }
-        public virtual ICollection<Enterprise_User>? Enterprises_Users { get; set; }
-        public virtual ICollection<ApplicationUserRoleEnterprise>? Users_Roles_Enteprises { get; set; }
+        //public virtual ICollection<Enterprise_User_Tenant>? Enterprises_Users_Tenants { get; set; }
+        public virtual ICollection<ApplicationUserRoleEnterpriseTenant>? Users_Roles_Enteprises_Tenants { get; set; }
 
     }
 }

@@ -12,7 +12,7 @@
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set; }
         public virtual Subscription? Subscription { get; set; }
-        public virtual ICollection<Enterprise>? Enterprises { get; set; }
+        public virtual ICollection<ApplicationUserRoleEnterpriseTenant>? Users_Roles_Enteprises_Tenants { get; set; }
 
     }
 

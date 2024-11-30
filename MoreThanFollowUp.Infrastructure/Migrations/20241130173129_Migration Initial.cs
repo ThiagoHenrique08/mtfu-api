@@ -68,6 +68,20 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Enterprises",
+                columns: table => new
+                {
+                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    CorporateReason = table.Column<string>(type: "VARCHAR(100)", nullable: true),
+                    CNPJ = table.Column<string>(type: "VARCHAR(18)", nullable: true),
+                    Segment = table.Column<string>(type: "VARCHAR(100)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enterprises", x => x.EnterpriseId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProjectStatus",
                 columns: table => new
                 {
@@ -217,20 +231,63 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enterprises",
+                name: "Projects",
                 columns: table => new
                 {
-                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    CorporateReason = table.Column<string>(type: "VARCHAR(100)", nullable: true),
-                    CNPJ = table.Column<string>(type: "VARCHAR(18)", nullable: true),
-                    Segment = table.Column<string>(type: "VARCHAR(100)", nullable: true),
+                    ProjectId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Title = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Responsible = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Category = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Status = table.Column<string>(type: "VARCHAR(50)", nullable: true),
+                    Description = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.ProjectId);
+                    table.ForeignKey(
+                        name: "FK_Projects_Enterprises_EnterpriseId",
+                        column: x => x.EnterpriseId,
+                        principalTable: "Enterprises",
+                        principalColumn: "EnterpriseId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserRoleEnterprisesTenants",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
                     TenantId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enterprises", x => x.EnterpriseId);
+                    table.PrimaryKey("PK_ApplicationUserRoleEnterprisesTenants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enterprises_Tenants_TenantId",
+                        name: "FK_ApplicationUserRoleEnterprisesTenants_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRoleEnterprisesTenants_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRoleEnterprisesTenants_Enterprises_EnterpriseId",
+                        column: x => x.EnterpriseId,
+                        principalTable: "Enterprises",
+                        principalColumn: "EnterpriseId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRoleEnterprisesTenants_Tenants_TenantId",
                         column: x => x.TenantId,
                         principalTable: "Tenants",
                         principalColumn: "TenantId",
@@ -259,110 +316,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         column: x => x.TenantId,
                         principalTable: "Tenants",
                         principalColumn: "TenantId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApplicationUserRoleEnterprises",
-                columns: table => new
-                {
-                    ApplicationUserRoleEnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUserRoleEnterprises", x => x.ApplicationUserRoleEnterpriseId);
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserRoleEnterprises_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserRoleEnterprises_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserRoleEnterprises_Enterprises_EnterpriseId",
-                        column: x => x.EnterpriseId,
-                        principalTable: "Enterprises",
-                        principalColumn: "EnterpriseId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EnterpriseUsers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EnterpriseUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EnterpriseUsers_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EnterpriseUsers_Enterprises_EnterpriseId",
-                        column: x => x.EnterpriseId,
-                        principalTable: "Enterprises",
-                        principalColumn: "EnterpriseId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Projects",
-                columns: table => new
-                {
-                    ProjectId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    Title = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Responsible = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Category = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Status = table.Column<string>(type: "VARCHAR(50)", nullable: true),
-                    Description = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "DATETIME", nullable: true),
-                    EnterpriseId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Projects", x => x.ProjectId);
-                    table.ForeignKey(
-                        name: "FK_Projects_Enterprises_EnterpriseId",
-                        column: x => x.EnterpriseId,
-                        principalTable: "Enterprises",
-                        principalColumn: "EnterpriseId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Invoices",
-                columns: table => new
-                {
-                    InvoiceId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    Amount = table.Column<decimal>(type: "DECIMAL(10,2)", nullable: true),
-                    Status = table.Column<string>(type: "VARCHAR(30)", nullable: true),
-                    SubscriptionId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
-                    CreateAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
-                    DueDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Invoices", x => x.InvoiceId);
-                    table.ForeignKey(
-                        name: "FK_Invoices_Subscriptions_SubscriptionId",
-                        column: x => x.SubscriptionId,
-                        principalTable: "Subscriptions",
-                        principalColumn: "SubscriptionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -431,6 +384,28 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Invoices",
+                columns: table => new
+                {
+                    InvoiceId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    Amount = table.Column<decimal>(type: "DECIMAL(10,2)", nullable: true),
+                    Status = table.Column<string>(type: "VARCHAR(30)", nullable: true),
+                    SubscriptionId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    CreateAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoices", x => x.InvoiceId);
+                    table.ForeignKey(
+                        name: "FK_Invoices_Subscriptions_SubscriptionId",
+                        column: x => x.SubscriptionId,
+                        principalTable: "Subscriptions",
+                        principalColumn: "SubscriptionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -512,18 +487,23 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserRoleEnterprises_EnterpriseId",
-                table: "ApplicationUserRoleEnterprises",
+                name: "IX_ApplicationUserRoleEnterprisesTenants_EnterpriseId",
+                table: "ApplicationUserRoleEnterprisesTenants",
                 column: "EnterpriseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserRoleEnterprises_RoleId",
-                table: "ApplicationUserRoleEnterprises",
+                name: "IX_ApplicationUserRoleEnterprisesTenants_RoleId",
+                table: "ApplicationUserRoleEnterprisesTenants",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserRoleEnterprises_UserId",
-                table: "ApplicationUserRoleEnterprises",
+                name: "IX_ApplicationUserRoleEnterprisesTenants_TenantId",
+                table: "ApplicationUserRoleEnterprisesTenants",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserRoleEnterprisesTenants_UserId",
+                table: "ApplicationUserRoleEnterprisesTenants",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -569,21 +549,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "IX_DirectOrFunctionalRequirements_RequirementAnalysisId",
                 table: "DirectOrFunctionalRequirements",
                 column: "RequirementAnalysisId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enterprises_TenantId",
-                table: "Enterprises",
-                column: "TenantId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EnterpriseUsers_EnterpriseId",
-                table: "EnterpriseUsers",
-                column: "EnterpriseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EnterpriseUsers_UserId",
-                table: "EnterpriseUsers",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_SubscriptionId",
@@ -652,7 +617,7 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationUserRoleEnterprises");
+                name: "ApplicationUserRoleEnterprisesTenants");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -674,9 +639,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "DirectOrFunctionalRequirements");
-
-            migrationBuilder.DropTable(
-                name: "EnterpriseUsers");
 
             migrationBuilder.DropTable(
                 name: "Invoices");
@@ -706,6 +668,9 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
                 name: "Sprints");
 
             migrationBuilder.DropTable(
+                name: "Tenants");
+
+            migrationBuilder.DropTable(
                 name: "Plannings");
 
             migrationBuilder.DropTable(
@@ -716,9 +681,6 @@ namespace MoreThanFollowUp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Enterprises");
-
-            migrationBuilder.DropTable(
-                name: "Tenants");
         }
     }
 }

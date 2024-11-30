@@ -105,8 +105,7 @@ namespace MoreThanFollowUp.API.Extensions
             services.AddScoped<ISprint_UserRepository, Sprint_UserRepository>();
             services.AddScoped<IRequirementAnalysisRepository, RequirementAnalysisRepository>();
             services.AddScoped<IDirectOrFunctionalRequirementRepository, DirectOrFunctionalRequirementRepository>();
-            services.AddScoped<IApplicationUserRoleEnterpriseRepository, ApplicationUserRoleEnterpriseRepository>();
-            services.AddScoped<IEnterprise_UserRepository, Enterprise_UserRepository>();
+            services.AddScoped<IApplicationUserRoleEnterpriseTenantRepository, ApplicationUserRoleEnterpriseTenantRepository>();
             services.AddScoped<IApplicationRoleRepository, ApplicationRoleRepository>();
             return services;
         }

@@ -4,6 +4,6 @@ namespace MoreThanFollowUp.Domain.Models
 {
     public class ApplicationRole : IdentityRole
     {
-        public virtual ICollection<ApplicationUserRoleEnterprise>? Users_Roles_Enteprises { get; set; }
+        public virtual ICollection<ApplicationUserRoleEnterpriseTenant>? Users_Roles_Enteprises_Tenants { get; set; }
     }
 }
